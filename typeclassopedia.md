@@ -1390,8 +1390,9 @@ newtype Kleisli m a b = Kleisli { runKleisli :: a -> m b }
 
 instance Monad m => Arrow (Kleisli m) where
   arr f = Kleisli (return . f)
-  first (Kleisli f) = Kleisli (\ ~(b,d) -> do c <- f b
-                                              return (c,d) )
+  first (Kleisli f) = Kleisli (\ ~(b,d) -> do
+                        c <- f b
+                        return (c,d) )
 ```
 
 ## Laws
