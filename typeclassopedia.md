@@ -108,7 +108,7 @@ There are other `Functor`{.haskell} instances in the standard libraries; below a
 > **Exercises**
 >
 > #. Implement `Functor`{.haskell} instances for `Either e`{.haskell} and `((->) e)`{.haskell}.
-> #. Implement `Functor`{.haskell} instances for `((,) e)`{.haskell} and for `Pair`{.haskell}, defined as `{.haskell}data Pair a = Pair a a`{.haskell}.  Explain their similarities and differences.
+> #. Implement `Functor`{.haskell} instances for `((,) e)`{.haskell} and for `Pair`{.haskell}, defined as `data Pair a = Pair a a`{.haskell}.  Explain their similarities and differences.
 > #. Implement a `Functor`{.haskell} instance for the type `ITree`{.haskell}, defined as
 >
 >     ```haskell
@@ -844,8 +844,8 @@ class Monoid a where
   mconcat = foldr mappend mempty
 ```
 
-The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`
-is the binary operation.  The default definition for `mconcat`
+The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`{.haskell}
+is the binary operation.  The default definition for `mconcat`{.haskell}
 “reduces” a list of elements by combining them all with `mappend`{.haskell},
 using a right fold. It is only in the `Monoid`{.haskell} class so that specific
 instances have the option of providing an alternative, more efficient
@@ -862,9 +862,9 @@ Of course, every `Monoid`{.haskell} instance should actually be a monoid in the
 mathematical sense, which implies these laws:
 
 ```haskell
-mempty `mappend`{.haskell} x = x
-x `mappend`{.haskell} mempty = x
-(x `mappend`{.haskell} y) `mappend`{.haskell} z = x `mappend`{.haskell} (y `mappend`{.haskell} z)
+mempty `mappend` x = x
+x `mappend` mempty = x
+(x `mappend` y) `mappend` z = x `mappend` (y `mappend` z)
 ```
 
 ## Instances
@@ -890,7 +890,7 @@ There are quite a few interesting `Monoid`{.haskell} instances defined in `Data.
 
 - `Endo a`{.haskell} is a newtype wrapper for functions `a -> a`{.haskell}, which form a monoid under composition.
 
-- There are several ways to “lift” `Monoid`{.haskell} instances to instances with additional structure.  We have already seen that an instance for `a`{.haskell} can be lifted to an instance for `Maybe a`{.haskell}.  There are also tuple instances: if `a`{.haskell} and `b`{.haskell} are instances of `Monoid`{.haskell}, then so is `(a,b)`{.haskell}, using the monoid operations for `a`{.haskell} and `b`{.haskell} in the obvious pairwise manner. Finally, if `a`{.haskell} is a `Monoid`{.haskell}, then so is the function type `e -> a`{.haskell} for any `e`; in particular, `g `mappend`{.haskell} h`{.haskell} is the function which applies both `g`{.haskell} and `h`{.haskell} to its argument and then combines the results using the underlying `Monoid`{.haskell} instance for `a`{.haskell}.  This can be quite useful and elegant (see [example](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/52416)).
+- There are several ways to “lift” `Monoid`{.haskell} instances to instances with additional structure.  We have already seen that an instance for `a`{.haskell} can be lifted to an instance for `Maybe a`{.haskell}.  There are also tuple instances: if `a`{.haskell} and `b`{.haskell} are instances of `Monoid`{.haskell}, then so is `(a,b)`{.haskell}, using the monoid operations for `a`{.haskell} and `b`{.haskell} in the obvious pairwise manner. Finally, if `a`{.haskell} is a `Monoid`{.haskell}, then so is the function type `e -> a`{.haskell} for any `e`; in particular, ``g `mappend` h``{.haskell} is the function which applies both `g`{.haskell} and `h`{.haskell} to its argument and then combines the results using the underlying `Monoid`{.haskell} instance for `a`{.haskell}.  This can be quite useful and elegant (see [example](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/52416)).
 
 - The type `Ordering = LT || EQ || GT`{.haskell} is a `Monoid`{.haskell}, defined in such a way that `mconcat (zipWith compare xs ys)`{.haskell} computes the lexicographic ordering of `xs`{.haskell} and `ys`{.haskell} (if `xs`{.haskell} and `ys`{.haskell} have the same length).  In particular, `mempty = EQ`{.haskell}, and `mappend`{.haskell} evaluates to its leftmost non-`EQ`{.haskell} argument (or `EQ`{.haskell} if both arguments are `EQ`{.haskell}).  This can be used together with the function instance of `Monoid`{.haskell} to do some clever things ([example](http://www.reddit.com/r/programming/comments/7cf4r/monoids_in_my_programming_language/c06adnx)).
 
@@ -902,7 +902,7 @@ As noted previously, we can use `Monoid`{.haskell} to make `((,) e)`{.haskell} a
 ```haskell
 instance Monoid e => Applicative ((,) e) where
   pure x = (mempty, x)
-  (u, f) <*> (v, x) = (u `mappend`{.haskell} v, f x)
+  (u, f) <*> (v, x) = (u `mappend` v, f x)
 ```
 
 `Monoid`{.haskell} can be similarly used to make `((,) e)`{.haskell} an instance of `Monad`{.haskell} as well; this is known as the *writer monad*.  As we’ve already seen, `Writer`{.haskell} and `WriterT`{.haskell} are a newtype wrapper and transformer for this monad, respectively.
@@ -948,8 +948,8 @@ v >> mzero   =  mzero
 ```
 
 which explains the sense in which `mzero`{.haskell} denotes failure. Since
-`mzero`{.haskell} should be the identity for `mplus`{.haskell}, the computation `m1 `mplus`{.haskell} m2`{.haskell} succeeds (evaluates to something other than `mzero`{.haskell}) if
-either `m1`{.haskell} or `m2`{.haskell} does; so `mplus`{.haskell} represents choice. The `guard`
+`mzero`{.haskell} should be the identity for `mplus`{.haskell}, the computation ``m1 `mplus` m2``{.haskell} succeeds (evaluates to something other than `mzero`{.haskell}) if
+either `m1`{.haskell} or `m2`{.haskell} does; so `mplus`{.haskell} represents choice. The `guard`{.haskell}
 function can also be used with instances of `MonadPlus`; it requires a
 condition to be satisfied and fails (using `mzero`{.haskell}) if it is not.  A
 simple example of a `MonadPlus`{.haskell} instance is `[]`{.haskell}, which is exactly the
@@ -963,7 +963,8 @@ of its use, is Doug Auclair’s *MonadPlus: What a Super Monad!* in [the Monad.R
 There used to be a type class called `MonadZero`{.haskell} containing only
 `mzero`{.haskell}, representing monads with failure.  The `do`-notation requires
 some notion of failure to deal with failing pattern matches.
-Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the `fail`
+Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the
+`fail`{.haskell}
 method to the `Monad`{.haskell} class. If we are lucky, someday `MonadZero`{.haskell} will
 be restored, and `fail`{.haskell} will be banished to the bit bucket where it
 belongs (see [MonadPlus reform proposal](http://www.haskell.org/haskellwiki/MonadPlus reform proposal)).  The idea is that any
@@ -977,10 +978,10 @@ monoid structure:
 
 ```haskell
 class Arrow arr => ArrowZero arr where
-  zeroArrow :: b `arr`{.haskell} c
+  zeroArrow :: b `arr` c
 
 class ArrowZero arr => ArrowPlus arr where
-  (<+>) :: (b `arr`{.haskell} c) -> (b `arr`{.haskell} c) -> (b `arr`{.haskell} c)
+  (<+>) :: (b `arr` c) -> (b `arr` c) -> (b `arr` c)
 ```
 
 ## Further reading
@@ -1045,7 +1046,7 @@ efficient implementations can be provided.
 
 The type of `foldMap`{.haskell} should make it clear what it is supposed to do:
 given a way to convert the data in a container into a `Monoid`{.haskell} (a
-function `a -> m`{.haskell}) and a container of `a`’s (`t a`{.haskell}), `foldMap`
+function `a -> m`{.haskell}) and a container of `a`’s (`t a`{.haskell}), `foldMap`{.haskell}
 provides a way to iterate over the entire contents of the container,
 converting all the `a`’s to `m`’s and combining all the `m`’s with
 `mappend`{.haskell}. The following code shows two examples: a simple
@@ -1061,7 +1062,7 @@ data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a)
 instance Foldable Tree where
   foldMap f Empty        = mempty
   foldMap f (Leaf x)     = f x
-  foldMap f (Node l k r) = foldMap f l `mappend`{.haskell} f k `mappend`{.haskell} foldMap f r
+  foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
 ```
 
 The `foldr`{.haskell} function has a type similar to the `foldr`{.haskell} found in the `Prelude`{.haskell}, but
@@ -1284,12 +1285,12 @@ For references on the `Traversable`{.haskell} laws, see Russell O'Connor's [mail
 `Category`{.haskell} is a relatively recent addition to the Haskell standard libraries.  It generalizes the notion of function composition to general “morphisms”.
 
 The definition of the `Category`{.haskell} type class (from
-`Control.Category`---[haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable ``arr``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of ``arr``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this messsage](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor ``arr``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
+`Control.Category`---[haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable `` `arr` ``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of `` `arr` ``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this messsage](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor `` `arr` ``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
 
 ```haskell
 class Category arr where
-  id  :: a `arr`{.haskell} a
-  (.) :: (b `arr`{.haskell} c) -> (a `arr`{.haskell} b) -> (a `arr`{.haskell} c)
+  id  :: a `arr` a
+  (.) :: (b `arr` c) -> (a `arr` b) -> (a `arr` c)
 
 -- The same thing, with a normal (prefix) type constructor
 class Category cat where
@@ -1328,7 +1329,7 @@ similar vein to `Monad`{.haskell} and `Applicative`{.haskell}.  However, unlike 
 and `Applicative`{.haskell}, whose types only reflect their output, the type of
 an `Arrow`{.haskell} computation reflects both its input and output.  Arrows
 generalize functions: if `arr`{.haskell} is an instance of `Arrow`{.haskell}, a value of
-type `b `arr`{.haskell} c`{.haskell} can be thought of as a computation which takes values of
+type ``b `arr` c``{.haskell} can be thought of as a computation which takes values of
 type `b`{.haskell} as input, and produces values of type `c`{.haskell} as output.  In the
 `(->)`{.haskell} instance of `Arrow`{.haskell} this is just a pure function; in general, however,
 an arrow may represent some sort of “effectful” computation.
@@ -1340,17 +1341,17 @@ The definition of the `Arrow`{.haskell} type class, from
 
 ```haskell
 class Category arr => Arrow arr where
-  arr :: (b -> c) -> (b `arr`{.haskell} c)
-  first :: (b `arr`{.haskell} c) -> ((b, d) `arr`{.haskell} (c, d))
-  second :: (b `arr`{.haskell} c) -> ((d, b) `arr`{.haskell} (d, c))
-  (***) :: (b `arr`{.haskell} c) -> (b' `arr`{.haskell} c') -> ((b, b') `arr`{.haskell} (c, c'))
-  (&&&) :: (b `arr`{.haskell} c) -> (b `arr`{.haskell} c') -> (b `arr`{.haskell} (c, c'))
+  arr :: (b -> c) -> (b `arr` c)
+  first :: (b `arr` c) -> ((b, d) `arr` (c, d))
+  second :: (b `arr` c) -> ((d, b) `arr` (d, c))
+  (***) :: (b `arr` c) -> (b' `arr` c') -> ((b, b') `arr` (c, c'))
+  (&&&) :: (b `arr` c) -> (b `arr` c') -> (b `arr` (c, c'))
 ```
 
 The first thing to note is the `Category`{.haskell} class constraint, which
 means that we get identity arrows and arrow composition for free:
-given two arrows `g :: b `arr`{.haskell} c`{.haskell} and `h :: c `arr`{.haskell} d`{.haskell}, we can form their
-composition `g >>> h :: b `arr`{.haskell} d`{.haskell} ^[In versions of the `base`{.haskell} package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
+given two arrows ``g :: b `arr` c``{.haskell} and ``h :: c `arr` d``{.haskell}, we can form their
+composition ``g >>> h :: b `arr` d``{.haskell} ^[In versions of the `base`{.haskell} package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
 
 As should be a familiar pattern by now, the only methods which must be
 defined when writing a new instance of `Arrow`{.haskell} are `arr`{.haskell} and `first`;
@@ -1363,7 +1364,7 @@ efficient implementations if desired.
 Let’s look at each of the arrow methods in turn.  [Ross Paterson’s web page on arrows](http://www.haskell.org/arrows/) has nice diagrams which can help
 build intuition.
 
-* The `arr`{.haskell} function takes any function `b -> c`{.haskell} and turns it into a generalized arrow `b `arr`{.haskell} c`{.haskell}.  The `arr`{.haskell} method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g`{.haskell} is “pure” in the sense that it only computes `g`{.haskell} and has no “effects” (whatever that might mean for any particular arrow type).
+* The `arr`{.haskell} function takes any function `b -> c`{.haskell} and turns it into a generalized arrow ``b `arr` c``{.haskell}.  The `arr`{.haskell} method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g`{.haskell} is “pure” in the sense that it only computes `g`{.haskell} and has no “effects” (whatever that might mean for any particular arrow type).
 
 * The `first`{.haskell} method turns any arrow from `b`{.haskell} to   `c`{.haskell} into an arrow from `(b,d)`{.haskell} to `(c,d)`{.haskell}.  The idea is that `first g`{.haskell} uses `g`{.haskell} to process the first element of a tuple, and lets the second element pass through unchanged.  For the function instance of `Arrow`{.haskell}, of course, `first g (x,y) = (g x, y)`{.haskell}.
 
@@ -1433,10 +1434,10 @@ The `ArrowChoice`{.haskell} class provides exactly such an ability:
 
 ```haskell
 class Arrow arr => ArrowChoice arr where
-  left  :: (b `arr`{.haskell} c) -> (Either b d `arr`{.haskell} Either c d)
-  right :: (b `arr`{.haskell} c) -> (Either d b `arr`{.haskell} Either d c)
-  (+++) :: (b `arr`{.haskell} c) -> (b' `arr`{.haskell} c') -> (Either b b' `arr`{.haskell} Either c c')
-  (|||) :: (b `arr`{.haskell} d) -> (c `arr`{.haskell} d) -> (Either b c `arr`{.haskell} d)
+  left  :: (b `arr` c) -> (Either b d `arr` Either c d)
+  right :: (b `arr` c) -> (Either d b `arr` Either d c)
+  (+++) :: (b `arr` c) -> (b' `arr` c') -> (Either b b' `arr` Either c c')
+  (|||) :: (b `arr` d) -> (c `arr` d) -> (Either b c `arr` d)
 ```
 
 A comparison of `ArrowChoice`{.haskell} to `Arrow`{.haskell} will reveal a striking
@@ -1466,14 +1467,14 @@ The `ArrowApply`{.haskell} type class is:
 
 ```haskell
 class Arrow arr => ArrowApply arr where
-  app :: (b `arr`{.haskell} c, b) `arr`{.haskell} c
+  app :: (b `arr` c, b) `arr` c
 ```
 
 If we have computed an arrow as the output of some previous
 computation, then `app`{.haskell} allows us to apply that arrow to an input,
 producing its output as the output of `app`{.haskell}.  As an exercise, the
 reader may wish to use `app`{.haskell} to implement an alternative “curried”
-version, `app2 :: b `arr`{.haskell} ((b `arr`{.haskell} c) `arr`{.haskell} c)`{.haskell}.
+version, ``app2 :: b `arr` ((b `arr` c) `arr` c)``{.haskell}.
 
 This notion of being able to *compute* a new computation
 may sound familiar:
@@ -1542,9 +1543,9 @@ Paterson, is:
 
 ```haskell
 class ArrowLoop arr => ArrowCircuit arr where
-  delay :: b -> (b `arr`{.haskell} b)
+  delay :: b -> (b `arr` b)
 
-counter :: ArrowCircuit arr => Bool `arr`{.haskell} Int
+counter :: ArrowCircuit arr => Bool `arr` Int
 counter = proc reset -> do
             rec output <- idA     -< if reset then 0 else next
                 next   <- delay 0 -< output + 1
