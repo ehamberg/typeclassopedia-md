@@ -15,7 +15,7 @@ The goal of this document is to serve as a starting point for the student of Has
 
 Have you ever had any of the following thoughts?
 
-* What the heck is a monoid, and how is it different from a mon<u>a</u>d?
+* What the heck is a monoid, and how is it different from a mon**a**d?
 * I finally figured out how to use [Parsec](http://www.haskell.org/haskellwiki/Parsec) with do-notation, and someone told me I should use something called `Applicative`{.haskell} instead. Um, what?
 * Someone in the [IRC channel](irc://chat.freenode.net/haskell) IRC channel used `(***)`{.haskell}, and when I asked lambdabot to tell me its type, it printed out scary gobbledygook that didn’t even fit on one line! Then someone used `fmap fmap fmap`{.haskell} and my brain exploded.
 * When I asked how to do something I thought was really complicated, people started typing things like `zip.ap fmap.(id &&& wtf)`{.haskell} and the scary thing is that they worked! Anyway, I think those people must actually be robots because there’s no way anyone could come up with that in two seconds off the top of their head.
