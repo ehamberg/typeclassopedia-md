@@ -1401,13 +1401,13 @@ There are quite a few laws that instances of `Arrow`{.haskell} should
 satisfy ^[See [John Hughes: Generalising monads to arrows](http://dx.doi.org/10.1016/S0167-6423(99)00023-4); [Sam Lindley, Philip Wadler, Jeremy Yallop: The arrow calculus](http://homepages.inf.ed.ac.uk/wadler/papers/arrows/arrows.pdf); [Ross Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html).]:
 
 ```haskell
-                       arr id  =  id
-                  arr (h . g)  =  arr g >>> arr h
-                first (arr g)  =  arr (g *** id)
-              first (g >>> h)  =  first g >>> first h
-   first g >>> arr (id *** h)  =  arr (id *** h) >>> first g
-          first g >>> arr fst  =  arr fst >>> g
-first (first g) >>> arr assoc  =  arr assoc >>> first g
+arr id = id
+arr (h . g) = arr g >>> arr h
+first (arr g) = arr (g *** id)
+first (g >>> h) = first g >>> first h
+first g >>> arr (id *** h) = arr (id *** h) >>> first g
+first g >>> arr fst = arr fst >>> g
+first (first g) >>> arr assoc = arr assoc >>> first g
 
 assoc ((x,y),z) = (x,(y,z))
 ```
