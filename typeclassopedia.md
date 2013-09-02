@@ -797,7 +797,7 @@ For example, the natural numbers under addition form a semigroup: the sum of any
 
 ## Definition
 
-Semigroups are not (yet?) defined in the base package, but the {{HackagePackage|id=semigroups}} package provides a standard definition.
+Semigroups are not (yet?) defined in the base package, but the [semigroups](http://hackage.haskell.org/package/semigroups) package provides a standard definition.
 
 The definition of the `Semigroup`{.haskell} type class ([haddock](http://hackage.haskell.org/packages/archive/semigroups/latest/doc/html/Data-Semigroup.html)) is as follows:
 
