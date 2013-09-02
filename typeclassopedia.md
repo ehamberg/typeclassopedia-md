@@ -315,9 +315,7 @@ Intuitively, this states that a *monoidal* functor is one which has some sort of
 
 Furthermore, to deserve the name "monoidal" (see the [section on Monoids](#monoid)), instances of `Monoidal`{.haskell} ought to satisfy the following laws, which seem much more straightforward than the traditional `Applicative`{.haskell} laws:
 
-
 * Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}.  See [Arrows](#arrow).]: `fmap (g *** h) (u ** v) = fmap g u ** fmap h v`{.haskell}
-
 * Left identity^[In this and the following laws, `≅`{.haskell} refers to *isomorphism* rather than equality.  In particular we consider `(x,()) ≅ x ≅ ((),x)`{.haskell} and `((x,y),z) ≅ (x,(y,z))`{.haskell}.]: `unit ** v ≅ v`{.haskell}
 * Right identity: `u ** unit ≅ u`{.haskell}
 * Associativity: `u ** (v ** w) ≅ (u ** v) ** w`{.haskell}
@@ -1633,6 +1631,7 @@ instance Comonad Stream where
 Dan Piponi explains in a blog post what [cellular automata have to do with comonads](http://blog.sigfpe.com/2006/12/evaluating-cellular-automata-is.html).  In another blog post, Conal Elliott has examined [a comonadic formulation of functional reactive programming](http://conal.net/blog/posts/functional-interactive-behavior/).  Sterling Clover’s blog post [Comonads in everyday life](http://fmapfixreturn.wordpress.com/2008/07/09/comonads-in-everyday-life/) explains the relationship between comonads and zippers, and how comonads can be used to design a menu system for a web site.
 
 Uustalu and Vene have a number of papers exploring ideas related to comonads and functional programming:
+
 * [Comonadic Notions of Computation](http://dx.doi.org/10.1016/j.entcs.2008.05.029)
 * [The dual of substitution is redecoration](http://www.ioc.ee/~tarmo/papers/sfp01-book.pdf) (Also available as [ps.gz](http://www.cs.ut.ee/~varmo/papers/sfp01-book.ps.gz).)
 * [Recursive coalgebras from comonads](http://dx.doi.org/10.1016/j.ic.2005.08.005)
