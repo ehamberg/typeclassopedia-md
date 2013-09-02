@@ -428,7 +428,7 @@ Even if you don’t understand the intuition behind the `Monad`{.haskell} class,
 >
 > #. Implement a `Monad`{.haskell} instance for the list constructor, `[]`{.haskell}. Follow the types!
 > #. Implement a `Monad`{.haskell} instance for `((->) e)`{.haskell}.
-> #.Implement `Functor`{.haskell} and `Monad`{.haskell} instances for `Free f`{.haskell}, defined as
+> #. Implement `Functor`{.haskell} and `Monad`{.haskell} instances for `Free f`{.haskell}, defined as
 >
 >     ```haskell
 >     data Free f a = Var a
