@@ -1,7 +1,7 @@
 % Typeclassopedia
 % Brent Yorgey
 
-Originally published 12 March 2009 in [issue 13](http://www.haskell.org/wikiupload/8/85/TMR-Issue13.pdf) of [the Monad.Reader](http://themonadreader.wordpress.com/). Ported to the Haskell wiki in November 2011 by Geheimdienst. Converted to Markdown in August 2013 by Erlend Hamberg. Converted to epub with [pandoc](http://www.pandoc.org).
+Originally published 12 March 2009 in [issue 13](http://www.haskell.org/wikiupload/8/85/TMR-Issue13.pdf) of [the Monad.Reader](http://themonadreader.wordpress.com/). Ported to the Haskell wiki in November 2011 by Geheimdienst. Converted to Markdown in August 2013 by Erlend Hamberg. Converted to EPUB format with [pandoc](http://www.pandoc.org).
 
 *This is not the official version of the Typeclassopedia. The official version is now the [Haskell wiki version](http://www.haskell.org/haskellwiki/Talk:Typeclassopedia) which supersedes the version published in the Monad.Reader.  Please help update and extend it by editing it yourself or by leaving comments, suggestions, and questions on the [talk page](http://www.haskell.org/haskellwiki/Talk:Typeclassopedia).*
 
