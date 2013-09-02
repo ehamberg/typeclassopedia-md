@@ -315,10 +315,10 @@ Intuitively, this states that a *monoidal* functor is one which has some sort of
 
 Furthermore, to deserve the name "monoidal" (see the [section on Monoids](#monoid)), instances of `Monoidal`{.haskell} ought to satisfy the following laws, which seem much more straightforward than the traditional `Applicative`{.haskell} laws:
 
-* Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}.  See [Arrows](#arrow).]: `fmap (g *** h) (u ** v) = fmap g u ** fmap h v`{.haskell}
-* Left identity^[In this and the following laws, `≅`{.haskell} refers to *isomorphism* rather than equality.  In particular we consider `(x,()) ≅ x ≅ ((),x)`{.haskell} and `((x,y),z) ≅ (x,(y,z))`{.haskell}.]: `unit ** v ≅ v`{.haskell}
-* Right identity: `u ** unit ≅ u`{.haskell}
-* Associativity: `u ** (v ** w) ≅ (u ** v) ** w`{.haskell}
+* Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}.  See [Arrows](#arrow).]:<br />`fmap (g *** h) (u ** v) = fmap g u ** fmap h v`{.haskell}
+* Left identity^[In this and the following laws, `≅`{.haskell} refers to *isomorphism* rather than equality.  In particular we consider `(x,()) ≅ x ≅ ((),x)`{.haskell} and `((x,y),z) ≅ (x,(y,z))`{.haskell}.]:<br />`unit ** v ≅ v`{.haskell}
+* Right identity:<br />`u ** unit ≅ u`{.haskell}
+* Associativity:<br />`u ** (v ** w) ≅ (u ** v) ** w`{.haskell}
 
 These turn out to be equivalent to the usual `Applicative`{.haskell} laws.
 
