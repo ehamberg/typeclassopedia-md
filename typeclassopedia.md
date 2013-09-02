@@ -710,7 +710,7 @@ let { y = baz
 in bob
 ```
 
-because, in Haskell, every variable bound in a `let`{.haskell}-block is in scope throughout the entire block.  (From this point of view, Haskell's normal `do`{.haskell} blocks are analogous to Scheme's `let\*`{.haskell} construct.)
+because, in Haskell, every variable bound in a `let`{.haskell}-block is in scope throughout the entire block.  (From this point of view, Haskell's normal `do`{.haskell} blocks are analogous to Scheme's `let*` construct.)
 
 What could such a feature be used for?  One of the motivating examples given in the original paper describing `MonadFix`{.haskell} (see below) is encoding circuit descriptions.  A line in a `do`{.haskell}-block such as
 
