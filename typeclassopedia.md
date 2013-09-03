@@ -348,7 +348,7 @@ Gershom Bazerman's [post](http://comonad.com/reader/2012/abstracting-with-applic
 It’s a safe bet that if you’re reading this, you’ve heard of monads---although it’s quite possible you’ve never heard of `Applicative`{.haskell} before, or `Arrow`{.haskell}, or even `Monoid`{.haskell}. Why are monads such a big deal in Haskell? There are several reasons.
 
 * Haskell does, in fact, single out monads for special attention by making them the framework in which to construct I/O operations.
-* Haskell also singles out monads for special attention by providing a special syntactic sugar for monadic expressions: the `do`{.haskell}-notation.
+* Haskell also singles out monads for special attention by providing a special syntactic sugar for monadic expressions: the `do`-notation.
 * `Monad`{.haskell} has been around longer than other abstract models of computation such as `Applicative`{.haskell} or `Arrow`{.haskell}.
 * The more monad tutorials there are, the harder people think monads must be, and the more new monad tutorials are written by people who think they finally “get” monads (the [monad tutorial fallacy](http://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/)).
 
@@ -517,9 +517,9 @@ There is also a formulation of the monad laws in terms of `fmap`{.haskell}, `ret
 >
 > #. Given the definition `g >=> h = \x -> g x >>= h`{.haskell}, prove the equivalence of the above laws and the usual monad laws.
 
-## `do`{.haskell} notation
+## `do` notation
 
-Haskell’s special `do`{.haskell} notation supports an “imperative style” of programming by providing syntactic sugar for chains of monadic expressions.  The genesis of the notation lies in realizing that something like `a >>= \x -> b >> c >>= \y -> d`{.haskell} can be more readably written by putting successive computations on separate lines:
+Haskell’s special `do` notation supports an “imperative style” of programming by providing syntactic sugar for chains of monadic expressions.  The genesis of the notation lies in realizing that something like `a >>= \x -> b >> c >>= \y -> d`{.haskell} can be more readably written by putting successive computations on separate lines:
 
 ```haskell
 a >>= \x ->
@@ -538,7 +538,7 @@ do { x <- a
    }
 ```
 
-(The curly braces and semicolons may optionally be omitted; the Haskell parser uses layout to determine where they should be inserted.)  This discussion should make clear that `do`{.haskell} notation is just syntactic sugar.  In fact, `do`{.haskell} blocks are recursively translated into monad operations (almost) like this:
+(The curly braces and semicolons may optionally be omitted; the Haskell parser uses layout to determine where they should be inserted.)  This discussion should make clear that `do` notation is just syntactic sugar.  In fact, `do` blocks are recursively translated into monad operations (almost) like this:
 
                       do e → e
            do { e; stmts } → e >> do { stmts }
@@ -554,7 +554,7 @@ do (x:xs) <- foo
 
 but what happens if `foo`{.haskell} produces an empty list?  Well, remember that ugly `fail`{.haskell} function in the `Monad`{.haskell} type class declaration?  That’s what happens.  See [section 3.14 of the Haskell Report](http://haskell.org/onlinereport/exps.html#sect3.14) for the full details. See also the discussion of `MonadPlus`{.haskell} and `MonadZero`{.haskell} in the [section on other monoidal classes](#other-monoidal-classes-alternative-monadplus-arrowplus).
 
-A final note on intuition: `do`{.haskell} notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m`{.haskell} is suggestive of “extracting” a single `x`{.haskell} from `m`{.haskell} and doing something with it.  But `m`{.haskell} may represent some sort of a container, such as a list or a tree; the meaning of `x <- m`{.haskell} is entirely dependent on the implementation of `(>>=)`{.haskell}.  For example, if `m`{.haskell} is a list, `x <- m`{.haskell} actually means that `x`{.haskell} will take on each value from the list in turn.
+A final note on intuition: `do` notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m`{.haskell} is suggestive of “extracting” a single `x`{.haskell} from `m`{.haskell} and doing something with it.  But `m`{.haskell} may represent some sort of a container, such as a list or a tree; the meaning of `x <- m`{.haskell} is entirely dependent on the implementation of `(>>=)`{.haskell}.  For example, if `m`{.haskell} is a list, `x <- m`{.haskell} actually means that `x`{.haskell} will take on each value from the list in turn.
 
 ## Further reading
 
@@ -570,7 +570,7 @@ For help constructing monads from scratch, and for obtaining a "deep embedding" 
 
 One of the quirks of the `Monad`{.haskell} class and the Haskell type system is that it is not possible to straightforwardly declare `Monad`{.haskell} instances for types which require a class constraint on their data, even if they are monads from a mathematical point of view. For example, `Data.Set` requires an `Ord`{.haskell} constraint on its data, so it cannot be easily made an instance of `Monad`{.haskell}.  A solution to this problem was [first described by Eric Kidd](http://www.randomhacks.net/articles/2007/03/15/data-set-monad-haskell-macros), and later made into a [library named rmonad](http://hackage.haskell.org/cgi-bin/hackage-scripts/package/rmonad) by Ganesh Sittampalam and Peter Gavin.
 
-There are many good reasons for eschewing `do`{.haskell} notation; some have gone so far as to [consider it harmful](http://www.haskell.org/haskellwiki/Do_notation_considered_harmful).
+There are many good reasons for eschewing `do` notation; some have gone so far as to [consider it harmful](http://www.haskell.org/haskellwiki/Do_notation_considered_harmful).
 
 Monads can be generalized in various ways; for an exposition of one possibility, see Robert Atkey’s paper on [parameterized monads](http://homepages.inf.ed.ac.uk/ratkey/paramnotions-jfp.pdf), or Dan Piponi’s [Beyond Monads](http://blog.sigfpe.com/2009/02/beyond-monads.html).
 
@@ -689,7 +689,7 @@ There is an alternative way to compose monads, using coproducts, as described by
 
 ## `mdo`{.haskell}/`do rec`{.haskell} notation
 
-The `MonadFix`{.haskell} class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`{.haskell}, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation) by a special “recursive do” notation, enabled by the `-XDoRec`{.haskell} flag^[In GHC 7.6, the flag has been changed to `-XRecursiveDo`{.haskell}.].  Within a `do`{.haskell} block, one may have a nested `rec`{.haskell} block, like so:
+The `MonadFix`{.haskell} class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`{.haskell}, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation) by a special “recursive do” notation, enabled by the `-XDoRec`{.haskell} flag^[In GHC 7.6, the flag has been changed to `-XRecursiveDo`{.haskell}.].  Within a `do` block, one may have a nested `rec`{.haskell} block, like so:
 
 ```haskell
 do { x <- foo
@@ -701,7 +701,7 @@ do { x <- foo
    }
 ```
 
-Normally (if we had `do`{.haskell} in place of `rec`{.haskell} in the above example), `y`{.haskell} would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z`{.haskell} would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y`{.haskell} and `z`{.haskell} are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
+Normally (if we had `do` in place of `rec`{.haskell} in the above example), `y`{.haskell} would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z`{.haskell} would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y`{.haskell} and `z`{.haskell} are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
 
 ```haskell
 let { y = baz
@@ -710,15 +710,15 @@ let { y = baz
 in bob
 ```
 
-because, in Haskell, every variable bound in a `let`{.haskell}-block is in scope throughout the entire block.  (From this point of view, Haskell's normal `do`{.haskell} blocks are analogous to Scheme's `let*` construct.)
+because, in Haskell, every variable bound in a `let`{.haskell}-block is in scope throughout the entire block.  (From this point of view, Haskell's normal `do` blocks are analogous to Scheme's `let*` construct.)
 
-What could such a feature be used for?  One of the motivating examples given in the original paper describing `MonadFix`{.haskell} (see below) is encoding circuit descriptions.  A line in a `do`{.haskell}-block such as
+What could such a feature be used for?  One of the motivating examples given in the original paper describing `MonadFix`{.haskell} (see below) is encoding circuit descriptions.  A line in a `do`-block such as
 
 ```haskell
   x <- gate y z
 ```
 
-describes a gate whose input wires are labeled `y`{.haskell} and `z`{.haskell} and whose output wire is labeled `x`{.haskell}.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`{.haskell}-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec`{.haskell} block solves this problem.
+describes a gate whose input wires are labeled `y`{.haskell} and `z`{.haskell} and whose output wire is labeled `x`{.haskell}.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec`{.haskell} block solves this problem.
 
 ## Examples and intuition
 
@@ -957,14 +957,14 @@ introduction to the `MonadPlus`{.haskell} type class, with interesting examples
 of its use, is Doug Auclair’s *MonadPlus: What a Super Monad!* in [the Monad.Reader issue 11](http://www.haskell.org/wikiupload/6/6a/TMR-Issue11.pdf).
 
 There used to be a type class called `MonadZero`{.haskell} containing only
-`mzero`{.haskell}, representing monads with failure.  The `do`{.haskell}-notation requires
+`mzero`{.haskell}, representing monads with failure.  The `do`-notation requires
 some notion of failure to deal with failing pattern matches.
 Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the
 `fail`{.haskell}
 method to the `Monad`{.haskell} class. If we are lucky, someday `MonadZero`{.haskell} will
 be restored, and `fail`{.haskell} will be banished to the bit bucket where it
 belongs (see [MonadPlus reform proposal](http://www.haskell.org/haskellwiki/MonadPlus reform proposal)).  The idea is that any
-`do`{.haskell}-block which uses pattern matching (and hence may fail) would require
+`do`-block which uses pattern matching (and hence may fail) would require
 a `MonadZero`{.haskell} constraint; otherwise, only a `Monad`{.haskell} constraint would be
 required.
 
@@ -1533,7 +1533,7 @@ kept in nested tuples, and it is up to the programmer to remember
 which intermediate results are in which components, and to swap,
 reassociate, and generally mangle tuples as necessary.  This problem
 is solved by the special arrow notation supported by GHC, similar to
-`do`{.haskell} notation for monads, that allows names to be assigned to
+`do` notation for monads, that allows names to be assigned to
 intermediate results while building up arrow computations.  An example
 arrow implemented using arrow notation, taken from
 Paterson, is:
