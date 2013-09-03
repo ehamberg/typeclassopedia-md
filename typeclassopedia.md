@@ -70,13 +70,13 @@ class Functor f where
 
 `Functor`{.haskell} is exported by the `Prelude`{.haskell}, so no special imports are needed to use it.
 
-First, the `f a`{.haskell} and `f b`{.haskell} in the type signature for `fmap`{.haskell} tell us that `f`{.haskell} isn’t just a type; it is a *type constructor* which takes another type as a parameter. (A more precise way to say this is that the *kind* of `f`{.haskell} must be `* -> *`{.haskell}.) For example, `Maybe`{.haskell} is such a type constructor: `Maybe`{.haskell} is not a type in and of itself, but requires another type as a parameter, like `Maybe Integer`{.haskell}. So it would not make sense to say `instance Functor Integer`{.haskell}, but it could make sense to say `instance Functor Maybe`{.haskell}.
+First, the `f a`{.haskell} and `f b`{.haskell} in the type signature for `fmap`{.haskell} tell us that `f` isn’t just a type; it is a *type constructor* which takes another type as a parameter. (A more precise way to say this is that the *kind* of `f` must be `* -> *`{.haskell}.) For example, `Maybe`{.haskell} is such a type constructor: `Maybe`{.haskell} is not a type in and of itself, but requires another type as a parameter, like `Maybe Integer`{.haskell}. So it would not make sense to say `instance Functor Integer`{.haskell}, but it could make sense to say `instance Functor Maybe`{.haskell}.
 
-Now look at the type of `fmap`{.haskell}: it takes any function from `a`{.haskell} to `b`{.haskell}, and a value of type `f a`{.haskell}, and outputs a value of type `f b`{.haskell}. From the container point of view, the intention is that `fmap`{.haskell} applies a function to each element of a container, without altering the structure of the container. From the context point of view, the intention is that `fmap`{.haskell} applies a function to a value without altering its context. Let’s look at a few specific examples.
+Now look at the type of `fmap`{.haskell}: it takes any function from `a` to `b`, and a value of type `f a`{.haskell}, and outputs a value of type `f b`{.haskell}. From the container point of view, the intention is that `fmap`{.haskell} applies a function to each element of a container, without altering the structure of the container. From the context point of view, the intention is that `fmap`{.haskell} applies a function to a value without altering its context. Let’s look at a few specific examples.
 
 ## Instances
 
-As noted before, the list constructor `[]`{.haskell} is a functor ^[Recall that `[]`{.haskell} has two meanings in Haskell: it can either stand for the empty list, or, as here, it can represent the list type constructor (pronounced “list-of”). In other words, the type `[a]`{.haskell} (list-of-`a`{.haskell}) can also be written `[] a`{.haskell}.]; we can use the standard list function `map`{.haskell} to apply a function to each element of a list ^[You might ask why we need a separate `map`{.haskell} function. Why not just do away with the current list-only `map`{.haskell} function, and rename `fmap`{.haskell} to `map`{.haskell} instead? Well, that’s a good question. The usual argument is that someone just learning Haskell, when using `map`{.haskell} incorrectly, would much rather see an error about lists than about `Functor`{.haskell}s.]. The `Maybe`{.haskell} type constructor is also a functor, representing a container which might hold a single element. The function `fmap g`{.haskell} has no effect on `Nothing`{.haskell} (there are no elements to which `g`{.haskell} can be applied), and simply applies `g`{.haskell} to the single element inside a `Just`{.haskell}. Alternatively, under the context interpretation, the list functor represents a context of nondeterministic choice; that is, a list can be thought of as representing a single value which is nondeterministically chosen from among several possibilities (the elements of the list). Likewise, the `Maybe`{.haskell} functor represents a context with possible failure. These instances are:
+As noted before, the list constructor `[]`{.haskell} is a functor ^[Recall that `[]`{.haskell} has two meanings in Haskell: it can either stand for the empty list, or, as here, it can represent the list type constructor (pronounced “list-of”). In other words, the type `[a]`{.haskell} (list-of-`a`) can also be written `[] a`{.haskell}.]; we can use the standard list function `map`{.haskell} to apply a function to each element of a list ^[You might ask why we need a separate `map`{.haskell} function. Why not just do away with the current list-only `map`{.haskell} function, and rename `fmap`{.haskell} to `map`{.haskell} instead? Well, that’s a good question. The usual argument is that someone just learning Haskell, when using `map`{.haskell} incorrectly, would much rather see an error about lists than about `Functor`{.haskell}s.]. The `Maybe`{.haskell} type constructor is also a functor, representing a container which might hold a single element. The function `fmap g`{.haskell} has no effect on `Nothing`{.haskell} (there are no elements to which `g` can be applied), and simply applies `g` to the single element inside a `Just`{.haskell}. Alternatively, under the context interpretation, the list functor represents a context of nondeterministic choice; that is, a list can be thought of as representing a single value which is nondeterministically chosen from among several possibilities (the elements of the list). Likewise, the `Maybe`{.haskell} functor represents a context with possible failure. These instances are:
 
 ```haskell
 instance Functor [] where
@@ -89,19 +89,19 @@ instance Functor Maybe where
   fmap g (Just a) = Just (g a)
 ```
 
-As an aside, in idiomatic Haskell code you will often see the letter `f`{.haskell} used to stand for both an arbitrary `Functor`{.haskell} and an arbitrary function. In this document, `f`{.haskell} represents only `Functor`{.haskell}s, and `g`{.haskell} or `h`{.haskell} always represent functions, but you should be aware of the potential confusion. In practice, what `f`{.haskell} stands for should always be clear from the context, by noting whether it is part of a type or part of the code.
+As an aside, in idiomatic Haskell code you will often see the letter `f` used to stand for both an arbitrary `Functor`{.haskell} and an arbitrary function. In this document, `f` represents only `Functor`{.haskell}s, and `g` or `h` always represent functions, but you should be aware of the potential confusion. In practice, what `f` stands for should always be clear from the context, by noting whether it is part of a type or part of the code.
 
 There are other `Functor`{.haskell} instances in the standard libraries; below are a few. Note that some of these instances are not exported by the `Prelude`; to access them, you can import `Control.Monad.Instances`.
 
-* `Either e`{.haskell} is an instance of `Functor`{.haskell}; `Either e a`{.haskell} represents a container which can contain either a value of type `a`{.haskell}, or a value of type `e`{.haskell} (often representing some sort of error condition). It is similar to `Maybe`{.haskell} in that it represents possible failure, but it can carry some extra information about the failure as well.
+* `Either e`{.haskell} is an instance of `Functor`{.haskell}; `Either e a`{.haskell} represents a container which can contain either a value of type `a`, or a value of type `e` (often representing some sort of error condition). It is similar to `Maybe`{.haskell} in that it represents possible failure, but it can carry some extra information about the failure as well.
 
-* `((,) e)`{.haskell} represents a container which holds an “annotation” of type `e`{.haskell} along with the actual value it holds. It might be clearer to write it as `(e,)`{.haskell}, by analogy with an operator section like `(1+)`{.haskell}, but that syntax is not allowed in types (although it is allowed in expressions with the `TupleSections`{.haskell} extension enabled). However, you can certainly *think* of it as `(e,)`{.haskell}.
+* `((,) e)`{.haskell} represents a container which holds an “annotation” of type `e` along with the actual value it holds. It might be clearer to write it as `(e,)`{.haskell}, by analogy with an operator section like `(1+)`{.haskell}, but that syntax is not allowed in types (although it is allowed in expressions with the `TupleSections`{.haskell} extension enabled). However, you can certainly *think* of it as `(e,)`{.haskell}.
 
-* `((->) e)`{.haskell} (which can be thought of as `(e ->)`; see above), the type of functions which take a value of type `e`{.haskell} as a parameter, is a `Functor`{.haskell}.  As a container, `(e -> a)`{.haskell} represents a (possibly infinite) set of values of `a`{.haskell}, indexed by values of `e`{.haskell}. Alternatively, and more usefully, `((->) e)`{.haskell} can be thought of as a context in which a value of type `e`{.haskell} is available to be consulted in a read-only fashion. This is also why `((->) e)`{.haskell} is sometimes referred to as the *reader monad*; more on this later.
+* `((->) e)`{.haskell} (which can be thought of as `(e ->)`; see above), the type of functions which take a value of type `e` as a parameter, is a `Functor`{.haskell}.  As a container, `(e -> a)`{.haskell} represents a (possibly infinite) set of values of `a`, indexed by values of `e`. Alternatively, and more usefully, `((->) e)`{.haskell} can be thought of as a context in which a value of type `e` is available to be consulted in a read-only fashion. This is also why `((->) e)`{.haskell} is sometimes referred to as the *reader monad*; more on this later.
 
-* `IO`{.haskell} is a `Functor`{.haskell}; a value of type `IO a`{.haskell} represents a computation producing a value of type `a`{.haskell} which may have I/O effects. If `m`{.haskell} computes the value `x`{.haskell} while producing some I/O effects, then `fmap g m`{.haskell} will compute the value `g x`{.haskell} while producing the same I/O effects.
+* `IO`{.haskell} is a `Functor`{.haskell}; a value of type `IO a`{.haskell} represents a computation producing a value of type `a` which may have I/O effects. If `m` computes the value `x` while producing some I/O effects, then `fmap g m`{.haskell} will compute the value `g x`{.haskell} while producing the same I/O effects.
 
-* Many standard types from the [containers library](http://hackage.haskell.org/package/containers/) (such as `Tree`{.haskell}, `Map`{.haskell}, and `Sequence`{.haskell}) are instances of `Functor`{.haskell}. A notable exception is `Set`{.haskell}, which cannot be made a `Functor`{.haskell} in Haskell (although it is certainly a mathematical functor) since it requires an `Ord`{.haskell} constraint on its elements; `fmap`{.haskell} must be applicable to *any* types `a`{.haskell} and `b`{.haskell}. However, `Set`{.haskell} (and other similarly restricted data types) can be made an instance of a suitable generalization of `Functor`{.haskell}, either by [making `a`{.haskell} and `b`{.haskell} arguments to the `Functor`{.haskell} type class themselves](http://article.gmane.org/gmane.comp.lang.haskell.cafe/78052/), or by adding an [associated constraint](http://blog.omega-prime.co.uk/?p=127).
+* Many standard types from the [containers library](http://hackage.haskell.org/package/containers/) (such as `Tree`{.haskell}, `Map`{.haskell}, and `Sequence`{.haskell}) are instances of `Functor`{.haskell}. A notable exception is `Set`{.haskell}, which cannot be made a `Functor`{.haskell} in Haskell (although it is certainly a mathematical functor) since it requires an `Ord`{.haskell} constraint on its elements; `fmap`{.haskell} must be applicable to *any* types `a` and `b`. However, `Set`{.haskell} (and other similarly restricted data types) can be made an instance of a suitable generalization of `Functor`{.haskell}, either by [making `a` and `b` arguments to the `Functor`{.haskell} type class themselves](http://article.gmane.org/gmane.comp.lang.haskell.cafe/78052/), or by adding an [associated constraint](http://blog.omega-prime.co.uk/?p=127).
 
 > **Exercises**
 >
@@ -130,7 +130,7 @@ fmap id = id
 fmap (g . h) = (fmap g) . (fmap h)
 ```
 
-Together, these laws ensure that `fmap g`{.haskell} does not change the *structure* of a container, only the elements. Equivalently, and more simply, they ensure that `fmap g`{.haskell} changes a value without altering its context ^[Technically, these laws make `f`{.haskell} and `fmap`{.haskell} together an endofunctor on *Hask*, the category of Haskell types (ignoring [&perp;](http://www.haskell.org/haskellwiki/Bottom), which is a party pooper). See [Wikibook: Category theory](http://en.wikibooks.org/wiki/Haskell/Category_theory).].
+Together, these laws ensure that `fmap g`{.haskell} does not change the *structure* of a container, only the elements. Equivalently, and more simply, they ensure that `fmap g`{.haskell} changes a value without altering its context ^[Technically, these laws make `f` and `fmap`{.haskell} together an endofunctor on *Hask*, the category of Haskell types (ignoring [&perp;](http://www.haskell.org/haskellwiki/Bottom), which is a party pooper). See [Wikibook: Category theory](http://en.wikibooks.org/wiki/Haskell/Category_theory).].
 
 The first law says that mapping the identity function over every item in a container has no effect. The second says that mapping a composition of two functions over every item in a container is the same as first mapping one function, and then mapping the other.
 
@@ -158,7 +158,7 @@ A similar argument also shows that any `Functor`{.haskell} instance satisfying t
 
 There are two fundamental ways to think about `fmap`{.haskell}. The first has already been mentioned: it takes two parameters, a function and a container, and applies the function “inside” the container, producing a new container. Alternately, we can think of `fmap`{.haskell} as applying a function to a value in a context (without altering the context).
 
-Just like all other Haskell functions of “more than one parameter”, however, `fmap`{.haskell} is actually *curried*: it does not really take two parameters, but takes a single parameter and returns a function. For emphasis, we can write `fmap`{.haskell}’s type with extra parentheses: `fmap :: (a -> b) -> (f a -> f b)`{.haskell}. Written in this form, it is apparent that `fmap`{.haskell} transforms a “normal” function (`g :: a -> b`{.haskell}) into one which operates over containers/contexts (`fmap g :: f a -> f b`{.haskell}). This transformation is often referred to as a *lift*; `fmap`{.haskell} “lifts” a function from the “normal world” into the “`f`{.haskell} world”.
+Just like all other Haskell functions of “more than one parameter”, however, `fmap`{.haskell} is actually *curried*: it does not really take two parameters, but takes a single parameter and returns a function. For emphasis, we can write `fmap`{.haskell}’s type with extra parentheses: `fmap :: (a -> b) -> (f a -> f b)`{.haskell}. Written in this form, it is apparent that `fmap`{.haskell} transforms a “normal” function (`g :: a -> b`{.haskell}) into one which operates over containers/contexts (`fmap g :: f a -> f b`{.haskell}). This transformation is often referred to as a *lift*; `fmap`{.haskell} “lifts” a function from the “normal world” into the “`f` world”.
 
 ## Further reading
 
@@ -180,9 +180,9 @@ class Functor f => Applicative f where
 
 Note that every `Applicative`{.haskell} must also be a `Functor`{.haskell}. In fact, as we will see, `fmap`{.haskell} can be implemented using the `Applicative`{.haskell} methods, so every `Applicative`{.haskell} is a functor whether we like it or not; the `Functor`{.haskell} constraint forces us to be honest.
 
-As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)`{.haskell} is similar to the type of `($)`{.haskell} ^[Recall that `($)`{.haskell} is just function application: `f $ x = f x`{.haskell}.], but with everything enclosed in an `f`{.haskell}. In other words, `(<*>)`{.haskell} is just function application within a computational context. The type of `(<*>)`{.haskell} is also very similar to the type of `fmap`{.haskell}; the only difference is that the first parameter is `f (a -> b)`{.haskell}, a function in a context, instead of a “normal” function `(a -> b)`{.haskell}.
+As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)`{.haskell} is similar to the type of `($)`{.haskell} ^[Recall that `($)`{.haskell} is just function application: `f $ x = f x`{.haskell}.], but with everything enclosed in an `f`. In other words, `(<*>)`{.haskell} is just function application within a computational context. The type of `(<*>)`{.haskell} is also very similar to the type of `fmap`{.haskell}; the only difference is that the first parameter is `f (a -> b)`{.haskell}, a function in a context, instead of a “normal” function `(a -> b)`{.haskell}.
 
-`pure`{.haskell} takes a value of any type `a`{.haskell}, and returns a context/container of type `f a`{.haskell}.  The intention is that `pure`{.haskell} creates some sort of “default” container or “effect free” context.  In fact, the behavior of `pure`{.haskell} is quite constrained by the laws it should satisfy in conjunction with `(<*>)`{.haskell}.  Usually, for a given implementation of `(<*>)`{.haskell} there is only one possible implementation of `pure`{.haskell}.
+`pure`{.haskell} takes a value of any type `a`, and returns a context/container of type `f a`{.haskell}.  The intention is that `pure`{.haskell} creates some sort of “default” container or “effect free” context.  In fact, the behavior of `pure`{.haskell} is quite constrained by the laws it should satisfy in conjunction with `(<*>)`{.haskell}.  Usually, for a given implementation of `(<*>)`{.haskell} there is only one possible implementation of `pure`{.haskell}.
 
 (Note that previous versions of the Typeclassopedia explained `pure`{.haskell} in terms of a type class `Pointed`{.haskell}, which can still be found in the [`pointed`{.haskell} package](http://hackage.haskell.org/package/pointed).  However, the current consensus is that `Pointed`{.haskell} is not very useful after all.  For a more detailed explanation, see [Why not Pointed?](http://www.haskell.org/haskellwiki/Why not Pointed%3F))
 
@@ -205,7 +205,7 @@ There is also a law specifying how `Applicative`{.haskell} should relate to `Fun
 fmap g x = pure g <*> x
 ```
 
-It says that mapping a pure function `g`{.haskell} over a context `x`{.haskell} is the same as first injecting `g`{.haskell} into a context with `pure`{.haskell}, and then applying it to `x`{.haskell} with `(<*>)`{.haskell}. In other words, we can decompose `fmap`{.haskell} into two more atomic operations: injection into a context, and application within a context. The `Control.Applicative` module also defines `(<$>)`{.haskell} as a synonym for `fmap`{.haskell}, so the above law can also be expressed as:
+It says that mapping a pure function `g` over a context `x` is the same as first injecting `g` into a context with `pure`{.haskell}, and then applying it to `x` with `(<*>)`{.haskell}. In other words, we can decompose `fmap`{.haskell} into two more atomic operations: injection into a context, and application within a context. The `Control.Applicative` module also defines `(<$>)`{.haskell} as a synonym for `fmap`{.haskell}, so the above law can also be expressed as:
 
 `g <$> x = pure g <*> x`{.haskell}.
 
@@ -243,7 +243,7 @@ instance Applicative [] where
 
 Instead of applying functions to inputs pairwise, we apply each function to all the inputs in turn, and collect all the results in a list.
 
-Now we can write nondeterministic computations in a natural style. To add the numbers `3`{.haskell} and `4`{.haskell} deterministically, we can of course write `(+) 3 4`{.haskell}. But suppose instead of `3`{.haskell} we have a nondeterministic computation that might result in `2`{.haskell}, `3`{.haskell}, or `4`{.haskell}; then we can write
+Now we can write nondeterministic computations in a natural style. To add the numbers `3` and `4` deterministically, we can of course write `(+) 3 4`{.haskell}. But suppose instead of `3` we have a nondeterministic computation that might result in `2`, `3`, or `4`; then we can write
 
 ```haskell
   pure (+) <*> [2,3,4] <*> pure 4
@@ -257,11 +257,11 @@ or, more idiomatically,
 
 There are several other `Applicative`{.haskell} instances as well:
 
-* `IO`{.haskell} is an instance of `Applicative`{.haskell}, and behaves exactly as you would think: to execute `m1 <*> m2`{.haskell}, first `m1`{.haskell} is executed, resulting in a function `f`{.haskell}, then `m2`{.haskell} is executed, resulting in a value `x`{.haskell}, and finally the value `f x`{.haskell} is returned as the result of executing `m1 <*> m2`{.haskell}.
+* `IO`{.haskell} is an instance of `Applicative`{.haskell}, and behaves exactly as you would think: to execute `m1 <*> m2`{.haskell}, first `m1`{.haskell} is executed, resulting in a function `f`, then `m2`{.haskell} is executed, resulting in a value `x`, and finally the value `f x`{.haskell} is returned as the result of executing `m1 <*> m2`{.haskell}.
 
-* `((,) a)`{.haskell} is an `Applicative`{.haskell}, as long as `a`{.haskell} is an instance of `Monoid`{.haskell} ([section Monoid](#monoid)). The `a`{.haskell} values are accumulated in parallel with the computation.
+* `((,) a)`{.haskell} is an `Applicative`{.haskell}, as long as `a` is an instance of `Monoid`{.haskell} ([section Monoid](#monoid)). The `a` values are accumulated in parallel with the computation.
 
-* The `Applicative`{.haskell} module defines the `Const`{.haskell} type constructor; a value of type `Const a b`{.haskell} simply contains an `a`{.haskell}. This is an instance of `Applicative`{.haskell} for any `Monoid a`{.haskell}; this instance becomes especially useful in conjunction with things like `Foldable`{.haskell} ([section Foldable](#foldable)).
+* The `Applicative`{.haskell} module defines the `Const`{.haskell} type constructor; a value of type `Const a b`{.haskell} simply contains an `a`. This is an instance of `Applicative`{.haskell} for any `Monoid a`{.haskell}; this instance becomes especially useful in conjunction with things like `Foldable`{.haskell} ([section Foldable](#foldable)).
 
 * The `WrappedMonad`{.haskell} and `WrappedArrow`{.haskell} newtypes make any instances of `Monad`{.haskell} ([section Monad](#monad)) or `Arrow`{.haskell} ([section Arrow](#arrow)) respectively into instances of `Applicative`{.haskell}; as we will see when we study those type classes, both are strictly more expressive than `Applicative`{.haskell}, in the sense that the `Applicative`{.haskell} methods can be implemented in terms of their methods.
 
@@ -274,7 +274,7 @@ There are several other `Applicative`{.haskell} instances as well:
 
 McBride and Paterson’s paper introduces the notation $[[g \; x_1 \; x_2 \; \cdots \; x_n]]$ to denote function application in a computational context. If each $x_i\ $ has type $f \; t_i\ $ for some applicative functor $f\ $, and $g\ $ has type $t_1 \to t_2 \to \dots \to t_n \to t\ $, then the entire expression $[[g \; x_1 \; \cdots \; x_n]]$ has type $f \; t\ $. You can think of this as applying a function to multiple “effectful” arguments. In this sense, the double bracket notation is a generalization of `fmap`{.haskell}, which allows us to apply a function to a single argument in a context.
 
-Why do we need `Applicative`{.haskell} to implement this generalization of `fmap`{.haskell}? Suppose we use `fmap`{.haskell} to apply `g`{.haskell} to the first parameter `x1`{.haskell}. Then we get something of type `f (t2 -> ... t)`{.haskell}, but now we are stuck: we can’t apply this function-in-a-context to the next argument with `fmap`{.haskell}. However, this is precisely what `(<*>)`{.haskell} allows us to do.
+Why do we need `Applicative`{.haskell} to implement this generalization of `fmap`{.haskell}? Suppose we use `fmap`{.haskell} to apply `g` to the first parameter `x1`{.haskell}. Then we get something of type `f (t2 -> ... t)`{.haskell}, but now we are stuck: we can’t apply this function-in-a-context to the next argument with `fmap`{.haskell}. However, this is precisely what `(<*>)`{.haskell} allows us to do.
 
 This suggests the proper translation of the idealized notation $[[g \; x_1 \; x_2 \; \cdots \; x_n]]$ into Haskell, namely
 
@@ -374,7 +374,7 @@ The `Monad`{.haskell} type class is exported by the `Prelude`{.haskell}, along w
 
 Let’s examine the methods in the `Monad`{.haskell} class one by one. The type of `return`{.haskell} should look familiar; it’s the same as `pure`{.haskell}. Indeed, `return`{.haskell} *is* `pure`{.haskell}, but with an unfortunate name. (Unfortunate, since someone coming from an imperative programming background might think that `return`{.haskell} is like the C or Java keyword of the same name, when in fact the similarities are minimal.) From a mathematical point of view, every monad is an applicative functor, but for historical reasons, the `Monad`{.haskell} type class declaration unfortunately does not require this.
 
-We can see that `(>>)`{.haskell} is a specialized version of `(>>=)`{.haskell}, with a default implementation given. It is only included in the type class declaration so that specific instances of `Monad`{.haskell} can override the default implementation of `(>>)`{.haskell} with a more efficient one, if desired. Also, note that although `_ >> n = n`{.haskell} would be a type-correct implementation of `(>>)`{.haskell}, it would not correspond to the intended semantics: the intention is that `m >> n`{.haskell} ignores the *result* of `m`{.haskell}, but not its *effects*.
+We can see that `(>>)`{.haskell} is a specialized version of `(>>=)`{.haskell}, with a default implementation given. It is only included in the type class declaration so that specific instances of `Monad`{.haskell} can override the default implementation of `(>>)`{.haskell} with a more efficient one, if desired. Also, note that although `_ >> n = n`{.haskell} would be a type-correct implementation of `(>>)`{.haskell}, it would not correspond to the intended semantics: the intention is that `m >> n`{.haskell} ignores the *result* of `m`, but not its *effects*.
 
 The `fail`{.haskell} function is an awful hack that has no place in the `Monad`{.haskell} class; more on this later.
 
@@ -399,7 +399,7 @@ Even if you don’t understand the intuition behind the `Monad`{.haskell} class,
     (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b.
     ```
 
-    If the first argument to `(>>=)`{.haskell} is `Just x`{.haskell}, then we have something of type `a`{.haskell} (namely, `x`{.haskell}), to which we can apply the second argument---resulting in a `Maybe b`{.haskell}, which is exactly what we wanted. What if the first argument to `(>>=)`{.haskell} is `Nothing`{.haskell}? In that case, we don’t have anything to which we can apply the `a -> Maybe b`{.haskell} function, so there’s only one thing we can do: yield `Nothing`{.haskell}. This instance is:
+    If the first argument to `(>>=)`{.haskell} is `Just x`{.haskell}, then we have something of type `a` (namely, `x`), to which we can apply the second argument---resulting in a `Maybe b`{.haskell}, which is exactly what we wanted. What if the first argument to `(>>=)`{.haskell} is `Nothing`{.haskell}? In that case, we don’t have anything to which we can apply the `a -> Maybe b`{.haskell} function, so there’s only one thing we can do: yield `Nothing`{.haskell}. This instance is:
 
     ```haskell
     instance Monad Maybe where
@@ -408,19 +408,19 @@ Even if you don’t understand the intuition behind the `Monad`{.haskell} class,
       Nothing  >>= _ = Nothing
     ```
 
-    We can already get a bit of intuition as to what is going on here: if we build up a computation by chaining together a bunch of functions with `(>>=)`{.haskell}, as soon as any one of them fails, the entire computation will fail (because `Nothing >>= f`{.haskell} is `Nothing`{.haskell}, no matter what `f`{.haskell} is). The entire computation succeeds only if all the constituent functions individually succeed. So the `Maybe`{.haskell} monad models computations which may fail.
+    We can already get a bit of intuition as to what is going on here: if we build up a computation by chaining together a bunch of functions with `(>>=)`{.haskell}, as soon as any one of them fails, the entire computation will fail (because `Nothing >>= f`{.haskell} is `Nothing`{.haskell}, no matter what `f` is). The entire computation succeeds only if all the constituent functions individually succeed. So the `Maybe`{.haskell} monad models computations which may fail.
 
 - The `Monad`{.haskell} instance for the list constructor `[]`{.haskell} is similar to its `Applicative`{.haskell} instance; see the exercise below.
 
 - Of course, the `IO`{.haskell} constructor is famously a `Monad`{.haskell}, but its implementation is somewhat magical, and may in fact differ from compiler to compiler. It is worth emphasizing that the `IO`{.haskell} monad is the *only* monad which is magical. It allows us to build up, in an entirely pure way, values representing possibly effectful computations. The special value `main`{.haskell}, of type `IO ()`{.haskell}, is taken by the runtime and actually executed, producing actual effects. Every other monad is functionally pure, and requires no special compiler support. We often speak of monadic values as “effectful computations”, but this is because some monads allow us to write code *as if* it has side effects, when in fact the monad is hiding the plumbing which allows these apparent side effects to be implemented in a functionally pure way.
 
-- As mentioned earlier, `((->) e)`{.haskell} is known as the *reader monad*, since it describes computations in which a value of type `e`{.haskell} is available as a read-only environment.
+- As mentioned earlier, `((->) e)`{.haskell} is known as the *reader monad*, since it describes computations in which a value of type `e` is available as a read-only environment.
 
     The [`Control.Monad.Reader`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Reader.html) module provides the `Reader e a`{.haskell} type, which is just a convenient `newtype`{.haskell} wrapper around `(e -> a)`{.haskell}, along with an appropriate `Monad`{.haskell} instance and some `Reader`{.haskell}-specific utility functions such as `ask`{.haskell} (retrieve the environment), `asks`{.haskell} (retrieve a function of the environment), and `local`{.haskell} (run a subcomputation under a different environment).
 
-- The [`Control.Monad.Writer`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Writer-Lazy.html) module provides the `Writer`{.haskell} monad, which allows information to be collected as a computation progresses. `Writer w a`{.haskell} is isomorphic to `(a,w)`{.haskell}, where the output value `a`{.haskell} is carried along with an annotation or “log” of type `w`{.haskell}, which must be an instance of `Monoid`{.haskell} (see [section Monoid](#monoid)); the special function `tell`{.haskell} performs logging.
+- The [`Control.Monad.Writer`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Writer-Lazy.html) module provides the `Writer`{.haskell} monad, which allows information to be collected as a computation progresses. `Writer w a`{.haskell} is isomorphic to `(a,w)`{.haskell}, where the output value `a` is carried along with an annotation or “log” of type `w`, which must be an instance of `Monoid`{.haskell} (see [section Monoid](#monoid)); the special function `tell`{.haskell} performs logging.
 
-- The [`Control.Monad.State`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-State-Lazy.html) module provides the `State s a`{.haskell} type, a `newtype`{.haskell} wrapper around `s -> (a,s)`{.haskell}. Something of type `State s a`{.haskell} represents a stateful computation which produces an `a`{.haskell} but can access and modify the state of type `s`{.haskell} along the way. The module also provides `State`{.haskell}-specific utility functions such as `get`{.haskell} (read the current state), `gets`{.haskell} (read a function of the current state), `put`{.haskell} (overwrite the state), and `modify`{.haskell} (apply a function to the state).
+- The [`Control.Monad.State`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-State-Lazy.html) module provides the `State s a`{.haskell} type, a `newtype`{.haskell} wrapper around `s -> (a,s)`{.haskell}. Something of type `State s a`{.haskell} represents a stateful computation which produces an `a` but can access and modify the state of type `s` along the way. The module also provides `State`{.haskell}-specific utility functions such as `get`{.haskell} (read the current state), `gets`{.haskell} (read a function of the current state), `put`{.haskell} (overwrite the state), and `modify`{.haskell} (apply a function to the state).
 
 - The [`Control.Monad.Cont`](http://hackage.haskell.org/packages/archive/mtl/latest/doc/html/Control-Monad-Cont.html) module provides the `Cont`{.haskell} monad, which represents computations in continuation-passing style. It can be used to suspend and resume computations, and to implement non-local transfers of control, co-routines, other complex control structures---all in a functionally pure way. `Cont`{.haskell} has been called the [“mother of all monads”](http://blog.sigfpe.com/2008/12/mother-of-all-monads.html) because of its universal properties.
 
@@ -435,19 +435,19 @@ Even if you don’t understand the intuition behind the `Monad`{.haskell} class,
 >                   | Node (f (Free f a))
 >     ```
 >
->     You may assume that `f`{.haskell} has a `Functor`{.haskell} instance.  This is known as the *free monad* built from the functor `f`{.haskell}.
+>     You may assume that `f` has a `Functor`{.haskell} instance.  This is known as the *free monad* built from the functor `f`.
 
 ## Intuition
 
-Let’s look more closely at the type of `(>>=)`{.haskell}. The basic intuition is that it combines two computations into one larger computation. The first argument, `m a`{.haskell}, is the first computation. However, it would be boring if the second argument were just an `m b`{.haskell}; then there would be no way for the computations to interact with one another (actually, this is exactly the situation with `Applicative`{.haskell}). So, the second argument to `(>>=)`{.haskell} has type `a -> m b`{.haskell}: a function of this type, given a *result* of the first computation, can produce a second computation to be run. In other words, `x >>= k`{.haskell} is a computation which runs `x`{.haskell}, and then uses the result(s) of `x`{.haskell} to *decide* what computation to run second, using the output of the second computation as the result of the entire computation.
+Let’s look more closely at the type of `(>>=)`{.haskell}. The basic intuition is that it combines two computations into one larger computation. The first argument, `m a`{.haskell}, is the first computation. However, it would be boring if the second argument were just an `m b`{.haskell}; then there would be no way for the computations to interact with one another (actually, this is exactly the situation with `Applicative`{.haskell}). So, the second argument to `(>>=)`{.haskell} has type `a -> m b`{.haskell}: a function of this type, given a *result* of the first computation, can produce a second computation to be run. In other words, `x >>= k`{.haskell} is a computation which runs `x`, and then uses the result(s) of `x` to *decide* what computation to run second, using the output of the second computation as the result of the entire computation.
 
 Intuitively, it is this ability to use the output from previous computations to decide what computations to run next that makes `Monad`{.haskell} more powerful than `Applicative`{.haskell}. The structure of an `Applicative`{.haskell} computation is fixed, whereas the structure of a `Monad`{.haskell} computation can change based on intermediate results.  This also means that parsers built using an `Applicative`{.haskell} interface can only parse context-free languages; in order to parse context-sensitive languages a `Monad`{.haskell} interface is needed.^[Actually, because Haskell allows general recursion, this is a lie: using a Haskell parsing library one can recursively construct *infinite* grammars, and hence `Applicative`{.haskell} (together with `Alternative`{.haskell}) is enough to parse any context-sensitive language with a finite alphabet. See [Parsing context-sensitive languages with Applicative](http://byorgey.wordpress.com/2012/01/05/parsing-context-sensitive-languages-with-applicative/).]
 
-To see the increased power of `Monad`{.haskell} from a different point of view, let’s see what happens if we try to implement `(>>=)`{.haskell} in terms of `fmap`{.haskell}, `pure`{.haskell}, and `(<*>)`{.haskell}. We are given a value `x`{.haskell} of type `m a`{.haskell}, and a function `k`{.haskell} of type `a -> m b`{.haskell}, so the only thing we can do is apply `k`{.haskell} to `x`{.haskell}. We can’t apply it directly, of course; we have to use `fmap`{.haskell} to lift it over the `m`{.haskell}. But what is the type of `fmap k`{.haskell}? Well, it’s `m a -> m (m b)`{.haskell}. So after we apply it to `x`{.haskell}, we are left with something of type `m (m b)`---but now we are stuck; what we really want is an `m b`{.haskell}, but there’s no way to get there from here. We can *add* `m`{.haskell}’s using `pure`{.haskell}, but we have no way to *collapse* multiple `m`{.haskell}’s into one.
+To see the increased power of `Monad`{.haskell} from a different point of view, let’s see what happens if we try to implement `(>>=)`{.haskell} in terms of `fmap`{.haskell}, `pure`{.haskell}, and `(<*>)`{.haskell}. We are given a value `x` of type `m a`{.haskell}, and a function `k` of type `a -> m b`{.haskell}, so the only thing we can do is apply `k` to `x`. We can’t apply it directly, of course; we have to use `fmap`{.haskell} to lift it over the `m`. But what is the type of `fmap k`{.haskell}? Well, it’s `m a -> m (m b)`{.haskell}. So after we apply it to `x`, we are left with something of type `m (m b)`---but now we are stuck; what we really want is an `m b`{.haskell}, but there’s no way to get there from here. We can *add* `m`’s using `pure`{.haskell}, but we have no way to *collapse* multiple `m`’s into one.
 
 
 
-This ability to collapse multiple `m`{.haskell}’s is exactly the ability provided by the function `join :: m (m a) -> m a`{.haskell}, and it should come as no surprise that an alternative definition of `Monad`{.haskell} can be given in terms of `join`{.haskell}:
+This ability to collapse multiple `m`’s is exactly the ability provided by the function `join :: m (m a) -> m a`{.haskell}, and it should come as no surprise that an alternative definition of `Monad`{.haskell} can be given in terms of `join`{.haskell}:
 
 ```haskell
 class Applicative m => Monad'' m where
@@ -479,7 +479,7 @@ The [`Control.Monad`](http://haskell.org/ghc/docs/latest/html/libraries/base/Con
 
 * `(=<<) :: Monad m => (a -> m b) -> m a -> m b`{.haskell} is just `(>>=)`{.haskell} with its arguments reversed; sometimes this direction is more convenient since it corresponds more closely to function application.
 
-* `(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c`{.haskell} is sort of like function composition, but with an extra `m`{.haskell} on the result type of each function, and the arguments swapped. We’ll have more to say about this operation later. There is also a flipped variant, `(<=<)`{.haskell}.
+* `(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c`{.haskell} is sort of like function composition, but with an extra `m` on the result type of each function, and the arguments swapped. We’ll have more to say about this operation later. There is also a flipped variant, `(<=<)`{.haskell}.
 
 * The `guard`{.haskell} function is for use with instances of `MonadPlus`{.haskell}, which is discussed at the end of the [`Monoid`{.haskell} section](#monoid).
 
@@ -499,9 +499,9 @@ m >>= (\x -> k x >>= h)  =  (m >>= k) >>= h
 fmap f xs  =  xs >>= return . f  =  liftM f xs
 ```
 
-The first and second laws express the fact that `return`{.haskell} behaves nicely: if we inject a value `a`{.haskell} into a monadic context with `return`{.haskell}, and then bind to `k`{.haskell}, it is the same as just applying `k`{.haskell} to `a`{.haskell} in the first place; if we bind a computation `m`{.haskell} to `return`{.haskell}, nothing changes. The third law essentially says that `(>>=)`{.haskell} is associative, sort of.  The last law ensures that `fmap`{.haskell} and `liftM`{.haskell} are the same for types which are instances of both `Functor`{.haskell} and `Monad`{.haskell}---which, as already noted, should be every instance of `Monad`{.haskell}.
+The first and second laws express the fact that `return`{.haskell} behaves nicely: if we inject a value `a` into a monadic context with `return`{.haskell}, and then bind to `k`, it is the same as just applying `k` to `a` in the first place; if we bind a computation `m` to `return`{.haskell}, nothing changes. The third law essentially says that `(>>=)`{.haskell} is associative, sort of.  The last law ensures that `fmap`{.haskell} and `liftM`{.haskell} are the same for types which are instances of both `Functor`{.haskell} and `Monad`{.haskell}---which, as already noted, should be every instance of `Monad`{.haskell}.
 
-However, the presentation of the above laws, especially the third, is marred by the asymmetry of `(>>=)`{.haskell}.  It’s hard to look at the laws and see what they’re really saying. I prefer a much more elegant version of the laws, which is formulated in terms of `(>=>)`{.haskell} ^[I like to pronounce this operator “fish”.]. Recall that `(>=>)`{.haskell} “composes” two functions of type `a -> m b`{.haskell} and `b -> m c`{.haskell}.  You can think of something of type `a -> m b`{.haskell} (roughly) as a function from `a`{.haskell} to `b`{.haskell} which may also have some sort of effect in the context corresponding to `m`{.haskell}. `(>=>)`{.haskell} lets us compose these “effectful functions”, and we would like to know what properties `(>=>)`{.haskell} has.  The monad laws reformulated in terms of `(>=>)`{.haskell} are:
+However, the presentation of the above laws, especially the third, is marred by the asymmetry of `(>>=)`{.haskell}.  It’s hard to look at the laws and see what they’re really saying. I prefer a much more elegant version of the laws, which is formulated in terms of `(>=>)`{.haskell} ^[I like to pronounce this operator “fish”.]. Recall that `(>=>)`{.haskell} “composes” two functions of type `a -> m b`{.haskell} and `b -> m c`{.haskell}.  You can think of something of type `a -> m b`{.haskell} (roughly) as a function from `a` to `b` which may also have some sort of effect in the context corresponding to `m`. `(>=>)`{.haskell} lets us compose these “effectful functions”, and we would like to know what properties `(>=>)`{.haskell} has.  The monad laws reformulated in terms of `(>=>)`{.haskell} are:
 
 ```haskell
 return >=> g  =  g
@@ -509,7 +509,7 @@ g >=> return  =  g
 (g >=> h) >=> k  =  g >=> (h >=> k)
 ```
 
-Ah, much better!  The laws simply state that `return`{.haskell} is the identity of `(>=>)`{.haskell}, and that `(>=>)`{.haskell} is associative ^[As fans of category theory will note, these laws say precisely that functions of type `a -> m b`{.haskell} are the arrows of a category with `(>=>)`{.haskell} as composition!  Indeed, this is known as the *Kleisli category* of the monad `m`{.haskell}.  It will come up again when we discuss `Arrow`{.haskell}s.].
+Ah, much better!  The laws simply state that `return`{.haskell} is the identity of `(>=>)`{.haskell}, and that `(>=>)`{.haskell} is associative ^[As fans of category theory will note, these laws say precisely that functions of type `a -> m b`{.haskell} are the arrows of a category with `(>=>)`{.haskell} as composition!  Indeed, this is known as the *Kleisli category* of the monad `m`.  It will come up again when we discuss `Arrow`{.haskell}s.].
 
 There is also a formulation of the monad laws in terms of `fmap`{.haskell}, `return`{.haskell}, and `join`{.haskell}; for a discussion of this formulation, see the Haskell [wikibook page on category theory](http://en.wikibooks.org/wiki/Haskell/Category_theory).
 
@@ -528,7 +528,7 @@ c >>= \y ->
 d
 ```
 
-This emphasizes that the overall computation consists of four computations `a`{.haskell}, `b`{.haskell}, `c`{.haskell}, and `d`{.haskell}, and that `x`{.haskell} is bound to the result of `a`{.haskell}, and `y`{.haskell} is bound to the result of `c`{.haskell} (`b`{.haskell}, `c`{.haskell}, and `d`{.haskell} are allowed to refer to `x`{.haskell}, and `d`{.haskell} is allowed to refer to `y`{.haskell} as well).  From here it is not hard to imagine a nicer notation:
+This emphasizes that the overall computation consists of four computations `a`, `b`, `c`, and `d`, and that `x` is bound to the result of `a`, and `y` is bound to the result of `c` (`b`, `c`, and `d` are allowed to refer to `x`, and `d` is allowed to refer to `y` as well).  From here it is not hard to imagine a nicer notation:
 
 ```haskell
 do { x <- a
@@ -545,7 +545,7 @@ do { x <- a
       do { v <- e; stmts } → e >>= \v -> do { stmts }
     do { let decls; stmts} → let decls in do { stmts }
 
-This is not quite the whole story, since `v`{.haskell} might be a pattern instead of a variable.  For example, one can write
+This is not quite the whole story, since `v` might be a pattern instead of a variable.  For example, one can write
 
 ```haskell
 do (x:xs) <- foo
@@ -554,7 +554,7 @@ do (x:xs) <- foo
 
 but what happens if `foo`{.haskell} produces an empty list?  Well, remember that ugly `fail`{.haskell} function in the `Monad`{.haskell} type class declaration?  That’s what happens.  See [section 3.14 of the Haskell Report](http://haskell.org/onlinereport/exps.html#sect3.14) for the full details. See also the discussion of `MonadPlus`{.haskell} and `MonadZero`{.haskell} in the [section on other monoidal classes](#other-monoidal-classes-alternative-monadplus-arrowplus).
 
-A final note on intuition: `do` notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m`{.haskell} is suggestive of “extracting” a single `x`{.haskell} from `m`{.haskell} and doing something with it.  But `m`{.haskell} may represent some sort of a container, such as a list or a tree; the meaning of `x <- m`{.haskell} is entirely dependent on the implementation of `(>>=)`{.haskell}.  For example, if `m`{.haskell} is a list, `x <- m`{.haskell} actually means that `x`{.haskell} will take on each value from the list in turn.
+A final note on intuition: `do` notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m`{.haskell} is suggestive of “extracting” a single `x` from `m` and doing something with it.  But `m` may represent some sort of a container, such as a list or a tree; the meaning of `x <- m`{.haskell} is entirely dependent on the implementation of `(>>=)`{.haskell}.  For example, if `m` is a list, `x <- m`{.haskell} actually means that `x` will take on each value from the list in turn.
 
 ## Further reading
 
@@ -596,7 +596,7 @@ The [transformers](http://hackage.haskell.org/package/transformers) library prov
 * [`ListT`{.haskell}](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Control-Monad-Trans-List.html) adds non-determinism (however, see the discussion of `ListT`{.haskell} below).
 * [`ContT`{.haskell}](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Control-Monad-Trans-Cont.html) adds continuation handling.
 
-For example, `StateT s Maybe`{.haskell} is an instance of `Monad`{.haskell}; computations of type `StateT s Maybe a`{.haskell} may fail, and have access to a mutable state of type `s`{.haskell}.  Monad transformers can be multiply stacked.  One thing to keep in mind while using monad transformers is that the order of composition matters.  For example, when a `StateT s Maybe a`{.haskell} computation fails, the state ceases being updated (indeed, it simply disappears); on the other hand, the state of a `MaybeT (State s) a`{.haskell} computation may continue to be modified even after the computation has "failed". This may seem backwards, but it is correct. Monad transformers build composite monads “inside out”; `MaybeT (State s) a`{.haskell} is isomorphic to `s -> (Maybe a, s)`{.haskell}.  (Lambdabot has an indispensable `@unmtl`{.haskell} command which you can use to “unpack” a monad transformer stack in this way.)
+For example, `StateT s Maybe`{.haskell} is an instance of `Monad`{.haskell}; computations of type `StateT s Maybe a`{.haskell} may fail, and have access to a mutable state of type `s`.  Monad transformers can be multiply stacked.  One thing to keep in mind while using monad transformers is that the order of composition matters.  For example, when a `StateT s Maybe a`{.haskell} computation fails, the state ceases being updated (indeed, it simply disappears); on the other hand, the state of a `MaybeT (State s) a`{.haskell} computation may continue to be modified even after the computation has "failed". This may seem backwards, but it is correct. Monad transformers build composite monads “inside out”; `MaybeT (State s) a`{.haskell} is isomorphic to `s -> (Maybe a, s)`{.haskell}.  (Lambdabot has an indispensable `@unmtl`{.haskell} command which you can use to “unpack” a monad transformer stack in this way.)
 Intuitively, the monads become "more fundamental" the further down in the stack you get, and the effects of a given monad "have precedence" over the effects of monads further up the stack.  Of course, this is just handwaving, and if you are unsure of the proper order for some monads you wish to combine, there is no substitute for using `@unmtl`{.haskell} or simply trying out the various options.
 
 ## Definition and laws
@@ -608,7 +608,7 @@ class MonadTrans t where
   lift :: Monad m => m a -> t m a
 ```
 
-It allows arbitrary computations in the base monad `m`{.haskell} to be “lifted” into computations in the transformed monad `t m`{.haskell}. (Note that type application associates to the left, just like function application, so `t m a = (t m) a`{.haskell}.)
+It allows arbitrary computations in the base monad `m` to be “lifted” into computations in the transformed monad `t m`{.haskell}. (Note that type application associates to the left, just like function application, so `t m a = (t m) a`{.haskell}.)
 
 `lift`{.haskell} must satisfy the laws
 
@@ -617,11 +617,11 @@ lift . return   =  return
 lift (m >>= f)  =  lift m >>= (lift . f)
 ```
 
-which intuitively state that `lift`{.haskell} transforms `m a`{.haskell} computations into `t m a`{.haskell} computations in a "sensible" way, which sends the `return`{.haskell} and `(>>=)`{.haskell} of `m`{.haskell} to the `return`{.haskell} and `(>>=)`{.haskell} of `t m`{.haskell}.
+which intuitively state that `lift`{.haskell} transforms `m a`{.haskell} computations into `t m a`{.haskell} computations in a "sensible" way, which sends the `return`{.haskell} and `(>>=)`{.haskell} of `m` to the `return`{.haskell} and `(>>=)`{.haskell} of `t m`{.haskell}.
 
 > **Exercises**
 >
-> #. What is the kind of `t`{.haskell} in the declaration of `MonadTrans`{.haskell}?
+> #. What is the kind of `t` in the declaration of `MonadTrans`{.haskell}?
 
 ## Transformer type classes and "capability" style
 
@@ -651,15 +651,15 @@ However, this sort of "capability-based" style (*e.g.* specifying that `foo`{.ha
 
 Is the composition of two monads always a monad? As hinted previously, the answer is no.  For example, *XXX insert example here*.
 
-Since `Applicative`{.haskell} functors are closed under composition, the problem must lie with `join`{.haskell}.  Indeed, suppose `m`{.haskell} and `n`{.haskell} are arbitrary monads; to make a monad out of their composition we would need to be able to implement
+Since `Applicative`{.haskell} functors are closed under composition, the problem must lie with `join`{.haskell}.  Indeed, suppose `m` and `n` are arbitrary monads; to make a monad out of their composition we would need to be able to implement
 
 ```haskell
 join :: m (n (m (n a))) -> m (n a)
 ```
 
-but it is not clear how this could be done in general.  The  `join`{.haskell} method for `m`{.haskell} is no help, because the two occurrences of `m`{.haskell} are not next to each other (and likewise for `n`{.haskell}).
+but it is not clear how this could be done in general.  The  `join`{.haskell} method for `m` is no help, because the two occurrences of `m` are not next to each other (and likewise for `n`).
 
-However, one situation in which it can be done is if `n`{.haskell} *distributes* over `m`{.haskell}, that is, if there is a function
+However, one situation in which it can be done is if `n` *distributes* over `m`, that is, if there is a function
 
 ```haskell
 distrib :: n (m a) -> m (n a)
@@ -669,7 +669,7 @@ satisfying certain laws. See Jones and Duponcheel ([Composing Monads](http://cit
 
 > **Exercises**
 >
-> #. Implement `join :: M (N (M (N a))) -> M (N a)`{.haskell}, given `distrib :: N (M a) -> M (N a)`{.haskell} and assuming `M`{.haskell} and `N`{.haskell} are instances of `Monad`{.haskell}.
+> #. Implement `join :: M (N (M (N a))) -> M (N a)`{.haskell}, given `distrib :: N (M a) -> M (N a)`{.haskell} and assuming `M` and `N` are instances of `Monad`{.haskell}.
 
 ## Further reading
 
@@ -679,7 +679,7 @@ See [Edward Kmett's mailing list message](http://article.gmane.org/gmane.comp.la
 
 There are two excellent references on monad transformers. Martin Grabmüller’s [Monad Transformers Step by Step](http://www.grabmueller.de/martin/www/pub/Transformers.en.html) is a thorough description, with running examples, of how to use monad transformers to elegantly build up computations with various effects.  [Cale Gibbard’s article](http://cale.yi.org/index.php/How_To_Use_Monad_Transformers) on how to use monad transformers is more practical, describing how to structure code using monad transformers to make writing it as painless as possible.  Another good starting place for learning about monad transformers is a [blog post by Dan Piponi](http://blog.sigfpe.com/2006/05/grok-haskell-monad-transformers.html).
 
-The `ListT`{.haskell} transformer from the `transformers`{.haskell} package comes with the caveat that `ListT m`{.haskell} is only a monad when `m`{.haskell} is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`{.haskell}'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
+The `ListT`{.haskell} transformer from the `transformers`{.haskell} package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
 
 There is an alternative way to compose monads, using coproducts, as described by [Lüth and Ghani](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.8.3581).  This method is interesting but has not (yet?) seen widespread use.
 
@@ -701,7 +701,7 @@ do { x <- foo
    }
 ```
 
-Normally (if we had `do` in place of `rec`{.haskell} in the above example), `y`{.haskell} would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z`{.haskell} would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y`{.haskell} and `z`{.haskell} are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
+Normally (if we had `do` in place of `rec`{.haskell} in the above example), `y` would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z` would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y` and `z` are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
 
 ```haskell
 let { y = baz
@@ -718,7 +718,7 @@ What could such a feature be used for?  One of the motivating examples given in 
   x <- gate y z
 ```
 
-describes a gate whose input wires are labeled `y`{.haskell} and `z`{.haskell} and whose output wire is labeled `x`{.haskell}.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec`{.haskell} block solves this problem.
+describes a gate whose input wires are labeled `y` and `z` and whose output wire is labeled `x`.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec`{.haskell} block solves this problem.
 
 ## Examples and intuition
 
@@ -744,7 +744,7 @@ maybeFix f = maybeFix f >>= f
 
 This has the right type.  However, something seems wrong: there is nothing in particular here about `Maybe`{.haskell}; `maybeFix`{.haskell} actually has the more general type `Monad m => (a -> m a) -> m a`{.haskell}.  But didn't we just say that not all monads support `mfix`{.haskell}?
 
-The answer is that although this implementation of `maybeFix`{.haskell} has the right type, it does *not* have the intended semantics.  If we think about how `(>>=)`{.haskell} works for the `Maybe`{.haskell} monad (by pattern-matching on its first argument to see whether it is `Nothing`{.haskell} or `Just`{.haskell}) we can see that this definition of `maybeFix`{.haskell} is completely useless: it will just recurse infinitely, trying to decide whether it is going to return `Nothing`{.haskell} or `Just`{.haskell}, without ever even so much as a glance in the direction of `f`{.haskell}.
+The answer is that although this implementation of `maybeFix`{.haskell} has the right type, it does *not* have the intended semantics.  If we think about how `(>>=)`{.haskell} works for the `Maybe`{.haskell} monad (by pattern-matching on its first argument to see whether it is `Nothing`{.haskell} or `Just`{.haskell}) we can see that this definition of `maybeFix`{.haskell} is completely useless: it will just recurse infinitely, trying to decide whether it is going to return `Nothing`{.haskell} or `Just`{.haskell}, without ever even so much as a glance in the direction of `f`.
 
 The trick is to simply *assume* that `maybeFix`{.haskell} will return `Just`{.haskell}, and get on with life!
 
@@ -758,7 +758,7 @@ This says that the result of `maybeFix`{.haskell} is `ma`{.haskell}, and assumin
 
 Why is this OK?  Isn't `fromJust`{.haskell} almost as bad as `unsafePerformIO`{.haskell}?  Well, usually, yes.  This is just about the only situation in which it is justified!  The interesting thing to note is that `maybeFix`{.haskell} *will never crash* -- although it may, of course, fail to terminate.  The only way we could get a crash is if we try to evaluate `fromJust ma`{.haskell} when we know that `ma = Nothing`{.haskell}.  But how could we know `ma = Nothing`{.haskell}?  Since `ma`{.haskell} is defined as `f (fromJust ma)`{.haskell}, it must be that this expression has already been evaluated to `Nothing`{.haskell} -- in which case there is no reason for us to be evaluating `fromJust ma`{.haskell} in the first place!
 
-To see this from another point of view, we can consider three possibilities. First, if `f`{.haskell} outputs `Nothing`{.haskell} without looking at its argument, then `maybeFix f`{.haskell} clearly returns `Nothing`{.haskell}.  Second, if `f`{.haskell} always outputs `Just x`{.haskell}, where `x`{.haskell} depends on its argument, then the recursion can proceed usefully: `fromJust ma`{.haskell} will be able to evaluate to `x`{.haskell}, thus feeding `f`{.haskell}'s output back to it as input.  Third, if `f`{.haskell} tries to use its argument to decide whether to output `Just`{.haskell} or `Nothing`{.haskell}, then `maybeFix f`{.haskell} will not terminate: evaluating `f`{.haskell}'s argument requires evaluating `ma`{.haskell} to see whether it is `Just`{.haskell}, which requires evaluating `f (fromJust ma)`{.haskell}, which requires evaluating `ma`{.haskell}, ... and so on.
+To see this from another point of view, we can consider three possibilities. First, if `f` outputs `Nothing`{.haskell} without looking at its argument, then `maybeFix f`{.haskell} clearly returns `Nothing`{.haskell}.  Second, if `f` always outputs `Just x`{.haskell}, where `x` depends on its argument, then the recursion can proceed usefully: `fromJust ma`{.haskell} will be able to evaluate to `x`, thus feeding `f`'s output back to it as input.  Third, if `f` tries to use its argument to decide whether to output `Just`{.haskell} or `Nothing`{.haskell}, then `maybeFix f`{.haskell} will not terminate: evaluating `f`'s argument requires evaluating `ma`{.haskell} to see whether it is `Just`{.haskell}, which requires evaluating `f (fromJust ma)`{.haskell}, which requires evaluating `ma`{.haskell}, ... and so on.
 
 There are also instances of `MonadFix`{.haskell} for lists (which works analogously to the instance for `Maybe`{.haskell}), for `ST`{.haskell}, and for `IO`{.haskell}.  The [instance for `IO`{.haskell}](http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/System-IO.html#fixIO) is particularly amusing: it creates a new `IORef`{.haskell} (with a dummy value), immediately reads its contents using `unsafeInterleaveIO`{.haskell} (which delays the actual reading lazily until the value is needed), uses the contents of the `IORef`{.haskell} to compute a new value, which it then writes back into the `IORef`{.haskell}.  It almost seems, spookily, that `mfix`{.haskell} is sending a value back in time to itself through the `IORef`{.haskell} -- though of course what is really going on is that the reading is delayed just long enough (via `unsafeInterleaveIO`{.haskell}) to get the process bootstrapped.
 
@@ -779,7 +779,7 @@ mdo { x <- foo
     }
 ```
 
-which will be translated into the original example (assuming that, say, `bar`{.haskell} and `bob`{.haskell} refer to `y`{.haskell}.  The difference is that `mdo`{.haskell} will analyze the code in order to find minimal recursive blocks, which will be placed in `rec`{.haskell} blocks, whereas `rec`{.haskell} blocks desugar directly into calls to `mfix`{.haskell} without any further analysis.
+which will be translated into the original example (assuming that, say, `bar`{.haskell} and `bob`{.haskell} refer to `y`.  The difference is that `mdo`{.haskell} will analyze the code in order to find minimal recursive blocks, which will be placed in `rec`{.haskell} blocks, whereas `rec`{.haskell} blocks desugar directly into calls to `mfix`{.haskell} without any further analysis.
 ## Further reading
 
 For more information (such as the precise desugaring rules for `rec`{.haskell} blocks), see Levent Erkök and John Launchbury's 2002 Haskell workshop paper, [A Recursive do for Haskell](http://sites.google.com/site/leventerkok/recdo.pdf?attredirects=0), or for full details, Levent Erkök’s thesis, [Value Recursion in Monadic Computations](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.15.1543&rep=rep1&type=pdf).  (Note, while reading, that `MonadFix`{.haskell} used to be called `MonadRec`{.haskell}.)  You can also read the [GHC user manual section on recursive do-notation](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation).
@@ -867,7 +867,7 @@ x `mappend` mempty = x
 
 There are quite a few interesting `Monoid`{.haskell} instances defined in `Data.Monoid`.
 
-- `[a]`{.haskell} is a `Monoid`{.haskell}, with `mempty = []`{.haskell} and `mappend = (++)`{.haskell}. It is not hard to check that `(x ++ y) ++ z = x ++ (y ++ z)`{.haskell} for any lists `x`{.haskell}, `y`{.haskell}, and `z`{.haskell}, and that the empty list is the identity: `[] ++ x = x ++ [] = x`{.haskell}.
+- `[a]`{.haskell} is a `Monoid`{.haskell}, with `mempty = []`{.haskell} and `mappend = (++)`{.haskell}. It is not hard to check that `(x ++ y) ++ z = x ++ (y ++ z)`{.haskell} for any lists `x`, `y`, and `z`, and that the empty list is the identity: `[] ++ x = x ++ [] = x`{.haskell}.
 
 - As noted previously, we can make a monoid out of any numeric type under either addition or multiplication.  However, since we can’t have two instances for the same type, `Data.Monoid` provides two `newtype`{.haskell} wrappers, `Sum`{.haskell} and `Product`{.haskell}, with appropriate `Monoid`{.haskell} instances.
 
@@ -882,11 +882,11 @@ There are quite a few interesting `Monoid`{.haskell} instances defined in `Data.
 
 - `Any`{.haskell} and `All`{.haskell} are `newtype`{.haskell} wrappers providing `Monoid`{.haskell} instances for `Bool`{.haskell} (under disjunction and conjunction, respectively).
 
--  There are three instances for `Maybe`{.haskell}: a basic instance which lifts a `Monoid`{.haskell} instance for `a`{.haskell} to an instance for `Maybe a`{.haskell}, and two `newtype`{.haskell} wrappers `First`{.haskell} and `Last`{.haskell} for which `mappend`{.haskell} selects the first (respectively last) non-`Nothing`{.haskell} item.
+-  There are three instances for `Maybe`{.haskell}: a basic instance which lifts a `Monoid`{.haskell} instance for `a` to an instance for `Maybe a`{.haskell}, and two `newtype`{.haskell} wrappers `First`{.haskell} and `Last`{.haskell} for which `mappend`{.haskell} selects the first (respectively last) non-`Nothing`{.haskell} item.
 
 - `Endo a`{.haskell} is a newtype wrapper for functions `a -> a`{.haskell}, which form a monoid under composition.
 
-- There are several ways to “lift” `Monoid`{.haskell} instances to instances with additional structure.  We have already seen that an instance for `a`{.haskell} can be lifted to an instance for `Maybe a`{.haskell}.  There are also tuple instances: if `a`{.haskell} and `b`{.haskell} are instances of `Monoid`{.haskell}, then so is `(a,b)`{.haskell}, using the monoid operations for `a`{.haskell} and `b`{.haskell} in the obvious pairwise manner. Finally, if `a`{.haskell} is a `Monoid`{.haskell}, then so is the function type `e -> a`{.haskell} for any `e`{.haskell}; in particular, ``g `mappend` h``{.haskell} is the function which applies both `g`{.haskell} and `h`{.haskell} to its argument and then combines the results using the underlying `Monoid`{.haskell} instance for `a`{.haskell}.  This can be quite useful and elegant (see [example](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/52416)).
+- There are several ways to “lift” `Monoid`{.haskell} instances to instances with additional structure.  We have already seen that an instance for `a` can be lifted to an instance for `Maybe a`{.haskell}.  There are also tuple instances: if `a` and `b` are instances of `Monoid`{.haskell}, then so is `(a,b)`{.haskell}, using the monoid operations for `a` and `b` in the obvious pairwise manner. Finally, if `a` is a `Monoid`{.haskell}, then so is the function type `e -> a`{.haskell} for any `e`; in particular, ``g `mappend` h``{.haskell} is the function which applies both `g` and `h` to its argument and then combines the results using the underlying `Monoid`{.haskell} instance for `a`.  This can be quite useful and elegant (see [example](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/52416)).
 
 - The type `Ordering = LT || EQ || GT`{.haskell} is a `Monoid`{.haskell}, defined in such a way that `mconcat (zipWith compare xs ys)`{.haskell} computes the lexicographic ordering of `xs`{.haskell} and `ys`{.haskell} (if `xs`{.haskell} and `ys`{.haskell} have the same length).  In particular, `mempty = EQ`{.haskell}, and `mappend`{.haskell} evaluates to its leftmost non-`EQ`{.haskell} argument (or `EQ`{.haskell} if both arguments are `EQ`{.haskell}).  This can be used together with the function instance of `Monoid`{.haskell} to do some clever things ([example](http://www.reddit.com/r/programming/comments/7cf4r/monoids_in_my_programming_language/c06adnx)).
 
@@ -1042,9 +1042,9 @@ efficient implementations can be provided.
 
 The type of `foldMap`{.haskell} should make it clear what it is supposed to do:
 given a way to convert the data in a container into a `Monoid`{.haskell} (a
-function `a -> m`{.haskell}) and a container of `a`{.haskell}’s (`t a`{.haskell}), `foldMap`{.haskell}
+function `a -> m`{.haskell}) and a container of `a`’s (`t a`{.haskell}), `foldMap`{.haskell}
 provides a way to iterate over the entire contents of the container,
-converting all the `a`{.haskell}’s to `m`{.haskell}’s and combining all the `m`{.haskell}’s with
+converting all the `a`’s to `m`’s and combining all the `m`’s with
 `mappend`{.haskell}. The following code shows two examples: a simple
 implementation of `foldMap`{.haskell} for lists, and a binary tree example
 provided by the `Foldable`{.haskell} documentation.
@@ -1106,14 +1106,14 @@ element in a container, and then perform all the side effects from
 those computations, discarding the results: `traverse_`{.haskell}, `sequenceA_`{.haskell},
 and others.  The results must be discarded because the `Foldable`
 class is too weak to specify what to do with them: we cannot, in
-general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`{.haskell}.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid
+general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid
 structure---that is, an `Alternative`{.haskell} or a `MonadPlus`{.haskell}---then we can
 use the `asum`{.haskell} or `msum`{.haskell} functions, which can combine the results as
 well.  Consult the [`Foldable`{.haskell} documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html) for
 more details on any of these functions.
 
 Note that the `Foldable`{.haskell} operations always forget the structure of
-the container being folded.  If we start with a container of type `t a`{.haskell} for some `Foldable t`{.haskell}, then `t`{.haskell} will never appear in the output
+the container being folded.  If we start with a container of type `t a`{.haskell} for some `Foldable t`{.haskell}, then `t` will never appear in the output
 type of any operations defined in the `Foldable`{.haskell} module.  Many times
 this is exactly what we want, but sometimes we would like to be able
 to generically traverse a container while preserving its
@@ -1181,11 +1181,11 @@ trees?
 
 The ability to compose two monads depends crucially on this ability to
 commute functors. Intuitively, if we want to build a composed monad
-`M a = m (n a)`{.haskell} out of monads `m`{.haskell} and `n`{.haskell}, then to be able to
+`M a = m (n a)`{.haskell} out of monads `m` and `n`, then to be able to
 implement `join :: M (M a) -> M a`{.haskell}, that is,
 `join :: m (n (m (n a))) -> m (n a)`{.haskell}, we have to be able to commute
-the `n`{.haskell} past the `m`{.haskell} to get `m (m (n (n a)))`{.haskell}, and then we can use the
-`join`{.haskell}s for `m`{.haskell} and `n`{.haskell} to produce something of type `m (n a)`{.haskell}.  See
+the `n` past the `m` to get `m (m (n (n a)))`{.haskell}, and then we can use the
+`join`{.haskell}s for `m` and `n` to produce something of type `m (n a)`{.haskell}.  See
 [Mark Jones’s paper](http://web.cecs.pdx.edu/~mpj/pubs/springschool.html) for more details.
 
 Alternatively, looking at the type of `traverse`{.haskell},
@@ -1194,7 +1194,7 @@ Alternatively, looking at the type of `traverse`{.haskell},
   traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
 ```
 
-leads us to view `Traversable`{.haskell} as a generalization of `Functor`{.haskell}.  `traverse`{.haskell} is an "effectful `fmap`{.haskell}": it allows us to map over a structure of type `t a`{.haskell}, applying a function to every element of type `a`{.haskell} and in order to produce a new structure of type `t b`{.haskell}; but along the way the function may have some effects (captured by the applicative functor `f`{.haskell}).
+leads us to view `Traversable`{.haskell} as a generalization of `Functor`{.haskell}.  `traverse`{.haskell} is an "effectful `fmap`{.haskell}": it allows us to map over a structure of type `t a`{.haskell}, applying a function to every element of type `a` and in order to produce a new structure of type `t b`{.haskell}; but along the way the function may have some effects (captured by the applicative functor `f`).
 
 > **Exercises**
 >
@@ -1326,7 +1326,7 @@ and `Applicative`{.haskell}, whose types only reflect their output, the type of
 an `Arrow`{.haskell} computation reflects both its input and output.  Arrows
 generalize functions: if `arr`{.haskell} is an instance of `Arrow`{.haskell}, a value of
 type ``b `arr` c``{.haskell} can be thought of as a computation which takes values of
-type `b`{.haskell} as input, and produces values of type `c`{.haskell} as output.  In the
+type `b` as input, and produces values of type `c` as output.  In the
 `(->)`{.haskell} instance of `Arrow`{.haskell} this is just a pure function; in general, however,
 an arrow may represent some sort of “effectful” computation.
 
@@ -1360,15 +1360,15 @@ efficient implementations if desired.
 Let’s look at each of the arrow methods in turn.  [Ross Paterson’s web page on arrows](http://www.haskell.org/arrows/) has nice diagrams which can help
 build intuition.
 
-* The `arr`{.haskell} function takes any function `b -> c`{.haskell} and turns it into a generalized arrow ``b `arr` c``{.haskell}.  The `arr`{.haskell} method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g`{.haskell} is “pure” in the sense that it only computes `g`{.haskell} and has no “effects” (whatever that might mean for any particular arrow type).
+* The `arr`{.haskell} function takes any function `b -> c`{.haskell} and turns it into a generalized arrow ``b `arr` c``{.haskell}.  The `arr`{.haskell} method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g`{.haskell} is “pure” in the sense that it only computes `g` and has no “effects” (whatever that might mean for any particular arrow type).
 
-* The `first`{.haskell} method turns any arrow from `b`{.haskell} to   `c`{.haskell} into an arrow from `(b,d)`{.haskell} to `(c,d)`{.haskell}.  The idea is that `first g`{.haskell} uses `g`{.haskell} to process the first element of a tuple, and lets the second element pass through unchanged.  For the function instance of `Arrow`{.haskell}, of course, `first g (x,y) = (g x, y)`{.haskell}.
+* The `first`{.haskell} method turns any arrow from `b` to   `c` into an arrow from `(b,d)`{.haskell} to `(c,d)`{.haskell}.  The idea is that `first g`{.haskell} uses `g` to process the first element of a tuple, and lets the second element pass through unchanged.  For the function instance of `Arrow`{.haskell}, of course, `first g (x,y) = (g x, y)`{.haskell}.
 
 * The `second`{.haskell} function is similar to `first`{.haskell}, but with the elements of the tuples swapped.  Indeed, it can be defined in terms of `first`{.haskell} using an auxiliary function `swap`{.haskell}, defined by `swap (x,y) = (y,x)`{.haskell}.
 
-* The `(***)`{.haskell} operator is “parallel composition” of arrows: it takes two arrows and makes them into one arrow on tuples, which has the behavior of the first arrow on the first element of a tuple, and the behavior of the second arrow on the second element.  The mnemonic is that `g *** h`{.haskell} is the *product* (hence `*`{.haskell}) of `g`{.haskell} and `h`{.haskell}. For the function instance of `Arrow`{.haskell}, we define `(g *** h) (x,y) = (g x, h y)`{.haskell}.  The default implementation of `(***)`{.haskell} is in terms of `first`{.haskell}, `second`{.haskell}, and sequential arrow composition `(>>>)`{.haskell}.  The reader may also wish to think about how to implement `first`{.haskell} and `second`{.haskell} in terms of `(***)`{.haskell}.
+* The `(***)`{.haskell} operator is “parallel composition” of arrows: it takes two arrows and makes them into one arrow on tuples, which has the behavior of the first arrow on the first element of a tuple, and the behavior of the second arrow on the second element.  The mnemonic is that `g *** h`{.haskell} is the *product* (hence `*`{.haskell}) of `g` and `h`. For the function instance of `Arrow`{.haskell}, we define `(g *** h) (x,y) = (g x, h y)`{.haskell}.  The default implementation of `(***)`{.haskell} is in terms of `first`{.haskell}, `second`{.haskell}, and sequential arrow composition `(>>>)`{.haskell}.  The reader may also wish to think about how to implement `first`{.haskell} and `second`{.haskell} in terms of `(***)`{.haskell}.
 
-* The `(&&&)`{.haskell} operator is “fanout composition” of arrows: it takes two arrows `g`{.haskell} and `h`{.haskell} and makes them into a new arrow `g &&& h`{.haskell} which supplies its input as the input to both `g`{.haskell} and `h`{.haskell}, returning their results as a tuple.  The mnemonic is that `g &&& h`{.haskell} performs both `g`{.haskell} *and* `h`{.haskell} (hence `&`{.haskell}) on its input.  For functions, we define `(g &&& h) x = (g x, h x)`{.haskell}.
+* The `(&&&)`{.haskell} operator is “fanout composition” of arrows: it takes two arrows `g` and `h` and makes them into a new arrow `g &&& h`{.haskell} which supplies its input as the input to both `g` and `h`, returning their results as a tuple.  The mnemonic is that `g &&& h`{.haskell} performs both `g` *and* `h` (hence `&`{.haskell}) on its input.  For functions, we define `(g &&& h) x = (g x, h x)`{.haskell}.
 
 ## Instances
 
@@ -1446,13 +1446,13 @@ corresponding operations on sum types.  In general, these operations
 create arrows whose inputs are tagged with `Left`{.haskell} or `Right`{.haskell}, and can
 choose how to act based on these tags.
 
-* If `g`{.haskell} is an arrow from `b`{.haskell} to `c`{.haskell}, then `left g`{.haskell} is an arrow from `Either b d`{.haskell} to `Either c d`{.haskell}.  On inputs tagged with `Left`{.haskell}, the `left g`{.haskell} arrow has the behavior of `g`{.haskell}; on inputs tagged with `Right`{.haskell}, it behaves as the identity.
+* If `g` is an arrow from `b` to `c`, then `left g`{.haskell} is an arrow from `Either b d`{.haskell} to `Either c d`{.haskell}.  On inputs tagged with `Left`{.haskell}, the `left g`{.haskell} arrow has the behavior of `g`; on inputs tagged with `Right`{.haskell}, it behaves as the identity.
 
-* The `right`{.haskell} function, of course, is the mirror image of `left`{.haskell}. The arrow  `right g`{.haskell} has the behavior of `g`{.haskell} on inputs tagged with `Right`{.haskell}.
+* The `right`{.haskell} function, of course, is the mirror image of `left`{.haskell}. The arrow  `right g`{.haskell} has the behavior of `g` on inputs tagged with `Right`{.haskell}.
 
-* The `(+++)`{.haskell} operator performs “multiplexing”: `g +++ h`{.haskell} behaves as `g`{.haskell} on inputs tagged with `Left`{.haskell}, and as `h`{.haskell} on inputs tagged with `Right`{.haskell}.  The tags are preserved.  The `(+++)`{.haskell} operator is the *sum* (hence `+`{.haskell}) of two arrows, just as `(***)`{.haskell} is the product.
+* The `(+++)`{.haskell} operator performs “multiplexing”: `g +++ h`{.haskell} behaves as `g` on inputs tagged with `Left`{.haskell}, and as `h` on inputs tagged with `Right`{.haskell}.  The tags are preserved.  The `(+++)`{.haskell} operator is the *sum* (hence `+`{.haskell}) of two arrows, just as `(***)`{.haskell} is the product.
 
-* The `(|||)`{.haskell} operator is “merge” or “fanin”: the arrow `g ||| h`{.haskell} behaves as `g`{.haskell} on inputs tagged with `Left`{.haskell}, and `h`{.haskell} on inputs tagged with `Right`{.haskell}, but the tags are discarded (hence, `g`{.haskell} and `h`{.haskell} must have the same output type).  The mnemonic is that `g ||| h`{.haskell} performs either `g`{.haskell} *or* `h`{.haskell} on its input.
+* The `(|||)`{.haskell} operator is “merge” or “fanin”: the arrow `g ||| h`{.haskell} behaves as `g` on inputs tagged with `Left`{.haskell}, and `h` on inputs tagged with `Right`{.haskell}, but the tags are discarded (hence, `g` and `h` must have the same output type).  The mnemonic is that `g ||| h`{.haskell} performs either `g` *or* `h` on its input.
 
 The `ArrowChoice`{.haskell} class allows computations to choose among a finite number of execution paths, based on intermediate results.  The possible
 execution paths must be known in advance, and explicitly assembled with `(+++)`{.haskell} or `(|||)`{.haskell}.  However, sometimes more flexibility is
@@ -1512,13 +1512,13 @@ below).
 
 Taken by itself, the type of the `loop`{.haskell} method does not seem to tell
 us much.  Its intention, however, is a generalization of the `trace`
-function which is also shown.  The `d`{.haskell} component of the first arrow’s
+function which is also shown.  The `d` component of the first arrow’s
 output is fed back in as its own input.  In other words, the arrow
 `loop g`{.haskell} is obtained by recursively “fixing” the second component of
-the input to `g`{.haskell}.
+the input to `g`.
 
 It can be a bit difficult to grok what the `trace`{.haskell} function is doing.
-How can `d`{.haskell} appear on the left and right sides of the `let`{.haskell}?  Well,
+How can `d` appear on the left and right sides of the `let`{.haskell}?  Well,
 this is Haskell’s laziness at work.  There is not space here for a
 full explanation; the interested reader is encouraged to study the
 standard `fix`{.haskell} function, and to read [Paterson’s arrow tutorial](http://www.soi.city.ac.uk/~ross/papers/fop.html).
