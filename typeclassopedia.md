@@ -596,8 +596,7 @@ The [transformers](http://hackage.haskell.org/package/transformers) library prov
 * [`ListT`{.haskell}](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Control-Monad-Trans-List.html) adds non-determinism (however, see the discussion of `ListT`{.haskell} below).
 * [`ContT`{.haskell}](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Control-Monad-Trans-Cont.html) adds continuation handling.
 
-For example, `StateT s Maybe`{.haskell} is an instance of `Monad`{.haskell}; computations of type `StateT s Maybe a`{.haskell} may fail, and have access to a mutable state of type `s`.  Monad transformers can be multiply stacked.  One thing to keep in mind while using monad transformers is that the order of composition matters.  For example, when a `StateT s Maybe a`{.haskell} computation fails, the state ceases being updated (indeed, it simply disappears); on the other hand, the state of a `MaybeT (State s) a`{.haskell} computation may continue to be modified even after the computation has "failed". This may seem backwards, but it is correct. Monad transformers build composite monads “inside out”; `MaybeT (State s) a`{.haskell} is isomorphic to `s -> (Maybe a, s)`{.haskell}.  (Lambdabot has an indispensable `@unmtl` command which you can use to “unpack” a monad transformer stack in this way.)
-Intuitively, the monads become "more fundamental" the further down in the stack you get, and the effects of a given monad "have precedence" over the effects of monads further up the stack.  Of course, this is just handwaving, and if you are unsure of the proper order for some monads you wish to combine, there is no substitute for using `@unmtl` or simply trying out the various options.
+For example, `StateT s Maybe`{.haskell} is an instance of `Monad`{.haskell}; computations of type `StateT s Maybe a`{.haskell} may fail, and have access to a mutable state of type `s`.  Monad transformers can be multiply stacked.  One thing to keep in mind while using monad transformers is that the order of composition matters.  For example, when a `StateT s Maybe a`{.haskell} computation fails, the state ceases being updated (indeed, it simply disappears); on the other hand, the state of a `MaybeT (State s) a`{.haskell} computation may continue to be modified even after the computation has "failed". This may seem backwards, but it is correct. Monad transformers build composite monads “inside out”; `MaybeT (State s) a`{.haskell} is isomorphic to `s -> (Maybe a, s)`{.haskell}.  (Lambdabot has an indispensable `@unmtl` command which you can use to “unpack” a monad transformer stack in this way.) Intuitively, the monads become "more fundamental" the further down in the stack you get, and the effects of a given monad "have precedence" over the effects of monads further up the stack.  Of course, this is just handwaving, and if you are unsure of the proper order for some monads you wish to combine, there is no substitute for using `@unmtl` or simply trying out the various options.
 
 ## Definition and laws
 
@@ -787,10 +786,7 @@ For more information (such as the precise desugaring rules for `rec`{.haskell} b
 
 # Semigroup
 
-A semigroup is a set $S\ $ together with a binary operation $\oplus\ $ which
-combines elements from $S\ $. The $\oplus\ $ operator is required to be associative
-(that is, $(a \oplus b) \oplus c = a \oplus (b \oplus c)\ $, for any
-$a,b,c\ $ which are elements of $S\ $).
+A semigroup is a set $S\ $ together with a binary operation $\oplus\ $ which combines elements from $S\ $. The $\oplus\ $ operator is required to be associative (that is, $(a \oplus b) \oplus c = a \oplus (b \oplus c)\ $, for any $a,b,c\ $ which are elements of $S\ $).
 
 For example, the natural numbers under addition form a semigroup: the sum of any two natural numbers is a natural number, and $(a+b)+c = a+(b+c)\ $ for any natural numbers $a\ $, $b\ $, and $c\,\ $. The integers under multiplication also form a semigroup, as do the integers (or rationals, or reals) under $\max\ $ or $\min\ $, Boolean values under conjunction and disjunction, lists under concatenation, functions from a set to itself under composition ... Semigroups show up all over the place, once you know to look for them.
 
@@ -841,22 +837,13 @@ class Monoid a where
   mconcat = foldr mappend mempty
 ```
 
-The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`{.haskell}
-is the binary operation.  The default definition for `mconcat`{.haskell}
-“reduces” a list of elements by combining them all with `mappend`{.haskell},
-using a right fold. It is only in the `Monoid`{.haskell} class so that specific
-instances have the option of providing an alternative, more efficient
-implementation; usually, you can safely ignore `mconcat`{.haskell} when creating
-a `Monoid`{.haskell} instance, since its default definition will work just fine.
+The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`{.haskell} is the binary operation.  The default definition for `mconcat`{.haskell} “reduces” a list of elements by combining them all with `mappend`{.haskell}, using a right fold. It is only in the `Monoid`{.haskell} class so that specific instances have the option of providing an alternative, more efficient implementation; usually, you can safely ignore `mconcat`{.haskell} when creating a `Monoid`{.haskell} instance, since its default definition will work just fine.
 
-The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired
-by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many
-monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the haskell-cafe mailing list).
+The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the haskell-cafe mailing list).
 
 ## Laws
 
-Of course, every `Monoid`{.haskell} instance should actually be a monoid in the
-mathematical sense, which implies these laws:
+Of course, every `Monoid`{.haskell} instance should actually be a monoid in the mathematical sense, which implies these laws:
 
 ```haskell
 mempty `mappend` x = x
@@ -908,9 +895,7 @@ instance Monoid e => Applicative ((,) e) where
 
 ## Other monoidal classes: Alternative, MonadPlus, ArrowPlus
 
-The `Alternative`{.haskell} type class ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html#g:2))
-is for `Applicative`{.haskell} functors which also have
-a monoid structure:
+The `Alternative`{.haskell} type class ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html#g:2)) is for `Applicative`{.haskell} functors which also have a monoid structure:
 
 ```haskell
 class Applicative f => Alternative f where
@@ -926,8 +911,7 @@ x <|> empty = x
 (x <|> y) <|> z = x <|> (y <|> z)
 ```
 
-Likewise, `MonadPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html#t:MonadPlus))
-is for `Monad`{.haskell}s with a monoid structure:
+Likewise, `MonadPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html#t:MonadPlus)) is for `Monad`{.haskell}s with a monoid structure:
 
 ```haskell
 class Monad m => MonadPlus m where
@@ -935,43 +919,18 @@ class Monad m => MonadPlus m where
   mplus :: m a -> m a -> m a
 ```
 
-The `MonadPlus`{.haskell} documentation states that it is intended to model
-monads which also support “choice and failure”; in addition to the
-monoid laws, instances of `MonadPlus`{.haskell} are expected to satisfy
+The `MonadPlus`{.haskell} documentation states that it is intended to model monads which also support “choice and failure”; in addition to the monoid laws, instances of `MonadPlus`{.haskell} are expected to satisfy
 
 ```haskell
 mzero >>= f  =  mzero
 v >> mzero   =  mzero
 ```
 
-which explains the sense in which `mzero`{.haskell} denotes failure. Since
-`mzero`{.haskell} should be the identity for `mplus`{.haskell}, the computation ``m1 `mplus` m2``{.haskell} succeeds (evaluates to something other than `mzero`{.haskell}) if
-either `m1`{.haskell} or `m2`{.haskell} does; so `mplus`{.haskell} represents choice. The `guard`{.haskell}
-function can also be used with instances of `MonadPlus`{.haskell}; it requires a
-condition to be satisfied and fails (using `mzero`{.haskell}) if it is not.  A
-simple example of a `MonadPlus`{.haskell} instance is `[]`{.haskell}, which is exactly the
-same as the `Monoid`{.haskell} instance for `[]`: the empty list represents
-failure, and list concatenation represents choice.  In general,
-however, a `MonadPlus`{.haskell} instance for a type need not be the same as its
-`Monoid`{.haskell} instance; `Maybe`{.haskell} is an example of such a type.  A great
-introduction to the `MonadPlus`{.haskell} type class, with interesting examples
-of its use, is Doug Auclair’s *MonadPlus: What a Super Monad!* in [the Monad.Reader issue 11](http://www.haskell.org/wikiupload/6/6a/TMR-Issue11.pdf).
+which explains the sense in which `mzero`{.haskell} denotes failure. Since `mzero`{.haskell} should be the identity for `mplus`{.haskell}, the computation ``m1 `mplus` m2``{.haskell} succeeds (evaluates to something other than `mzero`{.haskell}) if either `m1`{.haskell} or `m2`{.haskell} does; so `mplus`{.haskell} represents choice. The `guard`{.haskell} function can also be used with instances of `MonadPlus`{.haskell}; it requires a condition to be satisfied and fails (using `mzero`{.haskell}) if it is not.  A simple example of a `MonadPlus`{.haskell} instance is `[]`{.haskell}, which is exactly the same as the `Monoid`{.haskell} instance for `[]`: the empty list represents failure, and list concatenation represents choice.  In general, however, a `MonadPlus`{.haskell} instance for a type need not be the same as its `Monoid`{.haskell} instance; `Maybe`{.haskell} is an example of such a type.  A great introduction to the `MonadPlus`{.haskell} type class, with interesting examples of its use, is Doug Auclair’s *MonadPlus: What a Super Monad!* in [the Monad.Reader issue 11](http://www.haskell.org/wikiupload/6/6a/TMR-Issue11.pdf).
 
-There used to be a type class called `MonadZero`{.haskell} containing only
-`mzero`{.haskell}, representing monads with failure.  The `do`-notation requires
-some notion of failure to deal with failing pattern matches.
-Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the
-`fail`{.haskell}
-method to the `Monad`{.haskell} class. If we are lucky, someday `MonadZero`{.haskell} will
-be restored, and `fail`{.haskell} will be banished to the bit bucket where it
-belongs (see [MonadPlus reform proposal](http://www.haskell.org/haskellwiki/MonadPlus reform proposal)).  The idea is that any
-`do`-block which uses pattern matching (and hence may fail) would require
-a `MonadZero`{.haskell} constraint; otherwise, only a `Monad`{.haskell} constraint would be
-required.
+There used to be a type class called `MonadZero`{.haskell} containing only `mzero`{.haskell}, representing monads with failure.  The `do`-notation requires some notion of failure to deal with failing pattern matches.  Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the `fail`{.haskell} method to the `Monad`{.haskell} class. If we are lucky, someday `MonadZero`{.haskell} will be restored, and `fail`{.haskell} will be banished to the bit bucket where it belongs (see [MonadPlus reform proposal](http://www.haskell.org/haskellwiki/MonadPlus reform proposal)).  The idea is that any `do`-block which uses pattern matching (and hence may fail) would require a `MonadZero`{.haskell} constraint; otherwise, only a `Monad`{.haskell} constraint would be required.
 
-Finally, `ArrowZero`{.haskell} and `ArrowPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html#t:ArrowZero))
-represent `Arrow`{.haskell}s ([see below](#arrow)) with a
-monoid structure:
+Finally, `ArrowZero`{.haskell} and `ArrowPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html#t:ArrowZero)) represent `Arrow`{.haskell}s ([see below](#arrow)) with a monoid structure:
 
 ```haskell
 class Arrow arr => ArrowZero arr where
@@ -983,40 +942,19 @@ class ArrowZero arr => ArrowPlus arr where
 
 ## Further reading
 
-Monoids have gotten a fair bit of attention recently, ultimately due
-to
-[a blog post by Brian Hurt](http://enfranchisedmind.com/blog/posts/random-thoughts-on-haskell/), in which he
-complained about the fact that the names of many Haskell type classes
-(`Monoid`{.haskell} in particular) are taken from abstract mathematics.  This
-resulted in [a long haskell-cafe thread](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590)
-arguing the point and discussing monoids in general.
+Monoids have gotten a fair bit of attention recently, ultimately due to [a blog post by Brian Hurt](http://enfranchisedmind.com/blog/posts/random-thoughts-on-haskell/), in which he complained about the fact that the names of many Haskell type classes (`Monoid`{.haskell} in particular) are taken from abstract mathematics.  This resulted in [a long haskell-cafe thread](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) arguing the point and discussing monoids in general.
 
-However, this was quickly followed by several blog posts about
-`Monoid`{.haskell} ^[May its name live forever.].  First, Dan Piponi
-wrote a great introductory post, [Haskell Monoids and their Uses](http://blog.sigfpe.com/2009/01/haskell-monoids-and-their-uses.html).  This was quickly followed by
-Heinrich Apfelmus’s [Monoids and Finger Trees](http://apfelmus.nfshost.com/monoid-fingertree.html), an accessible exposition of
-Hinze and Paterson’s [classic paper on 2-3 finger trees](http://www.soi.city.ac.uk/%7Eross/papers/FingerTree.html), which makes very clever
-use of `Monoid`{.haskell} to implement an elegant and generic data structure.
-Dan Piponi then wrote two fascinating articles about using `Monoids`
-(and finger trees): [Fast Incremental Regular Expressions](http://blog.sigfpe.com/2009/01/fast-incremental-regular-expression.html) and [Beyond Regular Expressions](http://blog.sigfpe.com/2009/01/beyond-regular-expressions-more.html)
+However, this was quickly followed by several blog posts about `Monoid`{.haskell} ^[May its name live forever.].  First, Dan Piponi wrote a great introductory post, [Haskell Monoids and their Uses](http://blog.sigfpe.com/2009/01/haskell-monoids-and-their-uses.html).  This was quickly followed by Heinrich Apfelmus’s [Monoids and Finger Trees](http://apfelmus.nfshost.com/monoid-fingertree.html), an accessible exposition of Hinze and Paterson’s [classic paper on 2-3 finger trees](http://www.soi.city.ac.uk/%7Eross/papers/FingerTree.html), which makes very clever use of `Monoid`{.haskell} to implement an elegant and generic data structure.  Dan Piponi then wrote two fascinating articles about using `Monoids` (and finger trees): [Fast Incremental Regular Expressions](http://blog.sigfpe.com/2009/01/fast-incremental-regular-expression.html) and [Beyond Regular Expressions](http://blog.sigfpe.com/2009/01/beyond-regular-expressions-more.html)
 
-In a similar vein, David Place’s article on improving `Data.Map` in
-order to compute incremental folds (see [the Monad Reader issue 11](http://www.haskell.org/sitewiki/images/6/6a/TMR-Issue11.pdf))
-is also a
-good example of using `Monoid`{.haskell} to generalize a data structure.
+In a similar vein, David Place’s article on improving `Data.Map` in order to compute incremental folds (see [the Monad Reader issue 11](http://www.haskell.org/sitewiki/images/6/6a/TMR-Issue11.pdf)) is also a good example of using `Monoid`{.haskell} to generalize a data structure.
 
 Some other interesting examples of `Monoid`{.haskell} use include [/monoids_in_my_programming_language/c06adnx building elegant list sorting combinators](http://www.reddit.com/r/programming/comments/7cf4r), [collecting unstructured information](http://byorgey.wordpress.com/2008/04/17/collecting-unstructured-information-with-the-monoid-of-partial-knowledge/), [combining probability distributions](http://izbicki.me/blog/gausian-distributions-are-monoids), and a brilliant series of posts by Chung-Chieh Shan and Dylan Thurston using `Monoid`{.haskell}s to [elegantly solve a difficult combinatorial puzzle](http://conway.rutgers.edu/~ccshan/wiki/blog/posts/WordNumbers1/) (followed by [part 2](http://conway.rutgers.edu/~ccshan/wiki/blog/posts/WordNumbers2/), [part 3](http://conway.rutgers.edu/~ccshan/wiki/blog/posts/WordNumbers3/), [part 4](http://conway.rutgers.edu/~ccshan/wiki/blog/posts/WordNumbers4/)).
 
-As unlikely as it sounds, monads can actually be viewed as a sort of
-monoid, with `join`{.haskell} playing the role of the binary operation and
-`return`{.haskell} the role of the identity; see [Dan Piponi’s blog post](http://blog.sigfpe.com/2008/11/from-monoids-to-monads.html).
+As unlikely as it sounds, monads can actually be viewed as a sort of monoid, with `join`{.haskell} playing the role of the binary operation and `return`{.haskell} the role of the identity; see [Dan Piponi’s blog post](http://blog.sigfpe.com/2008/11/from-monoids-to-monads.html).
 
 # Foldable
 
-The `Foldable`{.haskell} class, defined in the `Data.Foldable`
-module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html)), abstracts over containers which can be
-“folded” into a summary value.  This allows such folding operations
-to be written in a container-agnostic way.
+The `Foldable`{.haskell} class, defined in the `Data.Foldable` module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html)), abstracts over containers which can be “folded” into a summary value.  This allows such folding operations to be written in a container-agnostic way.
 
 ## Definition
 
@@ -1033,22 +971,11 @@ class Foldable t where
   foldl1  :: (a -> a -> a) -> t a -> a
 ```
 
-This may look complicated, but in fact, to make a `Foldable`{.haskell} instance
-you only need to implement one method: your choice of `foldMap`{.haskell} or
-`foldr`{.haskell}.  All the other methods have default implementations in terms
-of these, and are presumably included in the class in case more
-efficient implementations can be provided.
+This may look complicated, but in fact, to make a `Foldable`{.haskell} instance you only need to implement one method: your choice of `foldMap`{.haskell} or `foldr`{.haskell}.  All the other methods have default implementations in terms of these, and are presumably included in the class in case more efficient implementations can be provided.
 
 ## Instances and examples
 
-The type of `foldMap`{.haskell} should make it clear what it is supposed to do:
-given a way to convert the data in a container into a `Monoid`{.haskell} (a
-function `a -> m`{.haskell}) and a container of `a`’s (`t a`{.haskell}), `foldMap`{.haskell}
-provides a way to iterate over the entire contents of the container,
-converting all the `a`’s to `m`’s and combining all the `m`’s with
-`mappend`{.haskell}. The following code shows two examples: a simple
-implementation of `foldMap`{.haskell} for lists, and a binary tree example
-provided by the `Foldable`{.haskell} documentation.
+The type of `foldMap`{.haskell} should make it clear what it is supposed to do: given a way to convert the data in a container into a `Monoid`{.haskell} (a function `a -> m`{.haskell}) and a container of `a`’s (`t a`{.haskell}), `foldMap`{.haskell} provides a way to iterate over the entire contents of the container, converting all the `a`’s to `m`’s and combining all the `m`’s with `mappend`{.haskell}. The following code shows two examples: a simple implementation of `foldMap`{.haskell} for lists, and a binary tree example provided by the `Foldable`{.haskell} documentation.
 
 ```haskell
 instance Foldable [] where
@@ -1062,12 +989,9 @@ instance Foldable Tree where
   foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
 ```
 
-The `foldr`{.haskell} function has a type similar to the `foldr`{.haskell} found in the `Prelude`{.haskell}, but
-more general, since the `foldr`{.haskell} in the `Prelude`{.haskell} works only on lists.
+The `foldr`{.haskell} function has a type similar to the `foldr`{.haskell} found in the `Prelude`{.haskell}, but more general, since the `foldr`{.haskell} in the `Prelude`{.haskell} works only on lists.
 
-The `Foldable`{.haskell} module also provides instances for `Maybe`{.haskell} and `Array`{.haskell};
-additionally, many of the data structures found in the standard [containers library](http://hackage.haskell.org/package/containers) (for example, `Map`{.haskell}, `Set`{.haskell}, `Tree`{.haskell},
-and `Sequence`{.haskell}) provide their own `Foldable`{.haskell} instances.
+The `Foldable`{.haskell} module also provides instances for `Maybe`{.haskell} and `Array`{.haskell}; additionally, many of the data structures found in the standard [containers library](http://hackage.haskell.org/package/containers) (for example, `Map`{.haskell}, `Set`{.haskell}, `Tree`{.haskell}, and `Sequence`{.haskell}) provide their own `Foldable`{.haskell} instances.
 
 > **Exercises**
 >
@@ -1075,8 +999,7 @@ and `Sequence`{.haskell}) provide their own `Foldable`{.haskell} instances.
 
 ## Derived folds
 
-Given an instance of `Foldable`{.haskell}, we can write generic,
-container-agnostic functions such as:
+Given an instance of `Foldable`{.haskell}, we can write generic, container-agnostic functions such as:
 
 ```haskell
 -- Compute the size of any container.
@@ -1093,33 +1016,13 @@ aStrings :: Foldable f => f String -> [String]
 aStrings = filterF (elem 'a')
 ```
 
-The `Foldable`{.haskell} module also provides a large number of predefined
-folds, many of which are generalized versions of `Prelude`{.haskell} functions of the
-same name that only work on lists: `concat`{.haskell}, `concatMap`{.haskell}, `and`{.haskell},
-`or`{.haskell}, `any`{.haskell}, `all`{.haskell}, `sum`{.haskell}, `product`{.haskell}, `maximum`{.haskell}(`By`),
-`minimum`{.haskell}(`By`), `elem`{.haskell}, `notElem`{.haskell}, and `find`{.haskell}.
+The `Foldable`{.haskell} module also provides a large number of predefined folds, many of which are generalized versions of `Prelude`{.haskell} functions of the same name that only work on lists: `concat`{.haskell}, `concatMap`{.haskell}, `and`{.haskell}, `or`{.haskell}, `any`{.haskell}, `all`{.haskell}, `sum`{.haskell}, `product`{.haskell}, `maximum`{.haskell}(`By`), `minimum`{.haskell}(`By`), `elem`{.haskell}, `notElem`{.haskell}, and `find`{.haskell}.
 
 The important function `toList`{.haskell} is also provided, which turns any `Foldable`{.haskell} structure into a list of its elements in left-right order; it works by folding with the list monoid.
 
-There are also generic functions that work with `Applicative`{.haskell} or
-`Monad`{.haskell} instances to generate some sort of computation from each
-element in a container, and then perform all the side effects from
-those computations, discarding the results: `traverse_`{.haskell}, `sequenceA_`{.haskell},
-and others.  The results must be discarded because the `Foldable`
-class is too weak to specify what to do with them: we cannot, in
-general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid
-structure---that is, an `Alternative`{.haskell} or a `MonadPlus`{.haskell}---then we can
-use the `asum`{.haskell} or `msum`{.haskell} functions, which can combine the results as
-well.  Consult the [`Foldable`{.haskell} documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html) for
-more details on any of these functions.
+There are also generic functions that work with `Applicative`{.haskell} or `Monad`{.haskell} instances to generate some sort of computation from each element in a container, and then perform all the side effects from those computations, discarding the results: `traverse_`{.haskell}, `sequenceA_`{.haskell}, and others.  The results must be discarded because the `Foldable` class is too weak to specify what to do with them: we cannot, in general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid structure---that is, an `Alternative`{.haskell} or a `MonadPlus`{.haskell}---then we can use the `asum`{.haskell} or `msum`{.haskell} functions, which can combine the results as well.  Consult the [`Foldable`{.haskell} documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html) for more details on any of these functions.
 
-Note that the `Foldable`{.haskell} operations always forget the structure of
-the container being folded.  If we start with a container of type `t a`{.haskell} for some `Foldable t`{.haskell}, then `t` will never appear in the output
-type of any operations defined in the `Foldable`{.haskell} module.  Many times
-this is exactly what we want, but sometimes we would like to be able
-to generically traverse a container while preserving its
-structure---and this is exactly what the `Traversable`{.haskell} class provides,
-which will be discussed in the next section.
+Note that the `Foldable`{.haskell} operations always forget the structure of the container being folded.  If we start with a container of type `t a`{.haskell} for some `Foldable t`{.haskell}, then `t` will never appear in the output type of any operations defined in the `Foldable`{.haskell} module.  Many times this is exactly what we want, but sometimes we would like to be able to generically traverse a container while preserving its structure---and this is exactly what the `Traversable`{.haskell} class provides, which will be discussed in the next section.
 
 > **Exercises**
 >
@@ -1134,19 +1037,15 @@ This is sufficient for many tasks, but not all.  For example, consider trying to
 
 ## Further reading
 
-The `Foldable`{.haskell} class had its genesis in [McBride and Paterson’s paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html)
-introducing `Applicative`{.haskell}, although it has
-been fleshed out quite a bit from the form in the paper.
+The `Foldable`{.haskell} class had its genesis in [McBride and Paterson’s paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html) introducing `Applicative`{.haskell}, although it has been fleshed out quite a bit from the form in the paper.
 
-An interesting use of `Foldable`{.haskell} (as well as `Traversable`{.haskell}) can be
-found in Janis Voigtländer’s paper [Bidirectionalization for free!](http://doi.acm.org/10.1145/1480881.1480904).
+An interesting use of `Foldable`{.haskell} (as well as `Traversable`{.haskell}) can be found in Janis Voigtländer’s paper [Bidirectionalization for free!](http://doi.acm.org/10.1145/1480881.1480904).
 
 # Traversable
 
 ## Definition
 
-The `Traversable`{.haskell} type class, defined in the `Data.Traversable`
-module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Traversable.html)), is:
+The `Traversable`{.haskell} type class, defined in the `Data.Traversable` module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Traversable.html)), is:
 
 ```haskell
 class (Functor t, Foldable t) => Traversable t where
@@ -1156,38 +1055,19 @@ class (Functor t, Foldable t) => Traversable t where
   sequence  ::       Monad m => t (m a) -> m (t a)
 ```
 
-As you can see, every `Traversable`{.haskell} is also a foldable functor.  Like
-`Foldable`{.haskell}, there is a lot in this type class, but making instances is
-actually rather easy: one need only implement `traverse`{.haskell} or
-`sequenceA`{.haskell}; the other methods all have default implementations in
-terms of these functions.  A good exercise is to figure out what the default
-implementations should be: given either `traverse`{.haskell} or `sequenceA`{.haskell}, how
-would you define the other three methods?  (Hint for `mapM`{.haskell}:
-`Control.Applicative` exports the `WrapMonad`{.haskell} newtype, which makes any
-`Monad`{.haskell} into an `Applicative`{.haskell}. The `sequence`{.haskell} function can be implemented in terms
-of `mapM`{.haskell}.)
+As you can see, every `Traversable`{.haskell} is also a foldable functor.  Like `Foldable`{.haskell}, there is a lot in this type class, but making instances is actually rather easy: one need only implement `traverse`{.haskell} or `sequenceA`{.haskell}; the other methods all have default implementations in terms of these functions.  A good exercise is to figure out what the default implementations should be: given either `traverse`{.haskell} or `sequenceA`{.haskell}, how would you define the other three methods?  (Hint for `mapM`{.haskell}: `Control.Applicative` exports the `WrapMonad`{.haskell} newtype, which makes any `Monad`{.haskell} into an `Applicative`{.haskell}. The `sequence`{.haskell} function can be implemented in terms of `mapM`{.haskell}.)
 
 ## Intuition
 
-The key method of the `Traversable`{.haskell} class, and the source of its
-unique power, is `sequenceA`{.haskell}.  Consider its type:
+The key method of the `Traversable`{.haskell} class, and the source of its unique power, is `sequenceA`{.haskell}.  Consider its type:
 
 ```haskell
   sequenceA :: Applicative f => t (f a) -> f (t a)
 ```
 
-This answers the fundamental question: when can we commute two
-functors?  For example, can we turn a tree of lists into a list of
-trees?
+This answers the fundamental question: when can we commute two functors?  For example, can we turn a tree of lists into a list of trees?
 
-The ability to compose two monads depends crucially on this ability to
-commute functors. Intuitively, if we want to build a composed monad
-`M a = m (n a)`{.haskell} out of monads `m` and `n`, then to be able to
-implement `join :: M (M a) -> M a`{.haskell}, that is,
-`join :: m (n (m (n a))) -> m (n a)`{.haskell}, we have to be able to commute
-the `n` past the `m` to get `m (m (n (n a)))`{.haskell}, and then we can use the
-`join`{.haskell}s for `m` and `n` to produce something of type `m (n a)`{.haskell}.  See
-[Mark Jones’s paper](http://web.cecs.pdx.edu/~mpj/pubs/springschool.html) for more details.
+The ability to compose two monads depends crucially on this ability to commute functors. Intuitively, if we want to build a composed monad `M a = m (n a)`{.haskell} out of monads `m` and `n`, then to be able to implement `join :: M (M a) -> M a`{.haskell}, that is, `join :: m (n (m (n a))) -> m (n a)`{.haskell}, we have to be able to commute the `n` past the `m` to get `m (m (n (n a)))`{.haskell}, and then we can use the `join`{.haskell}s for `m` and `n` to produce something of type `m (n a)`{.haskell}.  See [Mark Jones’s paper](http://web.cecs.pdx.edu/~mpj/pubs/springschool.html) for more details.
 
 Alternatively, looking at the type of `traverse`{.haskell},
 
@@ -1205,11 +1085,7 @@ leads us to view `Traversable`{.haskell} as a generalization of `Functor`{.haske
 
 ## Instances and examples
 
-What’s an example of a `Traversable`{.haskell} instance?
-The following code shows an example instance for the same
-`Tree`{.haskell} type used as an example in the previous `Foldable`{.haskell} section.  It
-is instructive to compare this instance with a `Functor`{.haskell} instance for
-`Tree`{.haskell}, which is also shown.
+What’s an example of a `Traversable`{.haskell} instance?  The following code shows an example instance for the same `Tree`{.haskell} type used as an example in the previous `Foldable`{.haskell} section.  It is instructive to compare this instance with a `Functor`{.haskell} instance for `Tree`{.haskell}, which is also shown.
 
 ```haskell
 data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a)
@@ -1229,22 +1105,11 @@ instance Functor Tree where
                                  (fmap g r)
 ```
 
-It should be clear that the `Traversable`{.haskell} and `Functor`{.haskell} instances for
-`Tree`{.haskell} are almost identical; the only difference is that the `Functor`
-instance involves normal function application, whereas the
-applications in the `Traversable`{.haskell} instance take place within an
-`Applicative`{.haskell} context, using `(<$>)`{.haskell} and `(<*>)`{.haskell}.  In fact, this will
-be
-true for any type.
+It should be clear that the `Traversable`{.haskell} and `Functor`{.haskell} instances for `Tree`{.haskell} are almost identical; the only difference is that the `Functor` instance involves normal function application, whereas the applications in the `Traversable`{.haskell} instance take place within an `Applicative`{.haskell} context, using `(<$>)`{.haskell} and `(<*>)`{.haskell}.  In fact, this will be true for any type.
 
-Any `Traversable`{.haskell} functor is also `Foldable`{.haskell}, and a `Functor`{.haskell}.  We can see
-this not only from the class declaration, but by the fact that we can
-implement the methods of both classes given only the `Traversable`
-methods.
+Any `Traversable`{.haskell} functor is also `Foldable`{.haskell}, and a `Functor`{.haskell}.  We can see this not only from the class declaration, but by the fact that we can implement the methods of both classes given only the `Traversable` methods.
 
-The standard libraries provide a number of `Traversable`{.haskell} instances,
-including instances for `[]`{.haskell}, `Maybe`{.haskell}, `Map`{.haskell}, `Tree`{.haskell}, and `Sequence`{.haskell}.
-Notably, `Set`{.haskell} is not `Traversable`{.haskell}, although it is `Foldable`{.haskell}.
+The standard libraries provide a number of `Traversable`{.haskell} instances, including instances for `[]`{.haskell}, `Maybe`{.haskell}, `Map`{.haskell}, `Tree`{.haskell}, and `Sequence`{.haskell}.  Notably, `Set`{.haskell} is not `Traversable`{.haskell}, although it is `Foldable`{.haskell}.
 
 > **Exercises**
 >
@@ -1269,9 +1134,7 @@ and `eta`{.haskell} preserves the `Applicative`{.haskell} operations: `eta (pure
 
 ## Further reading
 
-The `Traversable`{.haskell} class also had its genesis in [McBride and Paterson’s `Applicative`{.haskell} paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html),
-and is described in more detail in Gibbons and Oliveira, [The Essence of the Iterator Pattern](http://www.comlab.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf),
-which also contains a wealth of references to related work.
+The `Traversable`{.haskell} class also had its genesis in [McBride and Paterson’s `Applicative`{.haskell} paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html), and is described in more detail in Gibbons and Oliveira, [The Essence of the Iterator Pattern](http://www.comlab.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf), which also contains a wealth of references to related work.
 
 `Traversable`{.haskell} forms a core component of Edward Kmett's [lens library](http://hackage.haskell.org/package/lens).  Watching [https://vimeo.com/56063074 Edward's talk on the subject] is a highly recommended way to gain better insight into `Traversable`{.haskell}, `Foldable`{.haskell}, `Applicative`{.haskell}, and many other things besides.
 
@@ -1321,15 +1184,7 @@ is another good source of motivation and category theory links.  You certainly d
 
 # Arrow
 
-The `Arrow`{.haskell} class represents another abstraction of computation, in a
-similar vein to `Monad`{.haskell} and `Applicative`{.haskell}.  However, unlike `Monad`
-and `Applicative`{.haskell}, whose types only reflect their output, the type of
-an `Arrow`{.haskell} computation reflects both its input and output.  Arrows
-generalize functions: if `arr`{.haskell} is an instance of `Arrow`{.haskell}, a value of
-type ``b `arr` c``{.haskell} can be thought of as a computation which takes values of
-type `b` as input, and produces values of type `c` as output.  In the
-`(->)`{.haskell} instance of `Arrow`{.haskell} this is just a pure function; in general, however,
-an arrow may represent some sort of “effectful” computation.
+The `Arrow`{.haskell} class represents another abstraction of computation, in a similar vein to `Monad`{.haskell} and `Applicative`{.haskell}.  However, unlike `Monad` and `Applicative`{.haskell}, whose types only reflect their output, the type of an `Arrow`{.haskell} computation reflects both its input and output.  Arrows generalize functions: if `arr`{.haskell} is an instance of `Arrow`{.haskell}, a value of type ``b `arr` c``{.haskell} can be thought of as a computation which takes values of type `b` as input, and produces values of type `c` as output.  In the `(->)`{.haskell} instance of `Arrow`{.haskell} this is just a pure function; in general, however, an arrow may represent some sort of “effectful” computation.
 
 ## Definition
 
@@ -1345,21 +1200,13 @@ class Category arr => Arrow arr where
   (&&&) :: (b `arr` c) -> (b `arr` c') -> (b `arr` (c, c'))
 ```
 
-The first thing to note is the `Category`{.haskell} class constraint, which
-means that we get identity arrows and arrow composition for free:
-given two arrows ``g :: b `arr` c``{.haskell} and ``h :: c `arr` d``{.haskell}, we can form their
-composition ``g >>> h :: b `arr` d``{.haskell} ^[In versions of the `base` package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
+The first thing to note is the `Category`{.haskell} class constraint, which means that we get identity arrows and arrow composition for free: given two arrows ``g :: b `arr` c``{.haskell} and ``h :: c `arr` d``{.haskell}, we can form their composition ``g >>> h :: b `arr` d``{.haskell} ^[In versions of the `base` package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
 
-As should be a familiar pattern by now, the only methods which must be
-defined when writing a new instance of `Arrow`{.haskell} are `arr`{.haskell} and `first`{.haskell};
-the other methods have default definitions in terms of these, but are
-included in the `Arrow`{.haskell} class so that they can be overridden with more
-efficient implementations if desired.
+As should be a familiar pattern by now, the only methods which must be defined when writing a new instance of `Arrow`{.haskell} are `arr`{.haskell} and `first`{.haskell}; the other methods have default definitions in terms of these, but are included in the `Arrow`{.haskell} class so that they can be overridden with more efficient implementations if desired.
 
 ## Intuition
 
-Let’s look at each of the arrow methods in turn.  [Ross Paterson’s web page on arrows](http://www.haskell.org/arrows/) has nice diagrams which can help
-build intuition.
+Let’s look at each of the arrow methods in turn.  [Ross Paterson’s web page on arrows](http://www.haskell.org/arrows/) has nice diagrams which can help build intuition.
 
 * The `arr`{.haskell} function takes any function `b -> c`{.haskell} and turns it into a generalized arrow ``b `arr` c``{.haskell}.  The `arr`{.haskell} method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g`{.haskell} is “pure” in the sense that it only computes `g` and has no “effects” (whatever that might mean for any particular arrow type).
 
@@ -1373,10 +1220,7 @@ build intuition.
 
 ## Instances
 
-The `Arrow`{.haskell} library itself only provides two `Arrow`{.haskell} instances, both
-of which we have already seen: `(->)`{.haskell}, the normal function
-constructor, and `Kleisli m`{.haskell}, which makes functions of
-type `a -> m b`{.haskell} into `Arrow`{.haskell}s for any `Monad m`{.haskell}. These instances are:
+The `Arrow`{.haskell} library itself only provides two `Arrow`{.haskell} instances, both of which we have already seen: `(->)`{.haskell}, the normal function constructor, and `Kleisli m`{.haskell}, which makes functions of type `a -> m b`{.haskell} into `Arrow`{.haskell}s for any `Monad m`{.haskell}. These instances are:
 
 ```haskell
 instance Arrow (->) where
@@ -1394,8 +1238,7 @@ instance Monad m => Arrow (Kleisli m) where
 
 ## Laws
 
-There are quite a few laws that instances of `Arrow`{.haskell} should
-satisfy ^[See [John Hughes: Generalising monads to arrows](http://dx.doi.org/10.1016/S0167-6423(99)00023-4); [Sam Lindley, Philip Wadler, Jeremy Yallop: The arrow calculus](http://homepages.inf.ed.ac.uk/wadler/papers/arrows/arrows.pdf); [Ross Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html).]:
+There are quite a few laws that instances of `Arrow`{.haskell} should satisfy ^[See [John Hughes: Generalising monads to arrows](http://dx.doi.org/10.1016/S0167-6423(99)00023-4); [Sam Lindley, Philip Wadler, Jeremy Yallop: The arrow calculus](http://homepages.inf.ed.ac.uk/wadler/papers/arrows/arrows.pdf); [Ross Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html).]:
 
 ```haskell
 arr id = id
@@ -1409,26 +1252,13 @@ first (first g) >>> arr assoc = arr assoc >>> first g
 assoc ((x,y),z) = (x,(y,z))
 ```
 
-Note that this version of the laws is slightly different than the laws given in the
-first two above references, since several of the laws have now been
-subsumed by the `Category`{.haskell} laws (in particular, the requirements that
-`id`{.haskell} is the identity arrow and that `(>>>)`{.haskell} is associative).  The laws
-shown here follow those in Paterson’s Programming with Arrows, which uses the
-`Category`{.haskell} class.
+Note that this version of the laws is slightly different than the laws given in the first two above references, since several of the laws have now been subsumed by the `Category`{.haskell} laws (in particular, the requirements that `id`{.haskell} is the identity arrow and that `(>>>)`{.haskell} is associative).  The laws shown here follow those in Paterson’s Programming with Arrows, which uses the `Category`{.haskell} class.
 
-The reader is advised not to lose too much sleep over the `Arrow`
-laws ^[Unless category-theory-induced insomnolence is your cup of tea.], since it is not essential to understand them in order to
-program with arrows. There are also laws that `ArrowChoice`{.haskell},
-`ArrowApply`{.haskell}, and `ArrowLoop`{.haskell} instances should satisfy; the interested
-reader should consult [Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html).
+The reader is advised not to lose too much sleep over the `Arrow` laws ^[Unless category-theory-induced insomnolence is your cup of tea.], since it is not essential to understand them in order to program with arrows. There are also laws that `ArrowChoice`{.haskell}, `ArrowApply`{.haskell}, and `ArrowLoop`{.haskell} instances should satisfy; the interested reader should consult [Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html).
 
 ## ArrowChoice
 
-Computations built using the `Arrow`{.haskell} class, like those built using
-the `Applicative`{.haskell} class, are rather inflexible: the structure of the computation
-is fixed at the outset, and there is no ability to choose between
-alternate execution paths based on intermediate results.
-The `ArrowChoice`{.haskell} class provides exactly such an ability:
+Computations built using the `Arrow`{.haskell} class, like those built using the `Applicative`{.haskell} class, are rather inflexible: the structure of the computation is fixed at the outset, and there is no ability to choose between alternate execution paths based on intermediate results.  The `ArrowChoice`{.haskell} class provides exactly such an ability:
 
 ```haskell
 class Arrow arr => ArrowChoice arr where
@@ -1438,14 +1268,7 @@ class Arrow arr => ArrowChoice arr where
   (|||) :: (b `arr` d) -> (c `arr` d) -> (Either b c `arr` d)
 ```
 
-A comparison of `ArrowChoice`{.haskell} to `Arrow`{.haskell} will reveal a striking
-parallel between `left`{.haskell}, `right`{.haskell}, `(+++)`{.haskell}, `(|||)`{.haskell} and `first`{.haskell},
-`second`{.haskell}, `(***)`{.haskell}, `(&&&)`{.haskell}, respectively.  Indeed, they are dual:
-`first`{.haskell}, `second`{.haskell}, `(***)`{.haskell}, and `(&&&)`{.haskell} all operate on product types
-(tuples), and `left`{.haskell}, `right`{.haskell}, `(+++)`{.haskell}, and `(|||)`{.haskell} are the
-corresponding operations on sum types.  In general, these operations
-create arrows whose inputs are tagged with `Left`{.haskell} or `Right`{.haskell}, and can
-choose how to act based on these tags.
+A comparison of `ArrowChoice`{.haskell} to `Arrow`{.haskell} will reveal a striking parallel between `left`{.haskell}, `right`{.haskell}, `(+++)`{.haskell}, `(|||)`{.haskell} and `first`{.haskell}, `second`{.haskell}, `(***)`{.haskell}, `(&&&)`{.haskell}, respectively.  Indeed, they are dual: `first`{.haskell}, `second`{.haskell}, `(***)`{.haskell}, and `(&&&)`{.haskell} all operate on product types (tuples), and `left`{.haskell}, `right`{.haskell}, `(+++)`{.haskell}, and `(|||)`{.haskell} are the corresponding operations on sum types.  In general, these operations create arrows whose inputs are tagged with `Left`{.haskell} or `Right`{.haskell}, and can choose how to act based on these tags.
 
 * If `g` is an arrow from `b` to `c`, then `left g`{.haskell} is an arrow from `Either b d`{.haskell} to `Either c d`{.haskell}.  On inputs tagged with `Left`{.haskell}, the `left g`{.haskell} arrow has the behavior of `g`; on inputs tagged with `Right`{.haskell}, it behaves as the identity.
 
@@ -1455,9 +1278,7 @@ choose how to act based on these tags.
 
 * The `(|||)`{.haskell} operator is “merge” or “fanin”: the arrow `g ||| h`{.haskell} behaves as `g` on inputs tagged with `Left`{.haskell}, and `h` on inputs tagged with `Right`{.haskell}, but the tags are discarded (hence, `g` and `h` must have the same output type).  The mnemonic is that `g ||| h`{.haskell} performs either `g` *or* `h` on its input.
 
-The `ArrowChoice`{.haskell} class allows computations to choose among a finite number of execution paths, based on intermediate results.  The possible
-execution paths must be known in advance, and explicitly assembled with `(+++)`{.haskell} or `(|||)`{.haskell}.  However, sometimes more flexibility is
-needed: we would like to be able to *compute* an arrow from intermediate results, and use this computed arrow to continue the computation.  This is the power given to us by `ArrowApply`{.haskell}.
+The `ArrowChoice`{.haskell} class allows computations to choose among a finite number of execution paths, based on intermediate results.  The possible execution paths must be known in advance, and explicitly assembled with `(+++)`{.haskell} or `(|||)`{.haskell}.  However, sometimes more flexibility is needed: we would like to be able to *compute* an arrow from intermediate results, and use this computed arrow to continue the computation.  This is the power given to us by `ArrowApply`{.haskell}.
 
 ## ArrowApply
 
@@ -1468,21 +1289,9 @@ class Arrow arr => ArrowApply arr where
   app :: (b `arr` c, b) `arr` c
 ```
 
-If we have computed an arrow as the output of some previous
-computation, then `app`{.haskell} allows us to apply that arrow to an input,
-producing its output as the output of `app`{.haskell}.  As an exercise, the
-reader may wish to use `app`{.haskell} to implement an alternative “curried”
-version, ``app2 :: b `arr` ((b `arr` c) `arr` c)``{.haskell}.
+If we have computed an arrow as the output of some previous computation, then `app`{.haskell} allows us to apply that arrow to an input, producing its output as the output of `app`{.haskell}.  As an exercise, the reader may wish to use `app`{.haskell} to implement an alternative “curried” version, ``app2 :: b `arr` ((b `arr` c) `arr` c)``{.haskell}.
 
-This notion of being able to *compute* a new computation
-may sound familiar:
-this is exactly what the monadic bind operator `(>>=)`{.haskell} does.  It
-should not particularly come as a surprise that `ArrowApply`{.haskell} and
-`Monad`{.haskell} are exactly equivalent in expressive power.  In particular,
-`Kleisli m`{.haskell} can be made an instance of `ArrowApply`{.haskell}, and any instance
-of `ArrowApply`{.haskell} can be made a `Monad`{.haskell} (via the `newtype`{.haskell} wrapper
-`ArrowMonad`{.haskell}).  As an exercise, the reader may wish to try
-implementing these instances:
+This notion of being able to *compute* a new computation may sound familiar: this is exactly what the monadic bind operator `(>>=)`{.haskell} does.  It should not particularly come as a surprise that `ArrowApply`{.haskell} and `Monad`{.haskell} are exactly equivalent in expressive power.  In particular, `Kleisli m`{.haskell} can be made an instance of `ArrowApply`{.haskell}, and any instance of `ArrowApply`{.haskell} can be made a `Monad`{.haskell} (via the `newtype`{.haskell} wrapper `ArrowMonad`{.haskell}).  As an exercise, the reader may wish to try implementing these instances:
 
 ```haskell
 instance Monad m => ArrowApply (Kleisli m) where
@@ -1507,37 +1316,15 @@ trace :: ((b,d) -> (c,d)) -> b -> c
 trace f b = let (c,d) = f (b,d) in c
 ```
 
-It describes arrows that can use recursion to compute results, and is
-used to desugar the `rec` construct in arrow notation (described
-below).
+It describes arrows that can use recursion to compute results, and is used to desugar the `rec` construct in arrow notation (described below).
 
-Taken by itself, the type of the `loop`{.haskell} method does not seem to tell
-us much.  Its intention, however, is a generalization of the `trace`
-function which is also shown.  The `d` component of the first arrow’s
-output is fed back in as its own input.  In other words, the arrow
-`loop g`{.haskell} is obtained by recursively “fixing” the second component of
-the input to `g`.
+Taken by itself, the type of the `loop`{.haskell} method does not seem to tell us much.  Its intention, however, is a generalization of the `trace` function which is also shown.  The `d` component of the first arrow’s output is fed back in as its own input.  In other words, the arrow `loop g`{.haskell} is obtained by recursively “fixing” the second component of the input to `g`.
 
-It can be a bit difficult to grok what the `trace`{.haskell} function is doing.
-How can `d` appear on the left and right sides of the `let`{.haskell}?  Well,
-this is Haskell’s laziness at work.  There is not space here for a
-full explanation; the interested reader is encouraged to study the
-standard `fix`{.haskell} function, and to read [Paterson’s arrow tutorial](http://www.soi.city.ac.uk/~ross/papers/fop.html).
+It can be a bit difficult to grok what the `trace`{.haskell} function is doing.  How can `d` appear on the left and right sides of the `let`{.haskell}?  Well, this is Haskell’s laziness at work.  There is not space here for a full explanation; the interested reader is encouraged to study the standard `fix`{.haskell} function, and to read [Paterson’s arrow tutorial](http://www.soi.city.ac.uk/~ross/papers/fop.html).
 
 ## Arrow notation
 
-Programming directly with the arrow combinators can be painful,
-especially when writing complex computations which need to retain
-simultaneous reference to a number of intermediate results. With
-nothing but the arrow combinators, such intermediate results must be
-kept in nested tuples, and it is up to the programmer to remember
-which intermediate results are in which components, and to swap,
-reassociate, and generally mangle tuples as necessary.  This problem
-is solved by the special arrow notation supported by GHC, similar to
-`do` notation for monads, that allows names to be assigned to
-intermediate results while building up arrow computations.  An example
-arrow implemented using arrow notation, taken from
-Paterson, is:
+Programming directly with the arrow combinators can be painful, especially when writing complex computations which need to retain simultaneous reference to a number of intermediate results. With nothing but the arrow combinators, such intermediate results must be kept in nested tuples, and it is up to the programmer to remember which intermediate results are in which components, and to swap, reassociate, and generally mangle tuples as necessary.  This problem is solved by the special arrow notation supported by GHC, similar to `do` notation for monads, that allows names to be assigned to intermediate results while building up arrow computations.  An example arrow implemented using arrow notation, taken from Paterson, is:
 
 ```haskell
 class ArrowLoop arr => ArrowCircuit arr where
@@ -1550,30 +1337,17 @@ counter = proc reset -> do
             idA -< output
 ```
 
-This arrow is intended to
-represent a recursively defined counter circuit with a reset line.
+This arrow is intended to represent a recursively defined counter circuit with a reset line.
 
-There is not space here for a full explanation of arrow notation; the
-interested reader should consult
-[Paterson’s paper introducing the notation](http://www.soi.city.ac.uk/~ross/papers/notation.html), or his later [tutorial which presents a simplified version](http://www.soi.city.ac.uk/~ross/papers/fop.html).
+There is not space here for a full explanation of arrow notation; the interested reader should consult [Paterson’s paper introducing the notation](http://www.soi.city.ac.uk/~ross/papers/notation.html), or his later [tutorial which presents a simplified version](http://www.soi.city.ac.uk/~ross/papers/fop.html).
 
 ## Further reading
 
-An excellent starting place for the student of arrows is the [arrows web page](http://www.haskell.org/arrows/), which contains an
-introduction and many references. Some key papers on arrows include
-Hughes’s original paper introducing arrows, [Generalising monads to arrows](http://dx.doi.org/10.1016/S0167-6423(99)00023-4), and [Paterson’s paper on arrow notation](http://www.soi.city.ac.uk/~ross/papers/notation.html).
+An excellent starting place for the student of arrows is the [arrows web page](http://www.haskell.org/arrows/), which contains an introduction and many references. Some key papers on arrows include Hughes’s original paper introducing arrows, [Generalising monads to arrows](http://dx.doi.org/10.1016/S0167-6423(99)00023-4), and [Paterson’s paper on arrow notation](http://www.soi.city.ac.uk/~ross/papers/notation.html).
 
-Both Hughes and Paterson later wrote accessible tutorials intended for a broader
-audience: [Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html) and [Hughes: Programming with Arrows](http://www.cse.chalmers.se/~rjmh/afp-arrows.pdf).
+Both Hughes and Paterson later wrote accessible tutorials intended for a broader audience: [Paterson: Programming with Arrows](http://www.soi.city.ac.uk/~ross/papers/fop.html) and [Hughes: Programming with Arrows](http://www.cse.chalmers.se/~rjmh/afp-arrows.pdf).
 
-Although Hughes’s goal in defining the `Arrow`{.haskell} class was to
-generalize `Monad`{.haskell}s, and it has been said that `Arrow`{.haskell} lies “between
-`Applicative`{.haskell} and `Monad`{.haskell}” in power, they are not directly
-comparable.  The precise relationship remained in some confusion until
-[analyzed by Lindley, Wadler, and Yallop](http://homepages.inf.ed.ac.uk/wadler/papers/arrows-and-idioms/arrows-and-idioms.pdf), who
-also invented a new calculus of arrows, based on the lambda calculus,
-which considerably simplifies the presentation of the arrow laws
-(see [The arrow calculus](http://homepages.inf.ed.ac.uk/wadler/papers/arrows/arrows.pdf)).  There is also a precise technical sense in which [`Arrow`{.haskell} can be seen as the intersection of `Applicative`{.haskell} and `Category`{.haskell}](http://just-bottom.blogspot.de/2010/04/programming-with-effects-story-so-far.html).
+Although Hughes’s goal in defining the `Arrow`{.haskell} class was to generalize `Monad`{.haskell}s, and it has been said that `Arrow`{.haskell} lies “between `Applicative`{.haskell} and `Monad`{.haskell}” in power, they are not directly comparable.  The precise relationship remained in some confusion until [analyzed by Lindley, Wadler, and Yallop](http://homepages.inf.ed.ac.uk/wadler/papers/arrows-and-idioms/arrows-and-idioms.pdf), who also invented a new calculus of arrows, based on the lambda calculus, which considerably simplifies the presentation of the arrow laws (see [The arrow calculus](http://homepages.inf.ed.ac.uk/wadler/papers/arrows/arrows.pdf)).  There is also a precise technical sense in which [`Arrow`{.haskell} can be seen as the intersection of `Applicative`{.haskell} and `Category`{.haskell}](http://just-bottom.blogspot.de/2010/04/programming-with-effects-story-so-far.html).
 
 Some examples of `Arrow`{.haskell}s include [Yampa](http://www.haskell.org/yampa/), the
 [Haskell XML Toolkit](http://www.fh-wedel.de/~si/HXmlToolbox/), and the functional GUI library [Grapefruit](http://www.haskell.org/haskellwiki/Grapefruit).
@@ -1586,16 +1360,11 @@ The Haskell wiki has [links to many additional research papers relating to `Arro
 
 # Comonad
 
-The final type class we will examine is `Comonad`{.haskell}. The `Comonad`{.haskell} class
-is the categorical dual of `Monad`{.haskell}; that is, `Comonad`{.haskell} is like `Monad`
-but with all the function arrows flipped. It is not actually in the
-standard Haskell libraries, but it has seen some interesting uses
-recently, so we include it here for completeness.
+The final type class we will examine is `Comonad`{.haskell}. The `Comonad`{.haskell} class is the categorical dual of `Monad`{.haskell}; that is, `Comonad`{.haskell} is like `Monad` but with all the function arrows flipped. It is not actually in the standard Haskell libraries, but it has seen some interesting uses recently, so we include it here for completeness.
 
 ## Definition
 
-The `Comonad`{.haskell} type class, defined in the `Control.Comonad` module of
-the [comonad library](http://hackage.haskell.org/package/comonad), is:
+The `Comonad`{.haskell} type class, defined in the `Control.Comonad` module of the [comonad library](http://hackage.haskell.org/package/comonad), is:
 
 ```haskell
 class Functor w => Comonad w where
@@ -1645,30 +1414,11 @@ The [comonad-transformers](http://hackage.haskell.org/package/comonad-transforme
 
 # Acknowledgements
 
-A special thanks to all of those who taught me about standard Haskell
-type classes and helped me develop good intuition for them,
-particularly Jules Bean (quicksilver), Derek Elkins (ddarius), Conal
-Elliott (conal), Cale Gibbard (Cale), David House, Dan Piponi
-(sigfpe), and Kevin Reid (kpreid).
+A special thanks to all of those who taught me about standard Haskell type classes and helped me develop good intuition for them, particularly Jules Bean (quicksilver), Derek Elkins (ddarius), Conal Elliott (conal), Cale Gibbard (Cale), David House, Dan Piponi (sigfpe), and Kevin Reid (kpreid).
 
-I also thank the many people who provided a mountain of helpful
-feedback and suggestions on a first draft of the Typeclassopedia: David Amos,
-Kevin Ballard, Reid Barton, Doug Beardsley, Joachim Breitner, Andrew
-Cave, David Christiansen, Gregory Collins, Mark Jason Dominus, Conal
-Elliott, Yitz Gale, George Giorgidze, Steven Grady, Travis Hartwell,
-Steve Hicks, Philip Hölzenspies, Edward Kmett, Eric Kow, Serge Le
-Huitouze, Felipe Lessa, Stefan Ljungstrand, Eric Macaulay, Rob MacAulay, Simon Meier,
-Eric Mertens, Tim Newsham, Russell O’Connor, Conrad Parker, Walt
-Rorie-Baety, Colin Ross, Tom Schrijvers, Aditya Siram, C. Smith,
-Martijn van Steenbergen, Joe Thornber, Jared Updike, Rob Vollmert,
-Andrew Wagner, Louis Wasserman, and Ashley Yakeley, as well as a few
-only known to me by their IRC nicks: b_jonas, maltem, tehgeekmeister,
-and ziman.  I have undoubtedly omitted a few inadvertently, which in
-no way diminishes my gratitude.
+I also thank the many people who provided a mountain of helpful feedback and suggestions on a first draft of the Typeclassopedia: David Amos, Kevin Ballard, Reid Barton, Doug Beardsley, Joachim Breitner, Andrew Cave, David Christiansen, Gregory Collins, Mark Jason Dominus, Conal Elliott, Yitz Gale, George Giorgidze, Steven Grady, Travis Hartwell, Steve Hicks, Philip Hölzenspies, Edward Kmett, Eric Kow, Serge Le Huitouze, Felipe Lessa, Stefan Ljungstrand, Eric Macaulay, Rob MacAulay, Simon Meier, Eric Mertens, Tim Newsham, Russell O’Connor, Conrad Parker, Walt Rorie-Baety, Colin Ross, Tom Schrijvers, Aditya Siram, C. Smith, Martijn van Steenbergen, Joe Thornber, Jared Updike, Rob Vollmert, Andrew Wagner, Louis Wasserman, and Ashley Yakeley, as well as a few only known to me by their IRC nicks: b_jonas, maltem, tehgeekmeister, and ziman.  I have undoubtedly omitted a few inadvertently, which in no way diminishes my gratitude.
 
-Finally, I would like to thank Wouter Swierstra for his fantastic work
-editing the Monad.Reader, and my wife Joyia for her patience during
-the process of writing the Typeclassopedia.
+Finally, I would like to thank Wouter Swierstra for his fantastic work editing the Monad.Reader, and my wife Joyia for her patience during the process of writing the Typeclassopedia.
 
 # About the author
 
