@@ -1136,7 +1136,7 @@ and `eta`{.haskell} preserves the `Applicative`{.haskell} operations: `eta (pure
 
 The `Traversable`{.haskell} class also had its genesis in [McBride and Paterson’s `Applicative`{.haskell} paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html), and is described in more detail in Gibbons and Oliveira, [The Essence of the Iterator Pattern](http://www.comlab.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf), which also contains a wealth of references to related work.
 
-`Traversable`{.haskell} forms a core component of Edward Kmett's [lens library](http://hackage.haskell.org/package/lens).  Watching [https://vimeo.com/56063074 Edward's talk on the subject] is a highly recommended way to gain better insight into `Traversable`{.haskell}, `Foldable`{.haskell}, `Applicative`{.haskell}, and many other things besides.
+`Traversable`{.haskell} forms a core component of Edward Kmett's [lens library](http://hackage.haskell.org/package/lens).  Watching [Edward's talk on the subject](https://vimeo.com/56063074) is a highly recommended way to gain better insight into `Traversable`{.haskell}, `Foldable`{.haskell}, `Applicative`{.haskell}, and many other things besides.
 
 For references on the `Traversable`{.haskell} laws, see Russell O'Connor's [mailing list post](http://article.gmane.org/gmane.comp.lang.haskell.libraries/17778) (and subsequent thread).
 
