@@ -839,7 +839,7 @@ class Monoid a where
 
 The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`{.haskell} is the binary operation.  The default definition for `mconcat`{.haskell} “reduces” a list of elements by combining them all with `mappend`{.haskell}, using a right fold. It is only in the `Monoid`{.haskell} class so that specific instances have the option of providing an alternative, more efficient implementation; usually, you can safely ignore `mconcat`{.haskell} when creating a `Monoid`{.haskell} instance, since its default definition will work just fine.
 
-The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the haskell-cafe mailing list).
+The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the haskell-cafe mailing list). This was improved in GHC 7.4, where `(<>)`{.haskell} was added as an alias to `mappend`{.haskell}.
 
 ## Laws
 
