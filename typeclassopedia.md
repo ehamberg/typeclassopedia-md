@@ -649,7 +649,7 @@ However, this sort of "capability-based" style (*e.g.* specifying that `foo`{.ha
 
 ## Composing monads
 
-Is the composition of two monads always a monad? As hinted previously, the answer is no.  For example, *XXX insert example here*.
+Is the composition of two monads always a monad? As hinted previously, the answer is no.  For example, `((->) r`{.haskell} is a monad for every `r`{.haskell} and `Either e`{.haskell} is a monad for every `e`{.haskell}. However, their composition `((->) r`{.haskell} inside `Either e`{.haskell}---`Either e (r -> a)`{.haskell}---is not a monad^[This example is taken from a [Stack Overflow answer](http://stackoverflow.com/a/13047319/2259460) which gives a nice proof of why this can never be a monad.].
 
 Since `Applicative`{.haskell} functors are closed under composition, the problem must lie with `join`{.haskell}.  Indeed, suppose `m` and `n` are arbitrary monads; to make a monad out of their composition we would need to be able to implement
 
