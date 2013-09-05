@@ -1144,7 +1144,7 @@ For references on the `Traversable`{.haskell} laws, see Russell O'Connor's [mail
 
 `Category`{.haskell} is a relatively recent addition to the Haskell standard libraries.  It generalizes the notion of function composition to general “morphisms”.
 
-The definition of the `Category`{.haskell} type class (from `Control.Category`---[haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable `` `arr` ``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of `` `arr` ``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor `` `arr` ``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
+The definition of the `Category`{.haskell} type class (from `Control.Category`; [haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable `` `arr` ``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of `` `arr` ``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor `` `arr` ``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
 
 ```haskell
 class Category arr where
@@ -1187,8 +1187,7 @@ The `Arrow`{.haskell} class represents another abstraction of computation, in a 
 
 ## Definition
 
-The definition of the `Arrow`{.haskell} type class, from
-`Control.Arrow` ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html)), is:
+The definition of the `Arrow`{.haskell} type class, (from `Control.Arrow`; [haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html)), is:
 
 ```haskell
 class Category arr => Arrow arr where
