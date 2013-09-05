@@ -780,6 +780,7 @@ mdo { x <- foo
 ```
 
 which will be translated into the original example (assuming that, say, `bar`{.haskell} and `bob`{.haskell} refer to `y`.  The difference is that `mdo`{.haskell} will analyze the code in order to find minimal recursive blocks, which will be placed in `rec`{.haskell} blocks, whereas `rec`{.haskell} blocks desugar directly into calls to `mfix`{.haskell} without any further analysis.
+
 ## Further reading
 
 For more information (such as the precise desugaring rules for `rec`{.haskell} blocks), see Levent Erkök and John Launchbury's 2002 Haskell workshop paper, [A Recursive do for Haskell](http://sites.google.com/site/leventerkok/recdo.pdf?attredirects=0), or for full details, Levent Erkök’s thesis, [Value Recursion in Monadic Computations](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.15.1543&rep=rep1&type=pdf).  (Note, while reading, that `MonadFix`{.haskell} used to be called `MonadRec`{.haskell}.)  You can also read the [GHC user manual section on recursive do-notation](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation).
