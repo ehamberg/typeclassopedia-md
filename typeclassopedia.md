@@ -45,7 +45,7 @@ The type classes we will be discussing and their interrelationships:
 * <span style="border-bottom: 2px solid black">Solid arrows</span> point from the general to the specific; that is, if there is an arrow from `Foo`{.haskell} to `Bar`{.haskell} it means that every `Bar`{.haskell} is (or should be, or can be made into) a `Foo`{.haskell}.
 * <span style="border-bottom: 2px dotted black">Dotted arrows</span> indicate some other sort of relationship.
 * `Monad`{.haskell} and `ArrowApply`{.haskell} are equivalent.
-* `Semigroup`{.haskell}, `Apply`{.haskell} and `Comonad`{.haskell} are greyed out since they are not actually (yet?) in the standard Haskell libraries ^[`Semigroup`{.haskell} can be found in the [`semigroups`{.haskell} package](http://hackage.haskell.org/package/semigroups), `Apply`{.haskell} in the [`semigroupoids`{.haskell} package](http://hackage.haskell.org/package/semigroupoids), and `Comonad`{.haskell} in the [`comonad`{.haskell} package](http://hackage.haskell.org/package/comonad).]
+* `Semigroup`{.haskell}, `Apply`{.haskell} and `Comonad`{.haskell} are greyed out since they are not actually (yet?) in the standard Haskell libraries ^[`Semigroup`{.haskell} can be found in the [`semigroups` package](http://hackage.haskell.org/package/semigroups), `Apply`{.haskell} in the [`semigroupoids` package](http://hackage.haskell.org/package/semigroupoids), and `Comonad`{.haskell} in the [`comonad` package](http://hackage.haskell.org/package/comonad).]
 
 One more note before we begin. The original spelling of “type class” is with two words, as evidenced by, for example, the [Haskell 98 Revised Report](http://haskell.org/onlinereport/), early papers on type classes like [Type classes in Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.5639) and [Type classes: exploring the design space](http://research.microsoft.com/en-us/um/people/simonpj/papers/type-class-design-space/), and [Hudak et al.’s history of Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.168.4008).  However, as often happens with two-word phrases that see a lot of use, it has started to show up as one word (“typeclass”) or, rarely, hyphenated (“type-class”).  When wearing my prescriptivist hat, I prefer “type class”, but realize (after changing into my descriptivist hat) that there's probably not much I can do about it.
 
@@ -184,7 +184,7 @@ As always, it’s crucial to understand the type signatures.  First, consider `(
 
 `pure`{.haskell} takes a value of any type `a`, and returns a context/container of type `f a`{.haskell}.  The intention is that `pure`{.haskell} creates some sort of “default” container or “effect free” context.  In fact, the behavior of `pure`{.haskell} is quite constrained by the laws it should satisfy in conjunction with `(<*>)`{.haskell}.  Usually, for a given implementation of `(<*>)`{.haskell} there is only one possible implementation of `pure`{.haskell}.
 
-(Note that previous versions of the Typeclassopedia explained `pure`{.haskell} in terms of a type class `Pointed`{.haskell}, which can still be found in the [`pointed`{.haskell} package](http://hackage.haskell.org/package/pointed).  However, the current consensus is that `Pointed`{.haskell} is not very useful after all.  For a more detailed explanation, see [Why not Pointed?](http://www.haskell.org/haskellwiki/Why not Pointed%3F))
+(Note that previous versions of the Typeclassopedia explained `pure`{.haskell} in terms of a type class `Pointed`{.haskell}, which can still be found in the [`pointed` package](http://hackage.haskell.org/package/pointed).  However, the current consensus is that `Pointed`{.haskell} is not very useful after all.  For a more detailed explanation, see [Why not Pointed?](http://www.haskell.org/haskellwiki/Why not Pointed%3F))
 
 ## Laws
 
@@ -389,7 +389,7 @@ We could spend a while talking about the intuition behind `(>>=)`---and we will.
 
 ## Instances
 
-Even if you don’t understand the intuition behind the `Monad`{.haskell} class, you can still create instances of it by just seeing where the types lead you. You may be surprised to find that this actually gets you a long way towards understanding the intuition; at the very least, it will give you some concrete examples to play with as you read more about the `Monad`{.haskell} class in general. The first few examples are from the standard `Prelude`{.haskell}; the remaining examples are from the [`transformers`{.haskell} package](http://hackage.haskell.org/package/transformers).
+Even if you don’t understand the intuition behind the `Monad`{.haskell} class, you can still create instances of it by just seeing where the types lead you. You may be surprised to find that this actually gets you a long way towards understanding the intuition; at the very least, it will give you some concrete examples to play with as you read more about the `Monad`{.haskell} class in general. The first few examples are from the standard `Prelude`{.haskell}; the remaining examples are from the [`transformers` package](http://hackage.haskell.org/package/transformers).
 
 - The simplest possible instance of `Monad`{.haskell} is [`Identity`{.haskell}](http://hackage.haskell.org/packages/archive/mtl/1.1.0.2/doc/html/Control-Monad-Identity.html), which is described in Dan Piponi’s highly recommended blog post on [The Trivial Monad](http://blog.sigfpe.com/2007/04/trivial-monad.html). Despite being “trivial”, it is a great introduction to the `Monad`{.haskell} type class, and contains some good exercises to get your brain working.
 
@@ -473,7 +473,7 @@ The [`Control.Monad`](http://haskell.org/ghc/docs/latest/html/libraries/base/Con
 
 * `replicateM :: Monad m => Int -> m a -> m [a]`{.haskell} is simply a combination of [`replicate`{.haskell}](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:replicate) and `sequence`{.haskell}.
 
-* `when :: Monad m => Bool -> m () -> m ()`{.haskell} conditionally executes a computation, evaluating to its second argument if the test is `True`{.haskell}, and to `return ()`{.haskell} if the test is `False`{.haskell}.  A collection of other sorts of monadic conditionals can be found in the [`IfElse`{.haskell} package](http://hackage.haskell.org/package/IfElse).
+* `when :: Monad m => Bool -> m () -> m ()`{.haskell} conditionally executes a computation, evaluating to its second argument if the test is `True`{.haskell}, and to `return ()`{.haskell} if the test is `False`{.haskell}.  A collection of other sorts of monadic conditionals can be found in the [`IfElse` package](http://hackage.haskell.org/package/IfElse).
 
 * `mapM :: Monad m => (a -> m b) -> [a] -> m [b]`{.haskell} maps its first argument over the second, and `sequence`{.haskell}s the results. The `forM`{.haskell} function is just `mapM`{.haskell} with its arguments reversed; it is called `forM`{.haskell} since it models generalized `for`{.haskell} loops: the list `[a]`{.haskell} provides the loop indices, and the function `a -> m b`{.haskell} specifies the “body” of the loop for each index.
 
@@ -625,7 +625,7 @@ which intuitively state that `lift`{.haskell} transforms `m a`{.haskell} computa
 
 ## Transformer type classes and "capability" style
 
-There are also type classes (provided by the [`mtl`{.haskell} package](http://hackage.haskell.org/package/mtl)) for the operations of each transformer.  For example, the `MonadState`{.haskell} type class provides the state-specific methods `get`{.haskell} and `put`{.haskell}, allowing you to conveniently use these methods not only with `State`{.haskell}, but with any monad which is an instance of `MonadState`{.haskell}---including `MaybeT (State s)`{.haskell}, `StateT s (ReaderT r IO)`{.haskell}, and so on. Similar type classes exist for `Reader`{.haskell}, `Writer`{.haskell}, `Cont`{.haskell}, `IO`{.haskell}, and others ^[The only problem with this scheme is the quadratic number of instances required as the number of standard monad transformers grows---but as the current set of standard monad transformers seems adequate for most common use cases, this may not be that big of a deal.].
+There are also type classes (provided by the [`mtl` package](http://hackage.haskell.org/package/mtl)) for the operations of each transformer.  For example, the `MonadState`{.haskell} type class provides the state-specific methods `get`{.haskell} and `put`{.haskell}, allowing you to conveniently use these methods not only with `State`{.haskell}, but with any monad which is an instance of `MonadState`{.haskell}---including `MaybeT (State s)`{.haskell}, `StateT s (ReaderT r IO)`{.haskell}, and so on. Similar type classes exist for `Reader`{.haskell}, `Writer`{.haskell}, `Cont`{.haskell}, `IO`{.haskell}, and others ^[The only problem with this scheme is the quadratic number of instances required as the number of standard monad transformers grows---but as the current set of standard monad transformers seems adequate for most common use cases, this may not be that big of a deal.].
 
 These type classes serve two purposes.  First, they get rid of (most of) the need for explicitly using `lift`{.haskell}, giving a type-directed way to automatically determine the right number of calls to `lift`{.haskell}. Simply writing `put`{.haskell} will be automatically translated into `lift . put`{.haskell}, `lift . lift . put`{.haskell}, or something similar depending on what concrete monad stack you are using.
 
@@ -645,7 +645,7 @@ foo = modify (*2) >> return 'x'
 
 Now, if somewhere down the line you realize you need to introduce the possibility of failure, you might switch from `State Int`{.haskell} to `MaybeT (State Int)`{.haskell}.  The type of the first version of `foo`{.haskell} would need to be modified to reflect this change, but the second version of `foo`{.haskell} can still be used as-is.
 
-However, this sort of "capability-based" style (*e.g.* specifying that `foo`{.haskell} works for any monad with the "state capability") quickly runs into problems when you try to naively scale it up: for example, what if you need to maintain two independent states?  A framework for solving this and related problems is described by Schrijvers and Olivera ([Monads, zippers and views: virtualizing the monad stack, ICFP 2011](http://users.ugent.be/~tschrijv/Research/papers/icfp2011.pdf)) and is implemented in the [`Monatron`{.haskell} package](http://hackage.haskell.org/package/Monatron).
+However, this sort of "capability-based" style (*e.g.* specifying that `foo`{.haskell} works for any monad with the "state capability") quickly runs into problems when you try to naively scale it up: for example, what if you need to maintain two independent states?  A framework for solving this and related problems is described by Schrijvers and Olivera ([Monads, zippers and views: virtualizing the monad stack, ICFP 2011](http://users.ugent.be/~tschrijv/Research/papers/icfp2011.pdf)) and is implemented in the [`Monatron` package](http://hackage.haskell.org/package/Monatron).
 
 ## Composing monads
 
@@ -673,13 +673,13 @@ satisfying certain laws. See Jones and Duponcheel ([Composing Monads](http://cit
 
 ## Further reading
 
-Much of the monad transformer library (originally [`mtl`{.haskell}](http://hackage.haskell.org/package/mtl), now split between `mtl`{.haskell} and [`transformers`{.haskell}](http://hackage.haskell.org/package/transformers)), including the `Reader`{.haskell}, `Writer`{.haskell}, `State`{.haskell}, and other monads, as well as the monad transformer framework itself, was inspired by Mark Jones’s classic paper [Functional Programming with Overloading and Higher-Order Polymorphism](http://web.cecs.pdx.edu/~mpj/pubs/springschool.html). It’s still very much worth a read---and highly readable---after almost fifteen years.
+Much of the monad transformer library (originally [`mtl`](http://hackage.haskell.org/package/mtl), now split between `mtl` and [`transformers`](http://hackage.haskell.org/package/transformers)), including the `Reader`{.haskell}, `Writer`{.haskell}, `State`{.haskell}, and other monads, as well as the monad transformer framework itself, was inspired by Mark Jones’s classic paper [Functional Programming with Overloading and Higher-Order Polymorphism](http://web.cecs.pdx.edu/~mpj/pubs/springschool.html). It’s still very much worth a read---and highly readable---after almost fifteen years.
 
-See [Edward Kmett's mailing list message](http://article.gmane.org/gmane.comp.lang.haskell.libraries/17139) for a description of the history and relationships among monad transformer packages (`mtl`{.haskell}, `transformers`{.haskell}, `monads-fd`{.haskell}, `monads-tf`{.haskell}).
+See [Edward Kmett's mailing list message](http://article.gmane.org/gmane.comp.lang.haskell.libraries/17139) for a description of the history and relationships among monad transformer packages (`mtl`, `transformers`, `monads-fd`, `monads-tf`).
 
 There are two excellent references on monad transformers. Martin Grabmüller’s [Monad Transformers Step by Step](http://www.grabmueller.de/martin/www/pub/Transformers.en.html) is a thorough description, with running examples, of how to use monad transformers to elegantly build up computations with various effects.  [Cale Gibbard’s article](http://cale.yi.org/index.php/How_To_Use_Monad_Transformers) on how to use monad transformers is more practical, describing how to structure code using monad transformers to make writing it as painless as possible.  Another good starting place for learning about monad transformers is a [blog post by Dan Piponi](http://blog.sigfpe.com/2006/05/grok-haskell-monad-transformers.html).
 
-The `ListT`{.haskell} transformer from the `transformers`{.haskell} package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
+The `ListT`{.haskell} transformer from the `transformers` package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
 
 There is an alternative way to compose monads, using coproducts, as described by [Lüth and Ghani](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.8.3581).  This method is interesting but has not (yet?) seen widespread use.
 
@@ -687,9 +687,9 @@ There is an alternative way to compose monads, using coproducts, as described by
 
 *Note: `MonadFix`{.haskell} is included here for completeness (and because it is interesting) but seems not to be used much.  Skipping this section on a first read-through is perfectly OK (and perhaps even recommended).*
 
-## `mdo`{.haskell}/`do rec`{.haskell} notation
+## `mdo`/`do rec` notation
 
-The `MonadFix`{.haskell} class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`{.haskell}, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation) by a special “recursive do” notation, enabled by the `-XDoRec`{.haskell} flag^[In GHC 7.6, the flag has been changed to `-XRecursiveDo`{.haskell}.].  Within a `do` block, one may have a nested `rec`{.haskell} block, like so:
+The `MonadFix`{.haskell} class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`{.haskell}, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation) by a special “recursive do” notation, enabled by the `-XDoRec` flag^[In GHC 7.6, the flag has been changed to `-XRecursiveDo`.].  Within a `do` block, one may have a nested `rec` block, like so:
 
 ```haskell
 do { x <- foo
@@ -701,7 +701,7 @@ do { x <- foo
    }
 ```
 
-Normally (if we had `do` in place of `rec`{.haskell} in the above example), `y` would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z` would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y` and `z` are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
+Normally (if we had `do` in place of `rec` in the above example), `y` would be in scope in `bar`{.haskell} and `bob`{.haskell} but not in `baz`{.haskell}, and `z` would be in scope only in `bob`{.haskell}.  With the `rec`{.haskell}, however, `y` and `z` are both in scope in all three of `baz`{.haskell}, `bar`{.haskell}, and `bob`{.haskell}. A `rec`{.haskell} block is analogous to a `let`{.haskell} block such as
 
 ```haskell
 let { y = baz
@@ -718,7 +718,7 @@ What could such a feature be used for?  One of the motivating examples given in 
   x <- gate y z
 ```
 
-describes a gate whose input wires are labeled `y` and `z` and whose output wire is labeled `x`.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec`{.haskell} block solves this problem.
+describes a gate whose input wires are labeled `y` and `z` and whose output wire is labeled `x`.  Many (most?) useful circuits, however, involve some sort of feedback loop, making them impossible to write in a normal `do`-block (since some wire would have to be mentioned as an input *before* being listed as an output).  Using a `rec` block solves this problem.
 
 ## Examples and intuition
 
@@ -768,7 +768,7 @@ There are also instances of `MonadFix`{.haskell} for lists (which works analogou
 
 ## GHC 7.6 changes
 
-GHC 7.6 reinstated the old `mdo`{.haskell} syntax, so the example at the start of this section can be written
+GHC 7.6 reinstated the old `mdo` syntax, so the example at the start of this section can be written
 
 ```haskell
 mdo { x <- foo
@@ -1251,7 +1251,7 @@ Notably, `Set`{.haskell} is not `Traversable`{.haskell}, although it is `Foldabl
 
 ## Laws
 
-Any instance of `Traversable`{.haskell} must statisfy the following two laws, where `Identity`{.haskell} is the identity functor (as defined in the [`Data.Functor.Identity` module](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Data-Functor-Identity.html) from the `transformers`{.haskell} package), and `Compose`{.haskell} wraps the composition of two functors (as defined in [`Data.Functor.Compose`](http://hackage.haskell.org/packages/archive/transformers/0.3.0.0/doc/html/Data-Functor-Compose.html)):
+Any instance of `Traversable`{.haskell} must statisfy the following two laws, where `Identity`{.haskell} is the identity functor (as defined in the [`Data.Functor.Identity` module](http://hackage.haskell.org/packages/archive/transformers/latest/doc/html/Data-Functor-Identity.html) from the `transformers` package), and `Compose`{.haskell} wraps the composition of two functors (as defined in [`Data.Functor.Compose`](http://hackage.haskell.org/packages/archive/transformers/0.3.0.0/doc/html/Data-Functor-Compose.html)):
 
 #. `traverse Identity = Identity`
 #. `traverse (Compose . fmap g . f) = Compose . fmap (traverse g) . traverse f`
@@ -1347,7 +1347,7 @@ class Category arr => Arrow arr where
 The first thing to note is the `Category`{.haskell} class constraint, which
 means that we get identity arrows and arrow composition for free:
 given two arrows ``g :: b `arr` c``{.haskell} and ``h :: c `arr` d``{.haskell}, we can form their
-composition ``g >>> h :: b `arr` d``{.haskell} ^[In versions of the `base`{.haskell} package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
+composition ``g >>> h :: b `arr` d``{.haskell} ^[In versions of the `base` package prior to version 4, there is no `Category`{.haskell} class, and the `Arrow`{.haskell} class includes the arrow composition operator `(>>>)`{.haskell}. It also includes `pure`{.haskell} as a synonym for `arr`{.haskell}, but this was removed since it conflicts with the `pure`{.haskell} from `Applicative`{.haskell}.].
 
 As should be a familiar pattern by now, the only methods which must be
 defined when writing a new instance of `Arrow`{.haskell} are `arr`{.haskell} and `first`{.haskell};
@@ -1507,7 +1507,7 @@ trace f b = let (c,d) = f (b,d) in c
 ```
 
 It describes arrows that can use recursion to compute results, and is
-used to desugar the `rec`{.haskell} construct in arrow notation (described
+used to desugar the `rec` construct in arrow notation (described
 below).
 
 Taken by itself, the type of the `loop`{.haskell} method does not seem to tell
