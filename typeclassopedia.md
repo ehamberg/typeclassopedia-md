@@ -981,7 +981,9 @@ The type of `foldMap`{.haskell} should make it clear what it is supposed to do: 
 instance Foldable [] where
   foldMap g = mconcat . map g
 
-data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a)
+data Tree a = Empty
+            | Leaf a
+            | Node (Tree a) a (Tree a)
 
 instance Foldable Tree where
   foldMap f Empty        = mempty
@@ -1088,7 +1090,9 @@ leads us to view `Traversable`{.haskell} as a generalization of `Functor`{.haske
 What’s an example of a `Traversable`{.haskell} instance?  The following code shows an example instance for the same `Tree`{.haskell} type used as an example in the previous `Foldable`{.haskell} section.  It is instructive to compare this instance with a `Functor`{.haskell} instance for `Tree`{.haskell}, which is also shown.
 
 ```haskell
-data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a)
+data Tree a = Empty
+            | Leaf a
+            | Node (Tree a) a (Tree a)
 
 instance Traversable Tree where
   traverse g Empty        = pure Empty
