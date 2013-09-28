@@ -1424,7 +1424,7 @@ Finally, I would like to thank Wouter Swierstra for his fantastic work editing t
 
 # About the author
 
-Brent Yorgey ([blog](http://byorgey.wordpress.com/), [homepage](http://www.cis.upenn.edu/~byorgey/)) is (as of November 2011) a fourth-year Ph.D. student in the [programming languages group](http://www.cis.upenn.edu/~plclub/) at the [University of Pennsylvania](http://www.upenn.edu).  He enjoys teaching, creating EDSLs, playing Bach fugues, musing upon category theory, and cooking tasty lambda-treats for the denizens of #haskell.
+Brent Yorgey ([blog](http://byorgey.wordpress.com/), [homepage](http://www.cis.upenn.edu/~byorgey/)) is (as of September 2013) a Ph.D. student in the [programming languages group](http://www.cis.upenn.edu/~plclub/) at the [University of Pennsylvania](http://www.upenn.edu).  He enjoys teaching, creating EDSLs, playing Bach fugues, musing upon category theory, and cooking tasty lambda-treats for the denizens of #haskell.
 
 # Colophon
 
