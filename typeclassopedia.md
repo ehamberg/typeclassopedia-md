@@ -1334,7 +1334,9 @@ class ArrowLoop arr => ArrowCircuit arr where
 
 counter :: ArrowCircuit arr => Bool `arr` Int
 counter = proc reset -> do
-            rec output <- idA     -< if reset then 0 else next
+            rec output <- idA     -< if reset
+                                        then 0
+                                        else next
                 next   <- delay 0 -< output + 1
             idA -< output
 ```
