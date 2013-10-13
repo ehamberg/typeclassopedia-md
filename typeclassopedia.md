@@ -130,7 +130,7 @@ fmap id = id
 fmap (g . h) = (fmap g) . (fmap h)
 ```
 
-Together, these laws ensure that `fmap g`{.haskell} does not change the *structure* of a container, only the elements. Equivalently, and more simply, they ensure that `fmap g`{.haskell} changes a value without altering its context ^[Technically, these laws make `f` and `fmap`{.haskell} together an endofunctor on *Hask*, the category of Haskell types (ignoring [&perp;](http://www.haskell.org/haskellwiki/Bottom), which is a party pooper). See [Wikibook: Category theory](http://en.wikibooks.org/wiki/Haskell/Category_theory).].
+Together, these laws ensure that `fmap g`{.haskell} does not change the *structure* of a container, only the elements. Equivalently, and more simply, they ensure that `fmap g`{.haskell} changes a value without altering its context ^[Technically, these laws make `f` and `fmap`{.haskell} together an endofunctor on *Hask*, the category of Haskell types (ignoring [$\bot$](http://www.haskell.org/haskellwiki/Bottom), which is a party pooper). See [Wikibook: Category theory](http://en.wikibooks.org/wiki/Haskell/Category_theory).].
 
 The first law says that mapping the identity function over every item in a container has no effect. The second says that mapping a composition of two functions over every item in a container is the same as first mapping one function, and then mapping the other.
 
@@ -180,7 +180,7 @@ class Functor f => Applicative f where
 
 Note that every `Applicative`{.haskell} must also be a `Functor`{.haskell}. In fact, as we will see, `fmap`{.haskell} can be implemented using the `Applicative`{.haskell} methods, so every `Applicative`{.haskell} is a functor whether we like it or not; the `Functor`{.haskell} constraint forces us to be honest.
 
-As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)`{.haskell} is similar to the type of `($)`{.haskell} ^[Recall that `($)`{.haskell} is just function application: `f $ x = f x`{.haskell}.], but with everything enclosed in an `f`. In other words, `(<*>)`{.haskell} is just function application within a computational context. The type of `(<*>)`{.haskell} is also very similar to the type of `fmap`{.haskell}; the only difference is that the first parameter is `f (a -> b)`{.haskell}, a function in a context, instead of a “normal” function `(a -> b)`{.haskell}.
+As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)`{.haskell} is similar to the type of `($)`{.haskell} ^[Recall that `($)` is just function application: `f $ x = f x`.], but with everything enclosed in an `f`. In other words, `(<*>)`{.haskell} is just function application within a computational context. The type of `(<*>)`{.haskell} is also very similar to the type of `fmap`{.haskell}; the only difference is that the first parameter is `f (a -> b)`{.haskell}, a function in a context, instead of a “normal” function `(a -> b)`{.haskell}.
 
 `pure`{.haskell} takes a value of any type `a`, and returns a context/container of type `f a`{.haskell}.  The intention is that `pure`{.haskell} creates some sort of “default” container or “effect free” context.  In fact, the behavior of `pure`{.haskell} is quite constrained by the laws it should satisfy in conjunction with `(<*>)`{.haskell}.  Usually, for a given implementation of `(<*>)`{.haskell} there is only one possible implementation of `pure`{.haskell}.
 
@@ -315,10 +315,10 @@ Intuitively, this states that a *monoidal* functor is one which has some sort of
 
 Furthermore, to deserve the name "monoidal" (see the [section on Monoids](#monoid)), instances of `Monoidal`{.haskell} ought to satisfy the following laws, which seem much more straightforward than the traditional `Applicative`{.haskell} laws:
 
-* Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}.  See [Arrows](#arrow).]:<br />`fmap (g *** h) (u ** v) = fmap g u ** fmap h v`{.haskell}
-* Left identity^[In this and the following laws, `≅`{.haskell} refers to *isomorphism* rather than equality.  In particular we consider `(x,()) ≅ x ≅ ((),x)`{.haskell} and `((x,y),z) ≅ (x,(y,z))`{.haskell}.]:<br />`unit ** v ≅ v`{.haskell}
-* Right identity:<br />`u ** unit ≅ u`{.haskell}
-* Associativity:<br />`u ** (v ** w) ≅ (u ** v) ** w`{.haskell}
+* Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}.  See [Arrows](#arrow).]: <br />`fmap (g *** h) (u ** v) = fmap g u ** fmap h v`{.haskell}
+* Left identity^[In this and the following laws, $\cong$ refers to *isomorphism* rather than equality.  In particular we consider `(x,())` $\cong$ `x` $\cong$ `((),x)` and `((x,y),z)` $\cong$ `(x,(y,z))`.]: <br />`unit ** v `{.haskell} $\cong$ `v`
+* Right identity: <br />`u ** unit`{.haskell} $\cong$ `u`
+* Associativity: <br />`u ** (v ** w)`{.haskell} $\cong$ `(u ** v) ** w`{.haskell}
 
 These turn out to be equivalent to the usual `Applicative`{.haskell} laws.
 
