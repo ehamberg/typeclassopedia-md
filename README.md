@@ -15,3 +15,24 @@ An up-to-date version of the EPUB file can be found at
 
 To convert to different formats (e.g. for reading on a Kindle), the EPUB file
 can be converted by using tools such as [Calibre](http://calibre-ebook.com/).
+
+The following list shows the *Vim* commands that did the bulk of the work
+converting from wiki syntax to Markdown:
+
+    :%s/\[\(http:\S*\) \(.\{-}\)\]/[\2](\1)/g
+    :%s,<code>\(.\{-}\)</code>,`\1`,g
+    :%s,''\(.\{-}\)'',*\1*,g
+    :%s/^=\(.*\)=$/# \1/
+    :%s/^==\(.*\)==$/## \1/
+    :%s,^<haskell>,```haskell,
+    :%s,^</haskell>,```,
+    :%s,^{{note|\(.*\)}}$,> *\1*,
+    :%s,{{=}},=,g
+    :%s,<math>\(.\{-}\)</math>,$\1$,g
+    :%s,<i>\(.\{-}\)</i>,*\1*,g
+    :%s,^<li>\(.*\)</li>$,- \1,
+    :%s,\[\[\(.\{-}\)|\(.\{-}\)\]\],[\2](http://www.haskell.org/haskellwiki/\1),g
+    :%s,\[\[\(.\{-}\)\]\],[\1](http://www.haskell.org/haskellwiki/\1),g
+
+The hard work in converting from the original article was already done for the
+wiki conversion. So big thanks to Geheimdienst.
