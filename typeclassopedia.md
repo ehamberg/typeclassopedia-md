@@ -648,7 +648,7 @@ However, this sort of "capability-based" style (*e.g.* specifying that `foo`{.ha
 
 ## Composing monads
 
-Is the composition of two monads always a monad? As hinted previously, the answer is no.  For example, `((->) r`{.haskell} is a monad for every `r`{.haskell} and `Either e`{.haskell} is a monad for every `e`{.haskell}. However, their composition `((->) r`{.haskell} inside `Either e`{.haskell}---`Either e (r -> a)`{.haskell}---is not a monad^[This example is taken from a [Stack Overflow answer](http://stackoverflow.com/a/13047319/2259460) which gives a nice proof of why this can never be a monad.].
+Is the composition of two monads always a monad? As hinted previously, the answer is no.
 
 Since `Applicative`{.haskell} functors are closed under composition, the problem must lie with `join`{.haskell}.  Indeed, suppose `m` and `n` are arbitrary monads; to make a monad out of their composition we would need to be able to implement
 
@@ -666,6 +666,8 @@ distrib :: n (m a) -> m (n a)
 
 satisfying certain laws. See Jones and Duponcheel ([Composing Monads](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.2605)); see also the [section on Traversable](#traversable).
 
+For a much more in-depth discussion and analysis of the failure of monads to be closed under composition, see [this question on StackOverflow](http://stackoverflow.com/questions/13034229/).
+
 > **Exercises**
 >
 > #. Implement `join :: M (N (M (N a))) -> M (N a)`{.haskell}, given `distrib :: N (M a) -> M (N a)`{.haskell} and assuming `M` and `N` are instances of `Monad`{.haskell}.
@@ -680,7 +682,7 @@ There are two excellent references on monad transformers. Martin Grabmüller’s
 
 The `ListT`{.haskell} transformer from the `transformers` package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
 
-There is an alternative way to compose monads, using coproducts, as described by [Lüth and Ghani](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.8.3581).  This method is interesting but has not (yet?) seen widespread use.
+There is an alternative way to compose monads, using coproducts, as described by [Lüth and Ghani](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.8.3581).  This method is interesting but has not (yet?) seen widespread use. For a more recent alternative, see Kiselyov et al's [Extensible Effects: An Alternative to Monad Transformers](http://okmij.org/ftp/Haskell/extensible/exteff.pdf).
 
 # MonadFix
 
