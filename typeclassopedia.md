@@ -311,7 +311,14 @@ class Functor f => Monoidal f where
   (**) :: f a -> f b -> f (a,b)
 ```
 
-Intuitively, this states that a *monoidal* functor is one which has some sort of "default shape" and which supports some sort of "combining" operation.  `pure`{.haskell} and `(<*>)`{.haskell} are equivalent in power to `unit`{.haskell} and `(**)`{.haskell} (see the Exercises below).
+Intuitively, this states that a *monoidal* functor^[In category-theory speak, we say `f` is a *lax* monoidal functor because there aren't necessarily functions in the other direction, like `f (a, b) -> (f a, f b)`{.haskell}.] is one which has some sort of "default shape" and which supports some sort of "combining" operation.  `pure`{.haskell} and `(<*>)`{.haskell} are equivalent in power to `unit`{.haskell} and `(**)`{.haskell} (see the Exercises below).
+
+More technically, the idea is that `f` preserves the "monoidal structure" given by the pairing constructor `(,)`{.haskell} and unit type `()`{.haskell}. This can be seen even more clearly if we rewrite the types of `unit`{.haskell} and `(**)`{.haskell} as
+
+```haskell
+unit' :: () -> f ()
+(**') :: (f a, f b) -> f (a, b)
+```
 
 Furthermore, to deserve the name "monoidal" (see the [section on Monoids](#monoid)), instances of `Monoidal`{.haskell} ought to satisfy the following laws, which seem much more straightforward than the traditional `Applicative`{.haskell} laws:
 
@@ -320,13 +327,18 @@ Furthermore, to deserve the name "monoidal" (see the [section on Monoids](#monoi
 * Right identity: <br />`u ** unit`{.haskell} $\cong$ `u`
 * Associativity: <br />`u ** (v ** w)`{.haskell} $\cong$ `(u ** v) ** w`{.haskell}
 
-These turn out to be equivalent to the usual `Applicative`{.haskell} laws.
+These turn out to be equivalent to the usual `Applicative`{.haskell} laws. In a category theory setting, one would also require a naturality law:
+
+- Naturality^[Here `g *** h = \(x,y) -> (g x, h y)`{.haskell}. See [Arrow](#arrow).]: <br />`fmap (g *** h) (u ** v) = fmap g u ** fmap h v`
+
+but in the context of Haskell, this is a free theorem.
 
 Much of this section was taken from [a blog post by Edward Z. Yang](http://blog.ezyang.com/2012/08/applicative-functors/); see his actual post for a bit more information.
 
 > **Exercises**
 >
 > #. Implement `pure`{.haskell} and `(<*>)`{.haskell} in terms of `unit`{.haskell} and `(**)`{.haskell}, and vice versa.
+> #. Are there any `Applicative`{.haskell} instances for which there are also functions `f () -> ()`{.haskell} and `f (a,b) -> (f a, f b)`{.haskell}, satisfying some "reasonable" laws?
 > #. (Tricky) Prove that given your implementations from the previous exercise, the usual `Applicative`{.haskell} laws and the `Monoidal`{.haskell} laws stated above are equivalent.
 
 ## Further reading
