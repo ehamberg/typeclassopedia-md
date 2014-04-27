@@ -343,7 +343,7 @@ Much of this section was taken from [a blog post by Edward Z. Yang](http://blog.
 
 ## Further reading
 
-There are many other useful combinators in the standard libraries implemented in terms of `pure`{.haskell} and `(<*>)`: for example, `(*>)`{.haskell}, `(<*)`{.haskell}, `(<**>)`{.haskell}, `(<$)`{.haskell}, and so on (see [haddock for Applicative](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html)). Judicious use of such secondary combinators can often make code using `Applicative`{.haskell}s much easier to read.
+There are many other useful combinators in the standard libraries implemented in terms of `pure`{.haskell} and `(<*>)`: for example, `(*>)`{.haskell}, `(<*)`{.haskell}, `(<**>)`{.haskell}, `(<$)`{.haskell}, and so on (see [haddock for Applicative](http://www.haskell.org/ghc/docs/latest/html/libraries/base-4.7.0.0/Control-Applicative.html)). Judicious use of such secondary combinators can often make code using `Applicative`{.haskell}s much easier to read.
 
 [McBride and Paterson’s original paper](http://www.soi.city.ac.uk/~ross/papers/Applicative.html) is a treasure-trove of information and examples, as well as some perspectives on the connection between `Applicative`{.haskell} and category theory. Beginners will find it difficult to make it through the entire paper, but it is extremely well-motivated---even beginners will be able to glean something from reading as far as they are able.
 
@@ -351,7 +351,7 @@ Conal Elliott has been one of the biggest proponents of `Applicative`{.haskell}.
 
 Although the [Parsec parsing library](http://hackage.haskell.org/package/parsec) ([paper](http://legacy.cs.uu.nl/daan/download/papers/parsec-paper.pdf)) was originally designed for use as a monad, in its most common use cases an `Applicative`{.haskell} instance can be used to great effect; [Bryan O’Sullivan’s blog post](http://www.serpentine.com/blog/2008/02/06/the-basics-of-applicative-functors-put-to-practical-work/) is a good starting point. If the extra power provided by `Monad`{.haskell} isn’t needed, it’s usually a good idea to use `Applicative`{.haskell} instead.
 
-A couple other nice examples of `Applicative`{.haskell} in action include the [ConfigFile and HSQL libraries](http://chrisdone.com/blog/html/2009-02-10-applicative-configfile-hsql.html) and the [formlets library](http://groups.inf.ed.ac.uk/links/formlets/).
+A couple other nice examples of `Applicative`{.haskell} in action include the [ConfigFile and HSQL libraries](http://web.archive.org/web/20090416111947/chrisdone.com/blog/html/2009-02-10-applicative-configfile-hsql.html) and the [formlets library](http://groups.inf.ed.ac.uk/links/formlets/).
 
 Gershom Bazerman's [post](http://comonad.com/reader/2012/abstracting-with-applicatives/) contains many insights into applicatives.
 
