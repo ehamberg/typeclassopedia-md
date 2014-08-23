@@ -147,11 +147,11 @@ Any Haskeller worth their salt would reject this code as a gruesome abomination.
 
 Unlike some other type classes we will encounter, a given type has at most one valid instance of `Functor`{.haskell}. This [can be proven](http://article.gmane.org/gmane.comp.lang.haskell.libraries/15384) via the [*free theorem*](http://homepages.inf.ed.ac.uk/wadler/topics/parametricity.html#free) for the type of `fmap`{.haskell}.  In fact, [GHC can automatically derive](http://byorgey.wordpress.com/2010/03/03/deriving-pleasure-from-ghc-6-12-1/) `Functor`{.haskell} instances for many data types.
 
-A similar argument also shows that any `Functor`{.haskell} instance satisfying the first law (`fmap id = id`{.haskell}) will automatically satisfy the second law as well.  Practically, this means that only the first law needs to be checked (usually by a very straightforward induction) to ensure that a `Functor`{.haskell} instance is valid.
+A [similar argument also shows](https://github.com/quchen/articles/blob/master/second_functor_law.md) that any `Functor`{.haskell} instance satisfying the first law (`fmap id = id`{.haskell}) will automatically satisfy the second law as well. Practically, this means that only the first law needs to be checked (usually by a very straightforward induction) to ensure that a `Functor`{.haskell} instance is valid.^[Actually, if `seq`{.haskell}/`undefined`{.haskell} are considered, it [is possible](http://stackoverflow.com/a/8323243/305559) to have an implementation which satisfies the first law but not the second. The rest of the comments in this section should considered in a context where `seq`{.haskell} and `undefined`{.haskell} are excluded.]
 
 > **Exercises**
 >
-> #. Although it is not possible for a `Functor`{.haskell} instance to satisfy the first `Functor`{.haskell} law but not the second, the reverse is possible. Give an example of a (bogus) `Functor`{.haskell} instance which satisfies the second law but not the first.
+> #. Although it is not possible for a `Functor`{.haskell} instance to satisfy the first `Functor`{.haskell} law but not the second (excluding `undefined`{.haskell}), the reverse is possible. Give an example of a (bogus) `Functor`{.haskell} instance which satisfies the second law but not the first.
 > #. Which laws are violated by the evil `Functor`{.haskell} instance for list shown above: both laws, or the first law alone? Give specific counterexamples.
 
 ## Intuition
