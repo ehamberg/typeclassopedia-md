@@ -17,7 +17,7 @@ Have you ever had any of the following thoughts?
 
 * What the heck is a monoid, and how is it different from a mon**a**d?
 * I finally figured out how to use [Parsec](http://www.haskell.org/haskellwiki/Parsec) with do-notation, and someone told me I should use something called `Applicative`{.haskell} instead. Um, what?
-* Someone in the [IRC channel](http://www.haskell.org/haskellwiki/IRC_channel) used `(***)`{.haskell}, and when I asked lambdabot to tell me its type, it printed out scary gobbledygook that didn’t even fit on one line! Then someone used `fmap fmap fmap`{.haskell} and my brain exploded.
+* Someone in the [IRC channel](http://www.haskell.org/haskellwiki/IRC_channel) used `(***)`{.haskell}, and when I asked Lambdabot to tell me its type, it printed out scary gobbledygook that didn’t even fit on one line! Then someone used `fmap fmap fmap`{.haskell} and my brain exploded.
 * When I asked how to do something I thought was really complicated, people started typing things like `zip.ap fmap.(id &&& wtf)`{.haskell} and the scary thing is that they worked! Anyway, I think those people must actually be robots because there’s no way anyone could come up with that in two seconds off the top of their head.
 
 If you have, look no further! You, too, can write and understand concise, elegant, idiomatic Haskell code with the best of them.
@@ -53,7 +53,7 @@ We now begin with the simplest type class of all: `Functor`{.haskell}.
 
 # Functor
 
-The `Functor`{.haskell} class ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t:Functor)) is the most basic and ubiquitous type class in the Haskell libraries. A simple intuition is that a `Functor`{.haskell} represents a “container” of some sort, along with the ability to apply a function uniformly to every element in the container. For example, a list is a container of elements, and we can apply a function to every element of a list, using `map`{.haskell}. As another example, a binary tree is also a container of elements, and it’s not hard to come up with a way to recursively apply a function to every element in a tree.
+The `Functor`{.haskell} class ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t:Functor)) is the most basic and ubiquitous type class in the Haskell libraries. A simple intuition is that a `Functor`{.haskell} represents a “container” of some sort, along with the ability to apply a function uniformly to every element in the container. For example, a list is a container of elements, and we can apply a function to every element of a list, using `map`{.haskell}. As another example, a binary tree is also a container of elements, and it’s not hard to come up with a way to recursively apply a function to every element in a tree.
 
 Another intuition is that a `Functor`{.haskell} represents some sort of “computational context”. This intuition is generally more useful, but is more difficult to explain, precisely because it is so general. Some examples later should help to clarify the `Functor`{.haskell}-as-context point of view.
 
@@ -166,7 +166,7 @@ A good starting point for reading about the category theory behind the concept o
 
 # Applicative
 
-A somewhat newer addition to the pantheon of standard Haskell type classes, *applicative functors* represent an abstraction lying in between `Functor`{.haskell} and `Monad`{.haskell} in expressivity, first described by McBride and Paterson. The title of their classic paper, [Applicative Programming with Effects](http://www.soi.city.ac.uk/~ross/papers/Applicative.html), gives a hint at the intended intuition behind the [`Applicative`{.haskell}](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html) type class. It encapsulates certain sorts of “effectful” computations in a functionally pure way, and encourages an “applicative” programming style. Exactly what these things mean will be seen later.
+A somewhat newer addition to the pantheon of standard Haskell type classes, *applicative functors* represent an abstraction lying in between `Functor`{.haskell} and `Monad`{.haskell} in expressivity, first described by McBride and Paterson. The title of their classic paper, [Applicative Programming with Effects](http://www.soi.city.ac.uk/~ross/papers/Applicative.html), gives a hint at the intended intuition behind the [`Applicative`{.haskell}](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html) type class. It encapsulates certain sorts of “effectful” computations in a functionally pure way, and encourages an “applicative” programming style. Exactly what these things mean will be seen later.
 
 ## Definition
 
@@ -190,7 +190,7 @@ As always, it’s crucial to understand the type signatures.  First, consider `(
 
 
 
-Traditionally, there are four laws that `Applicative`{.haskell} instances should satisfy ^[See [haddock for Applicative](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html) and [Applicative programming with effects](http://www.soi.city.ac.uk/~ross/papers/Applicative.html)].  In some sense, they are all concerned with making sure that `pure`{.haskell} deserves its name:
+Traditionally, there are four laws that `Applicative`{.haskell} instances should satisfy ^[See [haddock for Applicative](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html) and [Applicative programming with effects](http://www.soi.city.ac.uk/~ross/papers/Applicative.html)].  In some sense, they are all concerned with making sure that `pure`{.haskell} deserves its name:
 
 * The identity law:<br />`pure id <*> v = v`{.haskell}
 * Homomorphism:<br />`pure f <*> pure x = pure (f x)`{.haskell}<br />Intuitively, applying a non-effectful function to a non-effectful argument in an effectful context is the same as just applying the function to the argument and then injecting the result into the context with `pure`{.haskell}.
@@ -370,7 +370,7 @@ In the end, despite all the hoopla, `Monad`{.haskell} is just another type class
 
 ## Definition
 
-The type class declaration for [`Monad`{.haskell}](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t:Monad) is:
+The type class declaration for [`Monad`{.haskell}](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#t:Monad) is:
 
 ```haskell
 class Monad m where
@@ -382,7 +382,7 @@ class Monad m where
   fail   :: String -> m a
 ```
 
-The `Monad`{.haskell} type class is exported by the `Prelude`{.haskell}, along with a few standard instances. However, many utility functions are found in [`Control.Monad`](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html), and there are also several instances (such as `((->) e)`{.haskell}) defined in [`Control.Monad.Instances`](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad-Instances.html).
+The `Monad`{.haskell} type class is exported by the `Prelude`{.haskell}, along with a few standard instances. However, many utility functions are found in [`Control.Monad`](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html), and there are also several instances (such as `((->) e)`{.haskell}) defined in [`Control.Monad.Instances`](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad-Instances.html).
 
 Let’s examine the methods in the `Monad`{.haskell} class one by one. The type of `return`{.haskell} should look familiar; it’s the same as `pure`{.haskell}. Indeed, `return`{.haskell} *is* `pure`{.haskell}, but with an unfortunate name. (Unfortunate, since someone coming from an imperative programming background might think that `return`{.haskell} is like the C or Java keyword of the same name, when in fact the similarities are minimal.) From a mathematical point of view, every monad is an applicative functor, but for historical reasons, the `Monad`{.haskell} type class declaration unfortunately does not require this. ^[However, as of GHC 7.10 this will be fixed!]
 
@@ -475,7 +475,7 @@ In fact, the canonical definition of monads in category theory is in terms of `r
 
 ## Utility functions
 
-The [`Control.Monad`](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html) module provides a large number of convenient utility functions, all of which can be implemented in terms of the basic `Monad`{.haskell} operations (`return`{.haskell} and `(>>=)`{.haskell} in particular).  We have already seen one of them, namely, `join`{.haskell}.  We also mention some other noteworthy ones here; implementing these utility functions oneself is a good exercise.  For a more detailed guide to these functions, with commentary and example code, see Henk-Jan van Tuyl’s [tour](http://members.chello.nl/hjgtuyl/tourdemonad.html).
+The [`Control.Monad`](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html) module provides a large number of convenient utility functions, all of which can be implemented in terms of the basic `Monad`{.haskell} operations (`return`{.haskell} and `(>>=)`{.haskell} in particular).  We have already seen one of them, namely, `join`{.haskell}.  We also mention some other noteworthy ones here; implementing these utility functions oneself is a good exercise.  For a more detailed guide to these functions, with commentary and example code, see Henk-Jan van Tuyl’s [tour](http://members.chello.nl/hjgtuyl/tourdemonad.html).
 
 * `liftM :: Monad m => (a -> b) -> m a -> m b`{.haskell}.  This should be familiar; of course, it is just `fmap`{.haskell}.  The fact that we have both `fmap`{.haskell} and `liftM`{.haskell} is an unfortunate consequence of the fact that the `Monad`{.haskell} type class does not require a `Functor`{.haskell} instance, even though mathematically speaking, every monad is a functor.  However, `fmap`{.haskell} and `liftM`{.haskell} are essentially interchangeable, since it is a bug (in a social rather than technical sense) for any type to be an instance of `Monad`{.haskell} without also being an instance of `Functor`{.haskell} ^[This will most likely change in Haskell 2014 with the implementation of the [Haskell 2014 Applicative => Monad proposal](http://www.haskell.org/haskellwiki/Functor-Applicative-Monad_Proposal).].
 
@@ -483,7 +483,7 @@ The [`Control.Monad`](http://haskell.org/ghc/docs/latest/html/libraries/base/Con
 
 * `sequence :: Monad m => [m a] -> m [a]`{.haskell} takes a list of computations and combines them into one computation which collects a list of their results.  It is again something of a historical accident that `sequence`{.haskell} has a `Monad`{.haskell} constraint, since it can actually be implemented only in terms of `Applicative`{.haskell}.  There is an additional generalization of `sequence`{.haskell} to structures other than lists, which will be discussed in the [section on `Traversable`{.haskell}](#traversable).
 
-* `replicateM :: Monad m => Int -> m a -> m [a]`{.haskell} is simply a combination of [`replicate`{.haskell}](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:replicate) and `sequence`{.haskell}.
+* `replicateM :: Monad m => Int -> m a -> m [a]`{.haskell} is simply a combination of [`replicate`{.haskell}](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#v:replicate) and `sequence`{.haskell}.
 
 * `when :: Monad m => Bool -> m () -> m ()`{.haskell} conditionally executes a computation, evaluating to its second argument if the test is `True`{.haskell}, and to `return ()`{.haskell} if the test is `False`{.haskell}.  A collection of other sorts of monadic conditionals can be found in the [`IfElse` package](http://hackage.haskell.org/package/IfElse).
 
@@ -572,13 +572,13 @@ A final note on intuition: `do` notation plays very strongly to the “computati
 
 Philip Wadler was the first to propose using monads to structure functional programs.  [His paper](http://homepages.inf.ed.ac.uk/wadler/topics/monads.html) is still a readable introduction to the subject.
 
-There are, of course, numerous monad tutorials of varying quality ^[[All About Monads](http://www.haskell.org/haskellwiki/All About Monads), [Monads as containers](http://haskell.org/haskellwiki/Monads_as_Containers), [Understanding monads](http://en.wikibooks.org/w/index.php?title=Haskell/Understanding_monads), [The Monadic Way](http://www.haskell.org/haskellwiki/The Monadic Way), [You Could Have Invented Monads! (And Maybe You Already Have.)](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html), [there’s a monster in my Haskell!](http://www.haskell.org/pipermail/haskell-cafe/2006-November/019190.html), [Understanding Monads. For real.](http://kawagner.blogspot.com/2007/02/understanding-monads-for-real.html), [Monads in 15 minutes: Backtracking and Maybe](http://www.randomhacks.net/articles/2007/03/12/monads-in-15-minutes), [Monads as computation](http://haskell.org/haskellwiki/Monads_as_computation), [Practical Monads](http://metafoo.co.uk/practical-monads.txt)].
+There are, of course, numerous monad tutorials of varying quality ^[[All About Monads](http://www.haskell.org/haskellwiki/All About Monads), [Monads as containers](http://www.haskell.org/haskellwiki/Monads_as_Containers), [Understanding monads](http://en.wikibooks.org/w/index.php?title=Haskell/Understanding_monads), [The Monadic Way](http://www.haskell.org/haskellwiki/The Monadic Way), [You Could Have Invented Monads! (And Maybe You Already Have.)](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html), [there’s a monster in my Haskell!](http://www.haskell.org/pipermail/haskell-cafe/2006-November/019190.html), [Understanding Monads. For real.](http://kawagner.blogspot.com/2007/02/understanding-monads-for-real.html), [Monads in 15 minutes: Backtracking and Maybe](http://www.randomhacks.net/articles/2007/03/12/monads-in-15-minutes), [Monads as computation](http://www.haskell.org/haskellwiki/Monads_as_computation), [Practical Monads](http://metafoo.co.uk/practical-monads.txt)].
 
-A few of the best include Cale Gibbard’s [Monads as containers](http://haskell.org/haskellwiki/Monads_as_Containers) and [Monads as computation](http://haskell.org/haskellwiki/Monads_as_computation); Jeff Newbern’s [All About Monads](http://www.haskell.org/haskellwiki/All About Monads), a comprehensive guide with lots of examples; and Dan Piponi’s [You Could Have Invented Monads!](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html), which features great exercises.  If you just want to know how to use `IO`{.haskell}, you could consult the [Introduction to IO](http://www.haskell.org/haskellwiki/Introduction to IO). Even this is just a sampling; the [monad tutorials timeline](http://www.haskell.org/haskellwiki/monad tutorials timeline) is a more complete list. (All these monad tutorials have prompted parodies like [think of a monad ...](http://koweycode.blogspot.com/2007/01/think-of-monad.html) as well as other kinds of backlash like [Monads! (and Why Monad Tutorials Are All Awful)](http://ahamsandwich.wordpress.com/2007/07/26/monads-and-why-monad-tutorials-are-all-awful/) or [Abstraction, intuition, and the “monad tutorial fallacy”](http://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/).)
+A few of the best include Cale Gibbard’s [Monads as containers](http://www.haskell.org/haskellwiki/Monads_as_Containers) and [Monads as computation](http://www.haskell.org/haskellwiki/Monads_as_computation); Jeff Newbern’s [All About Monads](http://www.haskell.org/haskellwiki/All About Monads), a comprehensive guide with lots of examples; and Dan Piponi’s [You Could Have Invented Monads!](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html), which features great exercises.  If you just want to know how to use `IO`{.haskell}, you could consult the [Introduction to IO](http://www.haskell.org/haskellwiki/Introduction to IO). Even this is just a sampling; the [monad tutorials timeline](http://www.haskell.org/haskellwiki/monad tutorials timeline) is a more complete list. (All these monad tutorials have prompted parodies like [think of a monad ...](http://koweycode.blogspot.com/2007/01/think-of-monad.html) as well as other kinds of backlash like [Monads! (and Why Monad Tutorials Are All Awful)](http://ahamsandwich.wordpress.com/2007/07/26/monads-and-why-monad-tutorials-are-all-awful/) or [Abstraction, intuition, and the “monad tutorial fallacy”](http://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/).)
 
 Other good monad references which are not necessarily tutorials include [Henk-Jan van Tuyl’s tour](http://members.chello.nl/hjgtuyl/tourdemonad.html) of the functions in `Control.Monad`, Dan Piponi’s [field guide](http://blog.sigfpe.com/2006/10/monads-field-guide.html), Tim Newsham’s [What’s a Monad?](http://www.thenewsh.com/~newsham/haskell/monad.html), and Chris Smith's excellent article [Why Do Monads Matter?](http://cdsmith.wordpress.com/2012/04/18/why-do-monads-matter/). There are also many blog posts which have been written on various aspects of monads; a collection of links can be found on the Haskell Wiki under [Blog articles/Monads](http://www.haskell.org/haskellwiki/Blog articles/Monads).
 
-For help constructing monads from scratch, and for obtaining a "deep embedding" of monad operations suitable for use in, say, compiling a domain-specific language, see [apfelmus's operational package](http://projects.haskell.org/operational).
+For help constructing monads from scratch, and for obtaining a "deep embedding" of monad operations suitable for use in, say, compiling a domain-specific language, see [Apfelmus's operational package](http://projects.haskell.org/operational).
 
 One of the quirks of the `Monad`{.haskell} class and the Haskell type system is that it is not possible to straightforwardly declare `Monad`{.haskell} instances for types which require a class constraint on their data, even if they are monads from a mathematical point of view. For example, `Data.Set` requires an `Ord`{.haskell} constraint on its data, so it cannot be easily made an instance of `Monad`{.haskell}.  A solution to this problem was [first described by Eric Kidd](http://www.randomhacks.net/articles/2007/03/15/data-set-monad-haskell-macros), and later made into a [library named rmonad](http://hackage.haskell.org/cgi-bin/hackage-scripts/package/rmonad) by Ganesh Sittampalam and Peter Gavin.
 
@@ -692,7 +692,7 @@ See [Edward Kmett's mailing list message](http://article.gmane.org/gmane.comp.la
 
 There are two excellent references on monad transformers. Martin Grabmüller’s [Monad Transformers Step by Step](http://www.grabmueller.de/martin/www/pub/Transformers.en.html) is a thorough description, with running examples, of how to use monad transformers to elegantly build up computations with various effects.  [Cale Gibbard’s article](http://cale.yi.org/index.php/How_To_Use_Monad_Transformers) on how to use monad transformers is more practical, describing how to structure code using monad transformers to make writing it as painless as possible.  Another good starting place for learning about monad transformers is a [blog post by Dan Piponi](http://blog.sigfpe.com/2006/05/grok-haskell-monad-transformers.html).
 
-The `ListT`{.haskell} transformer from the `transformers` package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://haskell.org/haskellwiki/ListT_done_right).
+The `ListT`{.haskell} transformer from the `transformers` package comes with the caveat that `ListT m`{.haskell} is only a monad when `m` is *commutative*, that is, when `ma >>= \a -> mb >>= \b -> foo`{.haskell} is equivalent to `mb >>= \b -> ma >>= \a -> foo`{.haskell} (i.e. the order of `m`'s effects does not matter).  For one explanation why, see  Dan Piponi's blog post ["Why isn't `ListT []`{.haskell} a monad"](http://blog.sigfpe.com/2006/11/why-isnt-listt-monad.html).  For more examples, as well as a design for a version of `ListT`{.haskell} which does not have this problem, see [`ListT`{.haskell} done right](http://www.haskell.org/haskellwiki/ListT_done_right).
 
 There is an alternative way to compose monads, using coproducts, as described by [Lüth and Ghani](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.8.3581).  This method is interesting but has not (yet?) seen widespread use. For a more recent alternative, see Kiselyov et al's [Extensible Effects: An Alternative to Monad Transformers](http://okmij.org/ftp/Haskell/extensible/exteff.pdf).
 
@@ -840,7 +840,7 @@ Many semigroups have a special element $e$ for which the binary operation $\oplu
 ## Definition
 
 The definition of the `Monoid`{.haskell} type class (defined in
-`Data.Monoid`; [haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Monoid.html)) is:
+`Data.Monoid`; [haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-Monoid.html)) is:
 
 ```haskell
 class Monoid a where
@@ -853,7 +853,7 @@ class Monoid a where
 
 The `mempty`{.haskell} value specifies the identity element of the monoid, and `mappend`{.haskell} is the binary operation.  The default definition for `mconcat`{.haskell} “reduces” a list of elements by combining them all with `mappend`{.haskell}, using a right fold. It is only in the `Monoid`{.haskell} class so that specific instances have the option of providing an alternative, more efficient implementation; usually, you can safely ignore `mconcat`{.haskell} when creating a `Monoid`{.haskell} instance, since its default definition will work just fine.
 
-The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the haskell-cafe mailing list). This was improved in GHC 7.4, where `(<>)`{.haskell} was added as an alias to `mappend`{.haskell}.
+The `Monoid`{.haskell} methods are rather unfortunately named; they are inspired by the list instance of `Monoid`{.haskell}, where indeed `mempty = []`{.haskell} and `mappend = (++)`{.haskell}, but this is misleading since many monoids have little to do with appending (see these [Comments from OCaml Hacker Brian Hurt](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) on the Haskell-cafe mailing list). This was improved in GHC 7.4, where `(<>)`{.haskell} was added as an alias to `mappend`{.haskell}.
 
 ## Laws
 
@@ -909,7 +909,7 @@ instance Monoid e => Applicative ((,) e) where
 
 ## Other monoidal classes: Alternative, MonadPlus, ArrowPlus
 
-The `Alternative`{.haskell} type class ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html#g:2)) is for `Applicative`{.haskell} functors which also have a monoid structure:
+The `Alternative`{.haskell} type class ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Applicative.html#g:2)) is for `Applicative`{.haskell} functors which also have a monoid structure:
 
 ```haskell
 class Applicative f => Alternative f where
@@ -925,7 +925,7 @@ x <|> empty = x
 (x <|> y) <|> z = x <|> (y <|> z)
 ```
 
-Likewise, `MonadPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html#t:MonadPlus)) is for `Monad`{.haskell}s with a monoid structure:
+Likewise, `MonadPlus`{.haskell} ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html#t:MonadPlus)) is for `Monad`{.haskell}s with a monoid structure:
 
 ```haskell
 class Monad m => MonadPlus m where
@@ -944,7 +944,7 @@ which explains the sense in which `mzero`{.haskell} denotes failure. Since `mzer
 
 There used to be a type class called `MonadZero`{.haskell} containing only `mzero`{.haskell}, representing monads with failure.  The `do`-notation requires some notion of failure to deal with failing pattern matches.  Unfortunately, `MonadZero`{.haskell} was scrapped in favor of adding the `fail`{.haskell} method to the `Monad`{.haskell} class. If we are lucky, someday `MonadZero`{.haskell} will be restored, and `fail`{.haskell} will be banished to the bit bucket where it belongs (see [MonadPlus reform proposal](http://www.haskell.org/haskellwiki/MonadPlus reform proposal)).  The idea is that any `do`-block which uses pattern matching (and hence may fail) would require a `MonadZero`{.haskell} constraint; otherwise, only a `Monad`{.haskell} constraint would be required.
 
-Finally, `ArrowZero`{.haskell} and `ArrowPlus`{.haskell} ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html#t:ArrowZero)) represent `Arrow`{.haskell}s ([see below](#arrow)) with a monoid structure:
+Finally, `ArrowZero`{.haskell} and `ArrowPlus`{.haskell} ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html#t:ArrowZero)) represent `Arrow`{.haskell}s ([see below](#arrow)) with a monoid structure:
 
 ```haskell
 class Arrow arr => ArrowZero arr where
@@ -956,7 +956,7 @@ class ArrowZero arr => ArrowPlus arr where
 
 ## Further reading
 
-Monoids have gotten a fair bit of attention recently, ultimately due to [a blog post by Brian Hurt](http://enfranchisedmind.com/blog/posts/random-thoughts-on-haskell/), in which he complained about the fact that the names of many Haskell type classes (`Monoid`{.haskell} in particular) are taken from abstract mathematics.  This resulted in [a long haskell-cafe thread](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) arguing the point and discussing monoids in general.
+Monoids have gotten a fair bit of attention recently, ultimately due to [a blog post by Brian Hurt](http://enfranchisedmind.com/blog/posts/random-thoughts-on-haskell/), in which he complained about the fact that the names of many Haskell type classes (`Monoid`{.haskell} in particular) are taken from abstract mathematics.  This resulted in [a long Haskell-cafe thread](http://thread.gmane.org/gmane.comp.lang.haskell.cafe/50590) arguing the point and discussing monoids in general.
 
 However, this was quickly followed by several blog posts about `Monoid`{.haskell} ^[May its name live forever.].  First, Dan Piponi wrote a great introductory post, [Haskell Monoids and their Uses](http://blog.sigfpe.com/2009/01/haskell-monoids-and-their-uses.html).  This was quickly followed by Heinrich Apfelmus’s [Monoids and Finger Trees](http://apfelmus.nfshost.com/monoid-fingertree.html), an accessible exposition of Hinze and Paterson’s [classic paper on 2-3 finger trees](http://www.soi.city.ac.uk/%7Eross/papers/FingerTree.html), which makes very clever use of `Monoid`{.haskell} to implement an elegant and generic data structure.  Dan Piponi then wrote two fascinating articles about using `Monoids` (and finger trees): [Fast Incremental Regular Expressions](http://blog.sigfpe.com/2009/01/fast-incremental-regular-expression.html) and [Beyond Regular Expressions](http://blog.sigfpe.com/2009/01/beyond-regular-expressions-more.html)
 
@@ -968,7 +968,7 @@ As unlikely as it sounds, monads can actually be viewed as a sort of monoid, wit
 
 # Foldable
 
-The `Foldable`{.haskell} class, defined in the `Data.Foldable` module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html)), abstracts over containers which can be “folded” into a summary value.  This allows such folding operations to be written in a container-agnostic way.
+The `Foldable`{.haskell} class, defined in the `Data.Foldable` module ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html)), abstracts over containers which can be “folded” into a summary value.  This allows such folding operations to be written in a container-agnostic way.
 
 ## Definition
 
@@ -1036,7 +1036,7 @@ The `Foldable`{.haskell} module also provides a large number of predefined folds
 
 The important function `toList`{.haskell} is also provided, which turns any `Foldable`{.haskell} structure into a list of its elements in left-right order; it works by folding with the list monoid.
 
-There are also generic functions that work with `Applicative`{.haskell} or `Monad`{.haskell} instances to generate some sort of computation from each element in a container, and then perform all the side effects from those computations, discarding the results: `traverse_`{.haskell}, `sequenceA_`{.haskell}, and others.  The results must be discarded because the `Foldable` class is too weak to specify what to do with them: we cannot, in general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid structure---that is, an `Alternative`{.haskell} or a `MonadPlus`{.haskell}---then we can use the `asum`{.haskell} or `msum`{.haskell} functions, which can combine the results as well.  Consult the [`Foldable`{.haskell} documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html) for more details on any of these functions.
+There are also generic functions that work with `Applicative`{.haskell} or `Monad`{.haskell} instances to generate some sort of computation from each element in a container, and then perform all the side effects from those computations, discarding the results: `traverse_`{.haskell}, `sequenceA_`{.haskell}, and others.  The results must be discarded because the `Foldable` class is too weak to specify what to do with them: we cannot, in general, make an arbitrary `Applicative`{.haskell} or `Monad`{.haskell} instance into a `Monoid`{.haskell}, but we can make `m ()`{.haskell} into a `Monoid`{.haskell} for any such `m`.  If we do have an `Applicative`{.haskell} or `Monad`{.haskell} with a monoid structure---that is, an `Alternative`{.haskell} or a `MonadPlus`{.haskell}---then we can use the `asum`{.haskell} or `msum`{.haskell} functions, which can combine the results as well.  Consult the [`Foldable`{.haskell} documentation](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-Foldable.html) for more details on any of these functions.
 
 Note that the `Foldable`{.haskell} operations always forget the structure of the container being folded.  If we start with a container of type `t a`{.haskell} for some `Foldable t`{.haskell}, then `t` will never appear in the output type of any operations defined in the `Foldable`{.haskell} module.  Many times this is exactly what we want, but sometimes we would like to be able to generically traverse a container while preserving its structure---and this is exactly what the `Traversable`{.haskell} class provides, which will be discussed in the next section.
 
@@ -1061,7 +1061,7 @@ An interesting use of `Foldable`{.haskell} (as well as `Traversable`{.haskell}) 
 
 ## Definition
 
-The `Traversable`{.haskell} type class, defined in the `Data.Traversable` module ([haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Data-Traversable.html)), is:
+The `Traversable`{.haskell} type class, defined in the `Data.Traversable` module ([haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-Traversable.html)), is:
 
 ```haskell
 class (Functor t, Foldable t) => Traversable t where
@@ -1162,7 +1162,7 @@ For references on the `Traversable`{.haskell} laws, see Russell O'Connor's [mail
 
 `Category`{.haskell} is a relatively recent addition to the Haskell standard libraries.  It generalizes the notion of function composition to general “morphisms”.
 
-The definition of the `Category`{.haskell} type class (from `Control.Category`; [haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable `` `arr` ``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of `` `arr` ``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor `` `arr` ``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
+The definition of the `Category`{.haskell} type class (from `Control.Category`; [haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Category.html)) is shown below.  For ease of reading, note that I have used an infix type variable `` `arr` ``{.haskell}, in parallel with the infix function type constructor `(->)`{.haskell}.  ^[GHC 7.6.1 changed its rules regarding types and type variables.  Now, any operator at the type level is treated as a type *constructor* rather than a type *variable*; prior to GHC 7.6.1 it was possible to use `(~>)`{.haskell} instead of `` `arr` ``{.haskell}.  For more information, see [the discussion on the GHC-users mailing list](http://thread.gmane.org/gmane.comp.lang.haskell.glasgow.user/21350).  For a new approach to nice arrow notation that works with GHC 7.6.1, see [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22615) and also [this message](http://article.gmane.org/gmane.comp.lang.haskell.glasgow.user/22616) from Edward Kmett, though for simplicity I haven't adopted it here.] This syntax is not part of Haskell 2010. The second definition shown is the one used in the standard libraries. For the remainder of this document, I will use the infix type constructor `` `arr` ``{.haskell} for `Category`{.haskell} as well as `Arrow`{.haskell}.
 
 ```haskell
 class Category arr where
@@ -1205,7 +1205,7 @@ The `Arrow`{.haskell} class represents another abstraction of computation, in a 
 
 ## Definition
 
-The definition of the `Arrow`{.haskell} type class, (from `Control.Arrow`; [haddock](http://haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html)), is:
+The definition of the `Arrow`{.haskell} type class, (from `Control.Arrow`; [haddock](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Arrow.html)), is:
 
 ```haskell
 class Category arr => Arrow arr where
@@ -1428,7 +1428,7 @@ Uustalu and Vene have a number of papers exploring ideas related to comonads and
 
 Gabriel Gonzalez's [Comonads are objects](http://www.haskellforall.com/2013/02/you-could-have-invented-comonads.html) points out similarities between comonads and object-oriented programming.
 
-The [comonad-transformers](http://hackage.haskell.org/package/comonad-transformers) package contains comonad transfomers.
+The [comonad-transformers](http://hackage.haskell.org/package/comonad-transformers) package contains comonad transformers.
 
 # Acknowledgements
 
