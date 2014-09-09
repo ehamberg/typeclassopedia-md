@@ -36,7 +36,7 @@ The second key---gaining deep intuition, backed by examples---is also important,
 
 This document can only be a starting point, since good intuition comes from hard work, [not from learning the right metaphor](http://byorgey.wordpress.com/2009/01/12/abstraction-intuition-and-the-monad-tutorial-fallacy/). Anyone who reads and understands all of it will still have an arduous journey ahead---but sometimes a good starting point makes a big difference.
 
-It should be noted that this is not a Haskell tutorial; it is assumed that the reader is already familiar with the basics of Haskell, including the standard [`Prelude`](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html), the type system, data types, and type classes.
+It should be noted that this is not a Haskell tutorial; it is assumed that the reader is already familiar with the basics of Haskell, including the standard [`Prelude`](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html), the type system, data types, and type classes.
 
 The type classes we will be discussing and their interrelationships:
 
@@ -47,7 +47,7 @@ The type classes we will be discussing and their interrelationships:
 * `Monad`{.haskell} and `ArrowApply`{.haskell} are equivalent.
 * `Semigroup`{.haskell}, `Apply`{.haskell} and `Comonad`{.haskell} are greyed out since they are not actually (yet?) in the standard Haskell libraries ^[`Semigroup`{.haskell} can be found in the [`semigroups` package](http://hackage.haskell.org/package/semigroups), `Apply`{.haskell} in the [`semigroupoids` package](http://hackage.haskell.org/package/semigroupoids), and `Comonad`{.haskell} in the [`comonad` package](http://hackage.haskell.org/package/comonad).]
 
-One more note before we begin. The original spelling of “type class” is with two words, as evidenced by, for example, the [Haskell 98 Revised Report](http://haskell.org/onlinereport/), early papers on type classes like [Type classes in Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.5639) and [Type classes: exploring the design space](http://research.microsoft.com/en-us/um/people/simonpj/papers/type-class-design-space/), and [Hudak et al.’s history of Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.168.4008).  However, as often happens with two-word phrases that see a lot of use, it has started to show up as one word (“typeclass”) or, rarely, hyphenated (“type-class”).  When wearing my prescriptivist hat, I prefer “type class”, but realize (after changing into my descriptivist hat) that there's probably not much I can do about it.
+One more note before we begin. The original spelling of “type class” is with two words, as evidenced by, for example, the [Haskell 2010 Language Report](http://www.haskell.org/onlinereport/haskell2010/), early papers on type classes like [Type classes in Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.5639) and [Type classes: exploring the design space](http://research.microsoft.com/en-us/um/people/simonpj/papers/type-class-design-space/), and [Hudak et al.’s history of Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.168.4008). However, as often happens with two-word phrases that see a lot of use, it has started to show up as one word (“typeclass”) or, rarely, hyphenated (“type-class”). When wearing my prescriptivist hat, I prefer “type class”, but realize (after changing into my descriptivist hat) that there's probably not much I can do about it.
 
 We now begin with the simplest type class of all: `Functor`{.haskell}.
 
