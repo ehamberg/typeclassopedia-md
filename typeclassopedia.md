@@ -1372,7 +1372,7 @@ Some examples of `Arrow`{.haskell}s include [Yampa](http://www.haskell.org/yampa
 [Haskell XML Toolkit](http://www.fh-wedel.de/~si/HXmlToolbox/), and the functional GUI library [Grapefruit](http://www.haskell.org/haskellwiki/Grapefruit).
 
 Some extensions to arrows have been explored; for example, the
-[`BiArrow`{.haskell}s of Alimarine et al.](http://www.cs.ru.nl/A.vanWeelden/bi-arrows/), for two-way instead of one-way
+[`BiArrow`{.haskell}s of Alimarine et al.](http://wiki.clean.cs.ru.nl/download/papers/2005/alia2005-biarrowsHaskellWorkshop.pdf), for two-way instead of one-way
 computation.
 
 The Haskell wiki has [links to many additional research papers relating to `Arrow`{.haskell}s](http://www.haskell.org/haskellwiki/Research papers/Monads and Arrows).
