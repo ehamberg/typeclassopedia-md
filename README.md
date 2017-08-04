@@ -22,10 +22,11 @@ converting from wiki syntax to Markdown:
     :%s/\[\(http:\S*\) \(.\{-}\)\]/[\2](\1)/g
     :%s,<code>\(.\{-}\)</code>,`\1`,g
     :%s,''\(.\{-}\)'',*\1*,g
-    :%s/^=\(.*\)=$/# \1/
     :%s/^==\(.*\)==$/## \1/
+    :%s/^=\(.*\)=$/# \1/
     :%s,^<haskell>,```haskell,
     :%s,^</haskell>,```,
+    %s,<haskell>\(.\{-}\)</haskell>,`\1`{.haskell},g
     :%s,^{{note|\(.*\)}}$,> *\1*,
     :%s,{{=}},=,g
     :%s,<math>\(.\{-}\)</math>,$\1$,g
@@ -33,6 +34,8 @@ converting from wiki syntax to Markdown:
     :%s,^<li>\(.*\)</li>$,- \1,
     :%s,\[\[\(.\{-}\)|\(.\{-}\)\]\],[\2](http://www.haskell.org/haskellwiki/\1),g
     :%s,\[\[\(.\{-}\)\]\],[\1](http://www.haskell.org/haskellwiki/\1),g
+    :%s,\[{{HackageDocs|\(.*\)|\(.*\)}}\(\S*\) \(.\{-}\)\],[\4](https://hackage.haskell.org/package/\1/docs/\2.html\3),g
+    %s,\[\(http\S*\) \([^\]]*\)\],[\2](\1),g
 
 The hard work in converting from the original article was already done for the
 wiki conversion. So big thanks to Geheimdienst.
