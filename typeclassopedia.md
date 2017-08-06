@@ -45,12 +45,10 @@ The type classes we will be discussing and their interrelationships ([source cod
 
 ![](Typeclassopedia-diagram.svg)
 
-> *`Apply` can be found in the [`semigroupoids` package](http://hackage.haskell.org/package/semigroupoids), and `Comonad` in the [`comonad` package](http://hackage.haskell.org/package/comonad).*
-
 * <span style="border-bottom: 2px solid black">Solid arrows</span> point from the general to the specific; that is, if there is an arrow from `Foo` to `Bar` it means that every `Bar` is (or should be, or can be made into) a `Foo`.
 * <span style="border-bottom: 2px dotted black">Dotted lines</span> indicate some other sort of relationship.
 * `Monad` and `ArrowApply` are equivalent.
-* `Apply` and `Comonad` are greyed out since they are not actually (yet?) in the standard Haskell libraries {{noteref}}.
+* `Apply` and `Comonad` are greyed out since they are not actually (yet?) in the standard Haskell libraries ^[`Apply` can be found in the [`semigroupoids` package](http://hackage.haskell.org/package/semigroupoids), and `Comonad` in the [`comonad` package](http://hackage.haskell.org/package/comonad).].
 
 One more note before we begin. The original spelling of “type class” is with two words, as evidenced by, for example, the [Haskell 2010 Language Report](http://www.haskell.org/onlinereport/haskell2010/), early papers on type classes like [Type classes in Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.103.5639) and [Type classes: exploring the design space](http://research.microsoft.com/en-us/um/people/simonpj/papers/type-class-design-space/), and [Hudak et al.’s history of Haskell](http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.168.4008).  However, as often happens with two-word phrases that see a lot of use, it has started to show up as one word (“typeclass”) or, rarely, hyphenated (“type-class”).  When wearing my prescriptivist hat, I prefer “type class”, but realize (after changing into my descriptivist hat) that there's probably not much I can do about it.
 
@@ -86,11 +84,7 @@ Finally, we can understand `(<$)`: instead of applying a function to the values 
 
 ## Instances
 
-> *Recall that `[]` has two meanings in Haskell: it can either stand for the empty list, or, as here, it can represent the list type constructor (pronounced “list-of”). In other words, the type `[a]` (list-of-`a`) can also be written `[] a`.*
-
-> *You might ask why we need a separate `map` function. Why not just do away with the current list-only `map` function, and rename `fmap` to `map` instead? Well, that’s a good question. The usual argument is that someone just learning Haskell, when using `map` incorrectly, would much rather see an error about lists than about `Functor`s.*
-
-As noted before, the list constructor `[]` is a functor {{noteref}}; we can use the standard list function `map` to apply a function to each element of a list {{noteref}}. The `Maybe` type constructor is also a functor, representing a container which might hold a single element. The function `fmap g` has no effect on `Nothing` (there are no elements to which `g` can be applied), and simply applies `g` to the single element inside a `Just`. Alternatively, under the context interpretation, the list functor represents a context of nondeterministic choice; that is, a list can be thought of as representing a single value which is nondeterministically chosen from among several possibilities (the elements of the list). Likewise, the `Maybe` functor represents a context with possible failure. These instances are:
+As noted before, the list constructor `[]` is a functor ^[Recall that `[]` has two meanings in Haskell: it can either stand for the empty list, or, as here, it can represent the list type constructor (pronounced “list-of”). In other words, the type `[a]` (list-of-`a`) can also be written `[] a`.]; we can use the standard list function `map` to apply a function to each element of a list ^[You might ask why we need a separate `map` function. Why not just do away with the current list-only `map` function, and rename `fmap` to `map` instead? Well, that’s a good question. The usual argument is that someone just learning Haskell, when using `map` incorrectly, would much rather see an error about lists than about `Functor`s.]. The `Maybe` type constructor is also a functor, representing a container which might hold a single element. The function `fmap g` has no effect on `Nothing` (there are no elements to which `g` can be applied), and simply applies `g` to the single element inside a `Just`. Alternatively, under the context interpretation, the list functor represents a context of nondeterministic choice; that is, a list can be thought of as representing a single value which is nondeterministically chosen from among several possibilities (the elements of the list). Likewise, the `Maybe` functor represents a context with possible failure. These instances are:
 
 ```haskell
 instance Functor [] where
@@ -224,9 +218,7 @@ Note that every `Applicative` must also be a `Functor`. In fact, as we will see,
 
 `(*>)` and `(<*)` are provided for convenience, in case a particular instance of `Applicative` can provide more efficient implementations, but they are provided with default implementations.  For more on these operators, see the section on [Utility functions](http://www.haskell.org/haskellwiki/#Utility functions) below.
 
-> Recall that `($)` is just function application: `f $ x = f x`.
-
-As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)` is similar to the type of `($)` {{noteref}}, but with everything enclosed in an `f`. In other words, `(<*>)` is just function application within a computational context. The type of `(<*>)` is also very similar to the type of `fmap`; the only difference is that the first parameter is `f (a -> b)`, a function in a context, instead of a “normal” function `(a -> b)`.
+As always, it’s crucial to understand the type signatures.  First, consider `(<*>)`: the best way of thinking about it comes from noting that the type of `(<*>)` is similar to the type of `($)` ^[Recall that `($)` is just function application: `f $ x = f x`], but with everything enclosed in an `f`. In other words, `(<*>)` is just function application within a computational context. The type of `(<*>)` is also very similar to the type of `fmap`; the only difference is that the first parameter is `f (a -> b)`, a function in a context, instead of a “normal” function `(a -> b)`.
 
 `pure` takes a value of any type `a`, and returns a context/container of type `f a`.  The intention is that `pure` creates some sort of “default” container or “effect free” context.  In fact, the behavior of `pure` is quite constrained by the laws it should satisfy in conjunction with `(<*>)`.  Usually, for a given implementation of `(<*>)` there is only one possible implementation of `pure`.
 
