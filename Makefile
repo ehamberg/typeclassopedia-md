@@ -13,4 +13,5 @@ typeclassopedia.epub: typeclassopedia.md
 typeclassopedia.pdf: typeclassopedia.md
 	sed 's/^The type classes we will be discussing/\\clearpage &/' \
 		typeclassopedia.md|\
+		sed 's/Typeclassopedia-diagram.svg/Typeclassopedia-diagram.png/'| \
 		pandoc -s -S -o typeclassopedia.pdf

@@ -43,7 +43,7 @@ It should be noted that this is not a Haskell tutorial; it is assumed that the r
 
 The type classes we will be discussing and their interrelationships ([source code for this graph can be found here](http://www.haskell.org/haskellwiki/:File:Dependencies.txt)):
 
-![](Typeclassopedia-diagram.png)
+![](Typeclassopedia-diagram.svg)
 
 > *`Apply` can be found in the [`semigroupoids` package](http://hackage.haskell.org/package/semigroupoids), and `Comonad` in the [`comonad` package](http://hackage.haskell.org/package/comonad).*
 
