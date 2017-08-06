@@ -26,8 +26,9 @@ Have you ever had any of the following thoughts?
 If you have, look no further! You, too, can write and understand concise, elegant, idiomatic Haskell code with the best of them.
 
 There are two keys to an expert Haskell hacker’s wisdom:
-# Understand the types.
-# Gain a deep intuition for each type class and its relationship to other type classes, backed up by familiarity with many examples.
+
+#. Understand the types.
+#. Gain a deep intuition for each type class and its relationship to other type classes, backed up by familiarity with many examples.
 
 It’s impossible to overstate the importance of the first; the patient student of type signatures will uncover many profound secrets. Conversely, anyone ignorant of the types in their code is doomed to eternal uncertainty. “Hmm, it doesn’t compile ... maybe I’ll stick in an
 `fmap` here ... nope, let’s see ... maybe I need another `(.)` somewhere? ... um ...”
