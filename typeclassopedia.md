@@ -937,12 +937,12 @@ For more information (such as the precise desugaring rules for `rec` blocks), se
 
 # Semigroup
 
-A semigroup is a set $S\ $ together with a binary operation $\oplus\ $ which
-combines elements from $S\ $. The $\oplus\ $ operator is required to be associative
-(that is, $(a \oplus b) \oplus c = a \oplus (b \oplus c)\ $, for any
-$a,b,c\ $ which are elements of $S\ $).
+A semigroup is a set $S$ together with a binary operation $\oplus$ which
+combines elements from $S$. The $\oplus$ operator is required to be associative
+(that is, $(a \oplus b) \oplus c = a \oplus (b \oplus c)$, for any
+$a,b,c$ which are elements of $S$).
 
-For example, the natural numbers under addition form a semigroup: the sum of any two natural numbers is a natural number, and $(a+b)+c = a+(b+c)\ $ for any natural numbers $a\ $, $b\ $, and $c\,\ $. The integers under multiplication also form a semigroup, as do the integers (or rationals, or reals) under $\max\ $ or $\min\ $, Boolean values under conjunction and disjunction, lists under concatenation, functions from a set to itself under composition ... Semigroups show up all over the place, once you know to look for them.
+For example, the natural numbers under addition form a semigroup: the sum of any two natural numbers is a natural number, and $(a+b)+c = a+(b+c)$ for any natural numbers $a$, $b$, and $c$. The integers under multiplication also form a semigroup, as do the integers (or rationals, or reals) under $\max$ or $\min$, Boolean values under conjunction and disjunction, lists under concatenation, functions from a set to itself under composition ... Semigroups show up all over the place, once you know to look for them.
 
 ## Definition
 
