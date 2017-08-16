@@ -302,7 +302,7 @@ The other `Applicative` instance for lists, based on the nondeterministic comput
 ```haskell
 instance Applicative [] where
   pure :: a -> [a]
-  pure x    = [x]
+  pure x = [x]
 
   (<*>) :: [a -> b] -> [a] -> [b]
   gs <*> xs = [ g x | g <- gs, x <- xs ]
