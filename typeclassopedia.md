@@ -719,6 +719,8 @@ Links to many more research papers related to monads can be found under [Researc
 
 Some monads support a notion of *failure*, without necessarily supporting the notion of *recovery* suggested by `MonadPlus`, and possibly including a primitive error reporting mechanism. This notion is expressed by the relatively unprincipled `MonadFail`. When the `MonadFailDesugaring` language extension is enabled, the `fail` method from `MonadFail` is used for pattern match failure in `do` bindings rather than the traditional `fail` method of the `Monad` class. This language change is being implemented because there are many monads, such as `Reader`, `State`, `Writer`, `RWST`, and `Cont` that simply do not support a legitimate `fail` method.
 
+See the [MonadFail proposal](https://prime.haskell.org/wiki/Libraries/Proposals/MonadFail) for more information.
+
 ## Definition
 
 ```haskell
