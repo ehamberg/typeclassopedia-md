@@ -1570,7 +1570,7 @@ similar vein to `Monad` and `Applicative`.  However, unlike `Monad`
 and `Applicative`, whose types only reflect their output, the type of
 an `Arrow` computation reflects both its input and output.  Arrows
 generalize functions: if `arr` is an instance of `Arrow`, a value of
-type `b `arr` c` can be thought of as a computation which takes values of
+type ``b `arr` c`` can be thought of as a computation which takes values of
 type `b` as input, and produces values of type `c` as output.  In the
 `(->)` instance of `Arrow` this is just a pure function; in general, however,
 an arrow may represent some sort of “effectful” computation.
@@ -1605,7 +1605,7 @@ efficient implementations if desired.
 Let’s look at each of the arrow methods in turn.  [Ross Paterson’s web page on arrows](http://www.haskell.org/arrows/) has nice diagrams which can help
 build intuition.
 
-* The `arr` function takes any function `b -> c` and turns it into a generalized arrow `b `arr` c`.  The `arr` method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g` is “pure” in the sense that it only computes `g` and has no “effects” (whatever that might mean for any particular arrow type).
+* The `arr` function takes any function `b -> c` and turns it into a generalized arrow ``b `arr` c``.  The `arr` method justifies the claim that arrows generalize functions, since it says that we can treat any function as an arrow.  It is intended that the arrow `arr g` is “pure” in the sense that it only computes `g` and has no “effects” (whatever that might mean for any particular arrow type).
 
 * The `first` method turns any arrow from `b` to   `c` into an arrow from `(b,d)` to `(c,d)`.  The idea is that `first g` uses `g` to process the first element of a tuple, and lets the second element pass through unchanged.  For the function instance of `Arrow`, of course, `first g (x,y) = (g x, y)`.
 
