@@ -10,7 +10,7 @@ Running `make` will convert the Markdown file to EPUB using the excellent
 [`pandoc`](http://johnmacfarlane.net/pandoc/) tool. This will also add syntax
 highlighting to the code snippets and handle the footnotes.
 
-An up-to-date version of the EPUB file can be found in
+An up-to-date version of the EPUB file and the PDF file can be found in
 [releases](https://github.com/ehamberg/typeclassopedia-md/releases).
 
 To convert to different formats (e.g. for reading on a Kindle), the EPUB file
