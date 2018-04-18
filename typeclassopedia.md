@@ -1519,6 +1519,81 @@ For references on the `Traversable` laws, see Russell O'Connor's [mailing list p
 
 [This blog post by Will Fancher](http://elvishjerricco.github.io/2017/03/23/applicative-sorting.html) shows how to use `Traversable` along with a clever choice of `Applicative` to efficiently sort any `Traversable` container.
 
+# Bifunctor
+
+Recall that a `Functor` is a type of kind `* -> *` where one can "map" a function over the type parameter. `(Either e)` is a `Functor` (with `fmap :: (a -> b) -> Either e a -> Either e b`), as is `((,) e)`.  But there is something oddly asymmetric about these two examples: in principle, there is no reason we can't map over the `e` instead of the `a`, for example, like so: `lmap :: (e -> e') -> Either e a -> Either e' a`. This observation leads directly to the definition of `Bifunctor`, a class for types of kind `* -> * -> *` where one can functorially map over *both* type parameters.
+
+## Definition
+
+Here is the type class declaration for `Bifunctor`, defined
+in `Data.Bifunctor` (since `base-4.8`, which came with GHC 7.10):
+
+```haskell
+class Bifunctor p where
+  bimap  :: (a -> b) -> (c -> d) -> p a c -> p b d
+
+  first  :: (a -> b) -> p a c -> p b c
+  second :: (b -> c) -> p a b -> p a c
+```
+
+We can infer from the fact that `p` is applied to two type arguments that its kind must be `* -> * -> *`.  The most fundamental method of the `Bifunctor` class is `bimap`, which allows mapping over both type arguments at once.  For example,
+
+```haskell
+bimap (+1) length (4, [1,2,3]) = (5,3)
+```
+
+`first` and `second` are also provided for mapping over only one type argument at a time.  One is required to define either `bimap`, or both `first` and `second`, since default definitions are provided for each in terms of the others, namely:
+
+```haskell
+bimap f g = first f . second g
+
+first  f = bimap f id
+second g = bimap id g
+```
+
+## Laws
+
+The laws for `Bifunctor` are entirely analogous to the laws for `Functor`.  First, mapping with the identity function should have no effect:
+
+```haskell
+bimap id id = id
+first id    = id
+second   id = id
+```
+
+Second, mapping with a composition should be the same as a composition
+of maps:
+
+```haskell
+bimap (f . g) (h . i) = bimap f h . bimap g i
+
+first  (f . g) = first f  . first g
+second (f . g) = second f . second g
+```
+
+These composition laws actually come "for free" (that is, by parametricity) once the identity laws are satisfied. One can also check that the default implementations of `first` and `second` will satisfy the requisite laws if and only if `bimap` does, and vice versa.
+
+There is one additional law that relates `bimap`,
+`first`, and `second`, namely,
+
+```haskell
+bimap f g = first f . second g
+```
+
+However, this law will hold automatically if one defines only `bimap`, or only `first` and `second`, using the default implementation for the others. So you only need to worry about this law if for some reason (*e.g.* efficiency) you define all three of the methods by hand.
+
+One might wonder about the symmetric law `bimap f g = second g . first f`; it turns out that once `bimap f g = first f . second g` is satisfied, the symmetric version [also follows from parametricity](https://byorgey.wordpress.com/2018/03/30/parametricity-for-bifunctor/).
+
+In summary, there are many laws that can be stated, but most of them follow automatically from default definitions or from parametricity. For example, if you define only `bimap`, then the only law you actually need to check is `bimap id id = id`; all the other laws come for free.  Likewise, if you define only `first` and `second`, you only need to check that `first id = id` and `second id = id`.
+
+## Instances
+
+* `(,)` and `Either` are instances in the evident way.
+
+* Some larger tuple constructors are also instances; for example, the instance for `(,,)` maps over the last two components, leaving the first alone.  Why anyone would ever want to use this is unclear.
+
+* A value of type `Const a b` (to be discussed more in a later section) consists simply of a value of type `a`; `bimap f g` maps `f` over the `a` and ignores `g`.
+
 # Category
 
 `Category` is a relatively recent addition to the Haskell standard libraries.  It generalizes the notion of function composition to general “morphisms”.
@@ -1599,6 +1674,8 @@ defined when writing a new instance of `Arrow` are `arr` and `first`;
 the other methods have default definitions in terms of these, but are
 included in the `Arrow` class so that they can be overridden with more
 efficient implementations if desired.
+
+Note that `first` and `second` conflict with methods of the same name from `Data.Bifunctor`.  If you want to use both for some reason, you will need to import one or both qualified.  It used to be common to import `Control.Arrow` just to get the `(->)` instance for use in editing pairs using `first` or `second`; now it is recommended to import `Data.Bifunctor` for this purpose instead.  (Notice that for the `(->)` instance of `Arrow` and the `(,)` instance of `Bifunctor`, `first` and `second` specialize to the same type.)
 
 ## Intuition
 
