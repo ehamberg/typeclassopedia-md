@@ -1166,7 +1166,7 @@ In the end, `some` and `many` really only make sense when used with some sort of
 
 Of course, instances of `Alternative` should satisfy the monoid laws
 
-```haskell
+```
 empty <|> x = x
 x <|> empty = x
 (x <|> y) <|> z = x <|> (y <|> z)
@@ -1178,7 +1178,7 @@ Since `Alternative` is a subclass of `Applicative`, a natural question is, "how 
 
 Almost everyone agrees on the *left zero* law (though see the discussion of the *right zero* law below):
 
-```haskell
+```
 empty <*> f = empty
 ```
 
@@ -1188,7 +1188,7 @@ After this is where it starts to get a bit hairy though.  It turns out there are
 
 Another obvious law would be
 
-```haskell
+```
 f <*> empty = empty
 ```
 
@@ -1196,7 +1196,7 @@ This law is satisfied by most instances; however, it is not satisfied by `IO`. O
 
 * *Left Distribution*:
 
-```haskell
+```
 (a <|> b) <*> c = (a <*> c) <|> (b <*> c)
 ```
 
@@ -1208,7 +1208,7 @@ This law does not hold for parsers for a similar reason: `(a <|> b) <*> c` has t
 
 * *Right Distribution*:
 
-```haskell
+```
 a <*> (b <|> c) = (a <*> b) <|> (a <*> c)
 ```
 
