@@ -1176,7 +1176,7 @@ The documentation for `some` and `many` states that they should be the "least so
 
 Since `Alternative` is a subclass of `Applicative`, a natural question is, "how should `empty` and `(<|>)` interact with `(<*>)` and `pure`?"
 
-First of all, everyone agrees on the *left zero* law:
+Almost everyone agrees on the *left zero* law (though see the discussion of the *right zero* law below):
 
 ```haskell
 empty <*> f = empty
@@ -1184,13 +1184,45 @@ empty <*> f = empty
 
 After this is where it starts to get a bit hairy though.  It turns out there are several other laws one might imagine adding, and different instances satisfy different laws.
 
-* *Right Zero*:<p>Another obvious law would be `f <*> empty = empty`{.haskell}</p><p>This law is satisfied by most instances; however, it is not satisfied by `IO`. Once the effects in `f` have been executed, there is no way to roll them back if we later encounter an exception.</p>
+* *Right Zero*:
 
-* *Left Distribution*:<p>`(a <|> b) <*> c = (a <*> c) <|> (b <*> c)`{.haskell}</p><p>This distributivity law is satisfied by `[]` and `Maybe`, as you may verify.  However, it is *not* satisfied by `IO` or most parsers.  The reason is that `a` and `b` can have effects which influence execution of `c`, and the left-hand side may end up failing where the right-hand side succeeds.</p><p>For example, consider `IO`, and suppose that `a` always executes successfully, but `c` throws an I/O exception after `a` has run.  Concretely, say, `a` might ensure that a certain file does not exist (deleting it if it does exist or doing nothing if it does not), and then `c` tries to read that file.  In that case `(a <|> b) <*> c` will first delete the file, ignoring `b` since `a` is successful, and then throw an exception when `c` tries to read the file.  On the other hand, `b` might ensure that the same file in question *does* exist.  In that case `(a <*> c) <|> (b <*> c)` would succeed: after `(a <*> c)` throws an exception, it would be caught by `(<|>)`, and then `(b <*> c)` would be tried.</p><p>This law does not hold for parsers for a similar reason: `(a <|> b) <*> c` has to "commit" to parsing with `a` or `b` before running `c`, whereas `(a <*> c) <|> (b <*> c)` allows backtracking if `a <*> c` fails.  In the particular case that `a` succeeds but `c` fails after `a` but not after `b`, these may give different results.  For example, suppose `a` and `c` both expect to see two asterisks, but `b` expects to see only one.  If there are only three asterisks in the input, `b <*> c` will be successful whereas `a <*> c` will not.</p>
+Another obvious law would be
 
-* *Right Distribution*:<p>`a <*> (b <|> c) = (a <*> b) <|> (a <*> c)`{.haskell}</p><p>This law is not satisfied by very many instances, but it's still worth discussing.  In particular the law is still satisfied by `Maybe`.  However, it is *not* satisfied by, for example, lists.  The problem is that the results come out in a different order.  For example, suppose `a = [(+1), (*10)]`, `b = [2]`, and `c = [3]`.  Then the left-hand side yields `[3,4,20,30]`, whereas the right-hand side is `[3,20,4,30]`.</p><p>`IO` does not satisfy it either, since, for example, `a` may succeed only the *second* time it is executed.  Parsers, on the other hand, may or may not satisfy this law, depending on how they handle backtracking.  Parsers for which `(<|>)` by itself does full backtracking will satisfy the law; but for many parser combinator libraries this is not the case, for efficiency reasons.  For example, parsec fails this law: if `a` succeeds while consuming some input, and afterwards `b` fails without consuming any input, then the left-hand side may succeed while the right-hand side fails: after `(a <*> b)` fails, the right-hand side tries to re-run `a` without backtracking over the input the original `a` consumed.</p>
+```haskell
+f <*> empty = empty
+```
 
-* *Left Catch*:<p>`(pure a) <|> x = pure a`{.haskell}</p><p>Intuitively, this law states that `pure` should always represent a "successful" computation.  It is satisfied by `Maybe`, `IO`, and parsers.  However, it is not satisfied by lists, since lists collect *all* possible results: it corresponds to `[a] ++ x == [a]` which is obviously false.</p>
+This law is satisfied by most instances; however, it is not satisfied by `IO`. Once the effects in `f` have been executed, there is no way to roll them back if we later encounter an exception.  Now consider the `Backwards` applicative transformer from the `transformers` package.  If `f` is `Applicative`, then so is `Backwards f`; it works the same way but performs the actions of the arguments to `(<*>)` in the reverse order.  There is also an instance `Alternative f => Alternative (Backwards f)`.  If some `f` (such as `IO`) satisfies *left zero* but not *right zero*, then `Backwards f` satisfies *right zero* but not *left zero*!  So even the *left zero* law is suspect. The point is that given the existence of `Backwards` we cannot privilege one direction or the other.
+
+* *Left Distribution*:
+
+```haskell
+(a <|> b) <*> c = (a <*> c) <|> (b <*> c)
+```
+
+This distributivity law is satisfied by `[]` and `Maybe`, as you may verify.  However, it is *not* satisfied by `IO` or most parsers.  The reason is that `a` and `b` can have effects which influence execution of `c`, and the left-hand side may end up failing where the right-hand side succeeds.
+
+For example, consider `IO`, and suppose that `a` always executes successfully, but `c` throws an I/O exception after `a` has run.  Concretely, say, `a` might ensure that a certain file does not exist (deleting it if it does exist or doing nothing if it does not), and then `c` tries to read that file.  In that case `(a <|> b) <*> c` will first delete the file, ignoring `b` since `a` is successful, and then throw an exception when `c` tries to read the file.  On the other hand, `b` might ensure that the same file in question *does* exist.  In that case `(a <*> c) <|> (b <*> c)` would succeed: after `(a <*> c)` throws an exception, it would be caught by `(<|>)`, and then `(b <*> c)` would be tried.
+
+This law does not hold for parsers for a similar reason: `(a <|> b) <*> c` has to "commit" to parsing with `a` or `b` before running `c`, whereas `(a <*> c) <|> (b <*> c)` allows backtracking if `a <*> c` fails.  In the particular case that `a` succeeds but `c` fails after `a` but not after `b`, these may give different results.  For example, suppose `a` and `c` both expect to see two asterisks, but `b` expects to see only one.  If there are only three asterisks in the input, `b <*> c` will be successful whereas `a <*> c` will not.
+
+* *Right Distribution*:
+
+```haskell
+a <*> (b <|> c) = (a <*> b) <|> (a <*> c)
+```
+
+This law is not satisfied by very many instances, but it's still worth discussing.  In particular the law is still satisfied by `Maybe`.  However, it is *not* satisfied by, for example, lists.  The problem is that the results come out in a different order.  For example, suppose `a = [(+1), (*10)]`, `b = [2]`, and `c = [3]`.  Then the left-hand side yields `[3,4,20,30]`, whereas the right-hand side is `[3,20,4,30]`.
+
+`IO` does not satisfy it either, since, for example, `a` may succeed only the *second* time it is executed.  Parsers, on the other hand, may or may not satisfy this law, depending on how they handle backtracking.  Parsers for which `(<|>)` by itself does full backtracking will satisfy the law; but for many parser combinator libraries this is not the case, for efficiency reasons.  For example, parsec fails this law: if `a` succeeds while consuming some input, and afterwards `b` fails without consuming any input, then the left-hand side may succeed while the right-hand side fails: after `(a <*> b)` fails, the right-hand side tries to re-run `a` without backtracking over the input the original `a` consumed.
+
+* *Left Catch*:
+
+```haskell
+(pure a) <|> x = pure a
+```
+
+Intuitively, this law states that `pure` should always represent a "successful" computation.  It is satisfied by `Maybe`, `IO`, and parsers.  However, it is not satisfied by lists, since lists collect *all* possible results: it corresponds to `[a] ++ x == [a]` which is obviously false.
 
 This, then, is the situation: we have a lot of instances of `Alternative` (and `MonadPlus`), with each instance satisfying some *subset* of these laws.  Moreover, it's not always the *same* subset, so there is no obvious "default" set of laws to choose.  For now at least, we just have to live with the situation.  When using a particular instance of `Alternative` or `MonadPlus`, it's worth thinking carefully about which laws it satisfies.
 
