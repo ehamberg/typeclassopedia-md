@@ -1315,9 +1315,6 @@ instance Foldable Tree where
   foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
 ```
 
-The `foldr` function has a type similar to the `foldr` found in the `Prelude`, but
-more general, since the `foldr` in the `Prelude` works only on lists.
-
 The `Foldable` module also provides instances for `Maybe` and `Array`;
 additionally, many of the data structures found in the standard [containers library](http://hackage.haskell.org/package/containers) (for example, `Map`, `Set`, `Tree`,
 and `Sequence`) provide their own `Foldable` instances.
