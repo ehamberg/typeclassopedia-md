@@ -10,6 +10,10 @@ Running `make` will convert the Markdown file to EPUB using the excellent
 [`pandoc`](http://johnmacfarlane.net/pandoc/) tool. This will also add syntax
 highlighting to the code snippets and handle the footnotes.
 
+To create the pdf using `nix-shell`:
+
+    nix-shell -p pandoc -p texlive.combined.scheme-small --run 'make pdf'
+
 An up-to-date version of the EPUB file and the PDF file can be found in
 [releases](https://github.com/ehamberg/typeclassopedia-md/releases).
 
