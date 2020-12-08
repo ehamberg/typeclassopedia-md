@@ -661,6 +661,8 @@ but what happens if `foo` is an empty list?  Well, remember that ugly `fail` fun
 
 A final note on intuition: `do` notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m` is suggestive of “extracting” a single `x` from `m` and doing something with it.  But `m` may represent some sort of a container, such as a list or a tree; the meaning of `x <- m` is entirely dependent on the implementation of `(>>=)`.  For example, if `m` is a list, `x <- m` actually means that `x` will take on each value from the list in turn.
 
+### `ApplicativeDo`
+
 Sometimes, the full power of `Monad` is not needed to desugar `do`-notation. For example,
 
 ```haskell
@@ -692,6 +694,26 @@ join (g <$> bar <*> baz)
 which may allow `bar` and `baz` to be computed in parallel, since they at least do not depend on each other.
 
 The `ApplicativeDo` extension is described in [this wiki page](https://ghc.haskell.org/trac/ghc/wiki/ApplicativeDo), and in more detail in [this Haskell Symposium paper](http://doi.org/10.1145/2976002.2976007).
+
+### `QualifiedDo`
+
+[GHC Proposal #216](https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0216-qualified-do.rst) adds the `QualifiedDo` extension, which is available in GHC 9.0.1.
+
+When `-XQualifiedDo` is activated, the syntax `[modid.]do` becomes available, where `modid` stands for some module name.
+
+The `x <- u` statement now uses `(modid.>>=)`. For example
+
+```haskell
+M.do { x <- u; stmts }
+```
+
+is like writing (without the new extension)
+
+```haskell
+u M.>>= \x -> M.do { stmts }
+```
+
+Other monad methods are also covered, see the proposal for more details.
 
 ## Further reading
 
