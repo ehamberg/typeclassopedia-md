@@ -471,7 +471,7 @@ I will let you judge for yourself whether these are good reasons.
 In the end, despite all the hoopla, `Monad` is just another type class. Let’s take a look at its definition.
 
 ## Definition
-As of GHC 7.10, [`Monad`](https://hackage.haskell.org/package/base/docs/Prelude.html#t:Monad) is defined as:
+As of GHC 8.8, [`Monad`](https://hackage.haskell.org/package/base/docs/Prelude.html#t:Monad) is defined as:
 
 ```haskell
 class Applicative m => Monad m where
@@ -479,19 +479,15 @@ class Applicative m => Monad m where
   (>>=)  :: m a -> (a -> m b) -> m b
   (>>)   :: m a -> m b -> m b
   m >> n = m >>= \_ -> n
-
-  fail   :: String -> m a
 ```
 
-(Prior to GHC 7.10, `Applicative` was not a superclass of `Monad`, for historical reasons.)
+(Prior to GHC 7.10, for historical reasons, `Applicative` was not a superclass of `Monad` and prior to GHC 8.8 `Monad` had an extra `fail` method.)
 
 The `Monad` type class is exported by the `Prelude`, along with a few standard instances. However, many utility functions are found in [`Control.Monad`](https://hackage.haskell.org/package/base/docs/Control-Monad.html).
 
 Let’s examine the methods in the `Monad` class one by one. The type of `return` should look familiar; it’s the same as `pure`. Indeed, `return` *is* `pure`, but with an unfortunate name. (Unfortunate, since someone coming from an imperative programming background might think that `return` is like the C or Java keyword of the same name, when in fact the similarities are minimal.) For historical reasons, we still have both names, but they should always denote the same value (although this cannot be enforced). Likewise, `(>>)` should be the same as `(*>)` from `Applicative`.  It is possible that `return` and `(>>)` may eventually be removed from the `Monad` class: see the [Monad of No Return proposal](https://ghc.haskell.org/trac/ghc/wiki/Proposal/MonadOfNoReturn).
 
 We can see that `(>>)` is a specialized version of `(>>=)`, with a default implementation given. It is only included in the type class declaration so that specific instances of `Monad` can override the default implementation of `(>>)` with a more efficient one, if desired. Also, note that although `_ >> n = n` would be a type-correct implementation of `(>>)`, it would not correspond to the intended semantics: the intention is that `m >> n` ignores the *result* of `m`, but not its *effects*.
-
-The `fail` function is an awful hack that has no place in the `Monad` class; more on this later.
 
 The only really interesting thing to look at—and what makes `Monad` strictly more powerful than `Applicative`—is `(>>=)`, which is often called *bind*.
 
@@ -657,7 +653,7 @@ do (x:xs) <- foo
    bar x
 ```
 
-but what happens if `foo` is an empty list?  Well, remember that ugly `fail` function in the `Monad` type class declaration?  That’s what happens.  See [section 3.14 of the Haskell Report](http://www.haskell.org/onlinereport/exps.html#sect3.14) for the full details. See also the discussion of `MonadPlus` and `MonadZero` in the [section on other monoidal classes](http://www.haskell.org/haskellwiki/#Other monoidal classes: Alternative, MonadPlus, ArrowPlus).
+but what happens if `foo` is an empty list?  There is [an instance](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/Control.Monad.Fail.html#fail) of `MonadFail` for `[]`, and the `fail` function in the `MonadFail` instance will be used as the value for the `do`-expression.  See also the discussion of `MonadPlus` and `MonadZero` in the [section on other monoidal classes](http://www.haskell.org/haskellwiki/#Other monoidal classes: Alternative, MonadPlus, ArrowPlus).
 
 A final note on intuition: `do` notation plays very strongly to the “computational context” point of view rather than the “container” point of view, since the binding notation `x <- m` is suggestive of “extracting” a single `x` from `m` and doing something with it.  But `m` may represent some sort of a container, such as a list or a tree; the meaning of `x <- m` is entirely dependent on the implementation of `(>>=)`.  For example, if `m` is a list, `x <- m` actually means that `x` will take on each value from the list in turn.
 
