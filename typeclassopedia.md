@@ -854,7 +854,7 @@ There is an alternative way to compose monads, using coproducts, as described by
 
 ## `do rec` notation
 
-The `MonadFix` class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](http://www.haskell.org/ghc/docs/latest/html/users_guide/syntax-extns.html#recursive-do-notation) by a special “recursive do” notation, enabled by the `-XRecursiveDo` flag.  Within a `do` block, one may have a nested `rec` block, like so:
+The `MonadFix` class describes monads which support the special fixpoint operation `mfix :: (a -> m a) -> m a`, which allows the output of monadic computations to be defined via (effectful) recursion.  This is [supported in GHC](https://downloads.haskell.org/~ghc/9.0.1/docs/html/users_guide/exts/recursive_do.html) by a special “recursive do” notation, enabled by the `-XRecursiveDo` flag.  Within a `do` block, one may have a nested `rec` block, like so:
 ```haskell
 do { x <- foo
    ; rec { y <- baz
