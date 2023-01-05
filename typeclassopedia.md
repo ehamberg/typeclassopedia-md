@@ -245,7 +245,7 @@ Traditionally, there are four laws that `Applicative` instances should satisfy^[
 * Interchange:
 
     ```haskell
-    u <*> pure y = pure ($ y) <*> u
+    u <*> pure y = pure (\f -> f y) <*> u
     ```
 
     Intuitively, this says that when evaluating the application of an effectful function to a pure argument, the order in which we evaluate the function and its argument doesn't matter.
